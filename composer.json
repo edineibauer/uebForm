@@ -1,0 +1,21 @@
+{
+  "name": "ueb/form",
+  "description": "Gerador de código fonte para operações CRUD",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Edinei J. Bauer",
+      "email": "edineibauer@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "ueb/entity": "*"
+  },
+  "autoload": {
+    "psr-0": {
+      "Form": "public/src/"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+<input type='hidden' {($value || $value == 0) ? "value='{$value}' " : "" } {$form['atributos']} data-model="{$ngmodel}" id="{$ngmodel}" data-format="hidden" />

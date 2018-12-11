@@ -1,0 +1,45 @@
+.red-subErro {
+    border-bottom-color: red !important;
+}
+
+.goldenrod-subErro {
+    border-bottom-color: goldenrod !important;
+}
+
+.red-span {
+    color: red !important;
+}
+
+.goldenrod-span {
+    color: goldenrod !important;
+}
+
+.error-message {
+    margin-top: -13px;
+    float: left;
+    font-size: 12px;
+    height: 1px;
+}
+
+.red-btn {
+    background: #ff00008f!important;
+    color: white!important;
+}
+.goldenrod-btn {
+    background: goldenrod!important;
+    color: #333333!important;
+}
+
+.list-result-itens li.active {
+    background: #f5f5f5;
+    opacity: 1;
+}
+
+.statusPanel {
+    background: #CCCCCC;
+    padding:5px;
+    margin: 6px 6px 0 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
