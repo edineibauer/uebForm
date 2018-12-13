@@ -61,7 +61,7 @@ class FormSearch
         $sql = new SqlCommand();
         $sql->exeCommand($comando);
         if ($sql->getResult()) {
-            $template = new \Helpers\Template("form-crud");
+            $template = new \Helpers\Template("form");
             $dataResult = $sql->getResult();
             if(!empty($this->search) && is_string($this->search)) {
                 foreach ($dataResult as $i => $r) {

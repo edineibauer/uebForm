@@ -9,7 +9,7 @@
                            accept="{foreach item=name key=i from=$allow['values']}{if $i > 0},{/if}.{$name}{/foreach}"/>
                 </div>
                 <input type="hidden" name="file" value="save/source"/>
-                <input type="hidden" name="lib" value="form-crud"/>
+                <input type="hidden" name="lib" value="form"/>
                 <input type="hidden" name="entity" value="{$entity}"/>
                 <input type="hidden" name="column" value="{$column}"/>
             </form>

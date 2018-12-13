@@ -326,7 +326,7 @@ if (typeof openPanel !== 'function') {
     function openPanel(entity, $id, value, $this) {
         $this.panel(
             themeDashboard("<i class='statusPanel left' title='sem mudanças'></i><span class='left'>Editar " + ucFirst(entity) + "</span>", {
-                lib: 'form-crud',
+                lib: 'form',
                 file: 'api',
                 entity: entity,
                 id: value
@@ -426,7 +426,7 @@ if (typeof formSubmit !== 'function') {
         id = id || null;
         $("#form_" + entity).closest(".ontab").loading();
         var fields = $("#fields-" + entity).val();
-        post('form-crud', 'children/form', {entity: entity, id: id, fields: fields}, function (data) {
+        post('form', 'children/form', {entity: entity, id: id, fields: fields}, function (data) {
             if (data) {
                 var $form = $("#form_" + entity).closest(".form-control");
                 $input = $form.find(":focus");
@@ -445,7 +445,7 @@ if (typeof formSubmit !== 'function') {
         var dados = formGetData($form);
         isSavingNew = (dados['dados.id'] === "");
 
-        post('form-crud', "save/form", {
+        post('form', "save/form", {
             entity: $form.attr("data-entity"),
             dados: dados,
             save: typeof (save) !== "undefined" ? save : $form.find("#autoSave").val()
@@ -495,7 +495,7 @@ if (typeof formSubmit !== 'function') {
         };
 
         if (typeof ($idReturn) !== "undefined") {
-            post('form-crud', $form.attr("data-action"), {
+            post('form', $form.attr("data-action"), {
                 entity: $form.attr("data-entity"),
                 dados: formGetData($form)
             }, function (data) {
@@ -641,7 +641,7 @@ if (typeof formAutoSubmit !== 'function') {
                             $(response.id).val(JSON.stringify(t)).trigger("change");
 
                         }).on("removedfile", function (file) {
-                            post('form-crud', 'delete/source', {
+                            post('form', 'delete/source', {
                                 entity: $this.find("input[name=entity]").val(),
                                 column: $this.find("input[name=column]").val(),
                                 name: file.name,
@@ -708,7 +708,7 @@ if (typeof formAutoSubmit !== 'function') {
 
     function readList($input, entity, parent, search, id) {
         var selecao = $input.hasClass("selecaoUnique") ? $input.closest(".multFieldsSelect").prev().prev().find("input[type=hidden]").val() : 0;
-        post('form-crud', 'read/list', {
+        post('form', 'read/list', {
             search: search,
             entity: entity,
             parent: parent,

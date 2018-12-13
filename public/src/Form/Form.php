@@ -180,7 +180,7 @@ class Form
             $form['fields'] = $this->fields;
             $form['saveButton'] = $this->saveButton;
 
-            $template = new Template("form-crud");
+            $template = new Template("form");
             return $template->getShow("form", $form);
         }
 
@@ -239,7 +239,7 @@ class Form
     private function prepareInputs(Dicionario $d, $fields = null, string $ngmodel = "dados."): array
     {
         $listaInput = [];
-        $template = new Template("form-crud");
+        $template = new Template("form");
 
         $max = 0;
         foreach ($d->getDicionario() as $m) {
@@ -419,7 +419,7 @@ class Form
 
         $input["inputs"] = $this->prepareInputs($dic, $meta->getForm()['fields'], $input['ngmodel'] . ".");
 
-        $template = new Template("form-crud");
+        $template = new Template("form");
         return $template->getShow("extend", $input);
     }
 
@@ -501,7 +501,7 @@ class Form
     {
         $mult = "";
 
-        $tpl = new \Helpers\Template("form-crud");
+        $tpl = new \Helpers\Template("form");
         foreach ($meta->getSelect() as $select) {
 
             if (!empty($select->getValue())) {

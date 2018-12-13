@@ -27,7 +27,7 @@ if($field) {
                 $item['id'] = "";
                 $item['ngmodel'] = "dados." . $item['column'];
                 $item['entity'] = $entityRelation;
-                $tpl = new \Helpers\Template("form-crud");
+                $tpl = new \Helpers\Template("form");
                 $data['data'] .= $tpl->getShow("selecao", $item);
 
                 break;

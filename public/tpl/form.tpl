@@ -28,15 +28,15 @@
             <script>
                 (function () {
                     var $head = document.getElementsByTagName('head')[0];
-                    if (document.querySelector("script[data-info='form-crud']") == null) {
+                    if (document.querySelector("script[data-info='form']") == null) {
                         var style = document.createElement('link');
                         style.rel = "stylesheet";
-                        style.href = HOME + VENDOR + 'form-crud/public/assets/main.min.css?v=' + VERSION;
+                        style.href = HOME + VENDOR + 'form/public/assets/main.min.css?v=' + VERSION;
                         $head.appendChild(style);
 
                         var script = document.createElement('script');
-                        script.setAttribute("data-info", "form-crud");
-                        script.src = HOME + VENDOR + 'form-crud/public/assets/main.min.js?v=' + VERSION;
+                        script.setAttribute("data-info", "form");
+                        script.src = HOME + VENDOR + 'form/public/assets/main.min.js?v=' + VERSION;
                         $head.appendChild(script);
                     } else {
                         {if $saveButton.text == "Adicionar" || $saveButton.text == "Atualizar"}

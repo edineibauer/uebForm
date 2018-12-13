@@ -9,7 +9,7 @@
                            accept="{foreach item=name key=i from=$allow['values']}{if $i > 0},{/if}.{$name}{/foreach}"/>
                 </div>
                 <input type="hidden" name="file" value="save/source"/>
-                <input type="hidden" name="lib" value="form-crud"/>
+                <input type="hidden" name="lib" value="form"/>
                 <input type="hidden" name="entity" value="{$entity}"/>
                 <input type="hidden" name="column" value="{$column}"/>
                 <span class="{(empty($value)) ? "hide " : ""}padding-small right font-small hover-shadow dropzone-btn-removeall color-gray-light radius border pointer" style="position: absolute;right: 10px;top: -16px;" rel="{$entity}-{$column}">Excluir Tudo</span>
