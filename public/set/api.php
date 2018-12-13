@@ -14,7 +14,7 @@ $fields = trim(strip_tags(filter_input(INPUT_POST, 'fields', FILTER_DEFAULT)));
 $fields = !empty($fields) ? json_decode($fields, true) : null;
 
 if(!empty($entity)) {
-    $form = new \FormCrud\Form($entity);
+    $form = new \Form\Form($entity);
 
     if ($save === false)
         $form->setAutoSave(false);

@@ -10,7 +10,7 @@ if (!empty($_SESSION['userlogin'])) {
     $callback = trim(strip_tags(filter_input(INPUT_POST, 'callback', FILTER_DEFAULT)));
     $fields = !empty($fields) ? json_decode($fields, true) : null;
 
-    $form = new \FormCrud\Form($entity);
+    $form = new \Form\Form($entity);
     if ($btnClass !== "notHaveButton") {
         $form->setAutoSave(false);
         $form->setSaveButtonClass($btnClass);
