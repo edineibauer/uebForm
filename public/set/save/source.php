@@ -24,7 +24,7 @@ function addFile(string $column, array $dicionario, array $info, array $file): a
                         \Helpers\Helper::createFolderIfNoExist(PATH_HOME . "uploads" . DIRECTORY_SEPARATOR . "form" . DIRECTORY_SEPARATOR . date("Y") . DIRECTORY_SEPARATOR . date("m"));
 
                         $nameFile = \Helpers\Check::name(str_replace(".{$extensao}", "", $file['name'])) . "." . strtolower($extensao);
-                        $name = "uploads" . DIRECTORY_SEPARATOR . "form" . DIRECTORY_SEPARATOR . date("Y") . DIRECTORY_SEPARATOR . date("m") . DIRECTORY_SEPARATOR . $nameFile;
+                        $name = "uploads/form/" . date("Y") . "/" . date("m") . "/" . $nameFile;
 
                         if (move_uploaded_file($file['tmp_name'], $name)) {
                             $dados['data']['url'] = $name;
