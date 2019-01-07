@@ -1,0 +1,5 @@
+<div class='col relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input relative align-left {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
+        {{#default}}{{{default}}}{{/default}}
+    </div>
+</div>

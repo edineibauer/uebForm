@@ -1,0 +1,17 @@
+<div class='form-control row font-large'>
+    <div class="row relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
+        <div class="panel">
+            {{#inputs}}
+                {{{.}}}
+            {{/inputs}}
+        </div>
+
+        {{#options.saveButton}}
+            <div class="col padding-16 container parent-save-form">
+                <button class="btn theme-d2 hover-shadow opacity hover-opacity-off" onclick="saveForm('{{identificador}}')">
+                    <i class="material-icons left padding-right">save</i>Salvar
+                </button>
+            </div>
+        {{/options.saveButton}}
+    </div>
+</div>

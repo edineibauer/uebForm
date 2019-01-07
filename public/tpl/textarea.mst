@@ -1,0 +1,25 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input relative {{form.class}}" {{#form.style}}style="{{form.style}}"{{/form.style}}>
+        <label class="col">
+            <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
+            <textarea
+                    data-format="{{format}}"
+                    class="formCrudInput"
+                    autocomplete="off"
+                    id="{{column}}"
+                    data-column="{{column}}"
+                    data-parent="{{parent}}"
+                    rows="3"
+                    rel="{{formIdentificador}}"
+                    {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
+                {{#minimo}} minlength="{{minimo}}" {{/minimo}}
+                {{#size}} maxlength="{{size}}" {{/size}}
+                {{#disabled}} disabled='disabled' {{/disabled}}
+                {{#required}} required="required" {{/required}}
+                {{form.atributos}}
+            >{{#default}}{{default}}{{/default}}</textarea>
+            <span class="input-bar"></span>
+            <span class="col input-message color-text-red align-right" style="margin-top: -19px;font-size: 12px;" rel="{{column}}"></span>
+        </label>
+    </div>
+</div>

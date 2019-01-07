@@ -1,0 +1,30 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
+        <label class="col">
+            <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
+            <select data-format="{{format}}"
+                    class="formCrudInput"
+                    id="{{column}}"
+                    data-column="{{column}}"
+                    data-parent="{{parent}}"
+                    rel="{{formIdentificador}}"
+                {{#disabled}} disabled='disabled' {{/disabled}}
+                {{#required}} required="required" {{/required}}>
+
+                {{^value}}
+                    <option value="0" selected='selected' disabled="disabled">
+                        selecione
+                    </option>
+                {{/value}}
+
+                {{#allow.options}}
+                    <option value="{{option}}" {{#isChecked}}selected="selected"{{/isChecked}}>
+                        {{name}}
+                    </option>
+                {{/allow.options}}
+            </select>
+            <span class="input-bar"></span>
+            <span class="col input-message color-text-red align-right" style="margin-top: -19px;font-size: 12px;" rel="{{column}}"></span>
+        </label>
+    </div>
+</div>
