@@ -6,11 +6,12 @@
                     type="{{form.type}}"
                     data-format="{{format}}"
                     data-column="{{column}}"
-                    class="formCrudInput"
+                    class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                     autocomplete="off"
                     id="{{column}}"
                     rel="{{formIdentificador}}"
                     data-parent="{{parent}}"
+                    {{#disabled}}disabled="disabled"{{/disabled}}
                     {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
                 {{#minimo}} minlength="{{minimo}}" min="{{minimo}}" {{/minimo}}
                 {{#size}} maxlength="{{size}}" max="{{size}}" {{/size}}

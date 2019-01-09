@@ -4,7 +4,8 @@
             <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
             <textarea
                     data-format="{{format}}"
-                    class="formCrudInput"
+                    class="formCrudInput{{#disabled}} disabled{{/disabled}}"
+                    {{#disabled}}disabled="disabled"{{/disabled}}
                     autocomplete="off"
                     id="{{column}}"
                     data-column="{{column}}"

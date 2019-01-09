@@ -7,7 +7,8 @@
                 <input
                         type="checkbox"
                         data-format="{{format}}"
-                        class="formCrudInput switchCheck"
+                        class="formCrudInput switchCheck{{#disabled}} disabled{{/disabled}}"
+                        {{#disabled}}disabled="disabled"{{/disabled}}
                         autocomplete="off"
                         id="{{column}}"
                         data-column="{{column}}"

@@ -3,7 +3,8 @@
         <label class="col">
             <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
             <select data-format="{{format}}"
-                    class="formCrudInput"
+                    class="formCrudInput{{#disabled}} disabled{{/disabled}}"
+                    {{#disabled}}disabled="disabled"{{/disabled}}
                     id="{{column}}"
                     data-column="{{column}}"
                     data-parent="{{parent}}"
