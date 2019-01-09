@@ -2,7 +2,7 @@
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="left">
             <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
-            <span class="left padding-small input-message color-text-red align-left" style="font-size: 12px;" rel="{{column}}"></span>
+            <span class="left padding-small input-message align-left" style="font-size: 12px;" rel="{{column}}"></span>
             <div class="switch switch-squad">
                 <input
                         type="checkbox"

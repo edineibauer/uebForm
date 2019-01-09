@@ -20,7 +20,7 @@
                 {{form.atributos}}
             >{{#default}}{{default}}{{/default}}</textarea>
             <span class="input-bar"></span>
-            <span class="col input-message color-text-red align-right" style="margin-top: -19px;font-size: 12px;" rel="{{column}}"></span>
+            <span class="col input-message align-right" style="margin-top: -19px;font-size: 12px;" rel="{{column}}"></span>
         </label>
     </div>
 </div>

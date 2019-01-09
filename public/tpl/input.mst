@@ -21,7 +21,15 @@
                 {{{form.atributos}}}
             />
             <span class="input-bar"></span>
-            <span class="col input-message color-text-red align-right" style="margin-top: -19px;font-size: 12px;" rel="{{column}}"></span>
+            <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+                <span class="right align-right color-text-gray"  rel="{{column}}">
+                    {{#isNumeric}}{{valueLenght}} ~{{#size}}{{size}}{{/size}}{{/isNumeric}}
+                    {{^isNumeric}}<span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}{{/isNumeric}}
+                </span>
+                <span class="left input-message color-text-red padding-right" rel="{{column}}">
+
+                </span>
+            </div>
         </label>
     </div>
 </div>
