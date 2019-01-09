@@ -1,9 +1,9 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
-        <div class="col">
-            <span class="left align-left">{{nome}} {{#required}}*{{/required}}</span>
-            <span class="left padding-small input-message align-left" style="font-size: 12px;" rel="{{column}}"></span>
-        </div>
+        <span class="col">
+            <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
+            <span class="left input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
+        </span>
         {{#allow.options}}
             <div class="md-radio {{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
                 <label class="left pointer">
@@ -22,7 +22,7 @@
                     <span class="md-radio--fake">
                     <span></span>
                 </span>
-                    <div class="left" style="margin-top: -12px;padding-left: 5px;">
+                    <div class="left{{#disabled}} disabled{{/disabled}}" style="margin-top: -12px;padding-left: 5px;">
                         {{name}}
                     </div>
                 </label>

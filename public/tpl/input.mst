@@ -1,7 +1,7 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="col">
-            <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
+            <span class="col align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</span>
             <input
                     type="{{form.type}}"
                     data-format="{{format}}"
@@ -23,12 +23,18 @@
             <span class="input-bar"></span>
             <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
                 <span class="right align-right color-text-gray"  rel="{{column}}">
-                    {{#isNumeric}}{{valueLenght}} ~{{#size}}{{size}}{{/size}}{{/isNumeric}}
+                    {{#isNumeric}}
+                        {{#valueLenght}}
+                            {{^size}}>= {{valueLenght}}{{/size}}
+                            {{#size}}{{valueLenght}} ~{{size}}{{/size}}
+                        {{/valueLenght}}
+                        {{^valueLenght}}
+                            {{#size}}<={{size}}{{/size}}
+                        {{/valueLenght}}
+                    {{/isNumeric}}
                     {{^isNumeric}}<span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}{{/isNumeric}}
                 </span>
-                <span class="left input-message color-text-red padding-right" rel="{{column}}">
-
-                </span>
+                <span class="left input-message color-text-red padding-right" rel="{{column}}"></span>
             </div>
         </label>
     </div>

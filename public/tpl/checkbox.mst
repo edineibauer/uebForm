@@ -1,9 +1,9 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
-        <div class="col">
-            <span class="left align-left">{{nome}} {{#required}}*{{/required}}</span>
-            <span class="left padding-small input-message align-left" style="font-size: 12px;" rel="{{column}}"></span>
-        </div>
+        <span class="col">
+            <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
+            <span class="left input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
+        </span>
         {{#allow.options}}
             <div class="{{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
                 <label class="left">
@@ -18,7 +18,7 @@
                            {{#isChecked}}checked="checked"{{/isChecked}}
                            rel="{{formIdentificador}}"
                         {{#disabled}} disabled='disabled' {{/disabled}}/>
-                    <div class="left font-large padding-small padding-8 pointer">
+                    <div class="left font-large padding-small padding-8 pointer{{#disabled}} disabled{{/disabled}}">
                         {{name}}
                     </div>
                 </label>

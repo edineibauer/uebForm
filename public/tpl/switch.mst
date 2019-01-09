@@ -1,13 +1,15 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="left">
-            <span class="col align-left">{{nome}} {{#required}}*{{/required}}</span>
-            <span class="left padding-small input-message align-left" style="font-size: 12px;" rel="{{column}}"></span>
-            <div class="switch switch-squad">
+            <span class="col">
+                <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
+                <span class="left input-message color-text-red padding-left padding-left" style="font-size: 12px;" rel="{{column}}"></span>
+            </span>
+            <div class="switch switch-squad{{#disabled}} disabled{{/disabled}}">
                 <input
                         type="checkbox"
                         data-format="{{format}}"
-                        class="formCrudInput switchCheck{{#disabled}} disabled{{/disabled}}"
+                        class="formCrudInput switchCheck"
                         {{#disabled}}disabled="disabled"{{/disabled}}
                         autocomplete="off"
                         id="{{column}}"
