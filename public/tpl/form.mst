@@ -7,10 +7,12 @@
         </div>
 
         {{#options.saveButton}}
-            <div class="col padding-16 container parent-save-form">
-                <button class="btn theme-d2 hover-shadow opacity hover-opacity-off" onclick="saveForm('{{identificador}}')">
-                    <i class="material-icons left padding-right">save</i>Salvar
-                </button>
+            <div class="col panel parent-save-form" style="padding-top: 0!important;">
+                <div class="col padding-tiny">
+                    <button class="btn theme-d2 hover-shadow opacity hover-opacity-off" onclick="saveForm('{{identificador}}')">
+                        <i class="material-icons left padding-right">save</i>Salvar
+                    </button>
+                </div>
             </div>
         {{/options.saveButton}}
     </div>
