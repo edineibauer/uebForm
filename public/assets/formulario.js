@@ -12,11 +12,14 @@ if(typeof loadFormulario === "undefined") {
         //entity title
         let p = new RegExp(/s$/i);
         let title = ucFirst((p.test(entityFormulario) ? entityFormulario.substr(0, (entityFormulario.length - 1)) : entityFormulario).replaceAll('_', ' ').replaceAll('-', ' '));
-        $("#core-content").find("h4").html(title + " <small class='opacity'> >> " + (idFormulario > 0 ? "edição" : "novo") + "</small>");
+        $("#formulario-header").find("h4").html(title + " <small class='opacity'> >> " + (idFormulario > 0 ? "edição" : "novo") + "</small>");
+        $("#formulario-header").find("a").attr("href", HOME + "listagem/" + entityFormulario);
 
         //form
         $("#formulario").form(entityFormulario, idFormulario);
     }
 }
 
-loadFormulario();
+$(function () {
+    loadFormulario();
+});
