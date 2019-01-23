@@ -5,8 +5,10 @@ $(function () {
         let t = entityFormulario.split('/');
         entityFormulario = t[0];
         if (!isEmpty(t[1]) && !isNaN(t[1]) && t[1] > 0)
-            idFormulario = parseInt(t[1]);
+            idFormulario = parseInt(t[1])
     }
 
-    $("#formulario").form(entityFormulario, idFormulario);
-});
+    let form = formCrud(entityFormulario, $("#formulario"));
+    form.header = true;
+    form.show(idFormulario);
+})

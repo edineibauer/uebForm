@@ -1,16 +1,18 @@
 <div class='form-control row font-large'>
     <div class="container-1200 padding-24" style="display: flow-root">
         <div class="col card">
-            <div class="col theme-d2 loadindTableSpace">
-                <div class="container-1200 padding-large padding-24" style="display: flow-root">
-                    <button class="left color-gray-light hover-shadow btn-floating btn-form-list"
-                            rel="{{identificador}}">
-                        <i class="material-icons left padding-right">keyboard_arrow_left</i>
-                    </button>
-                    <h4 class="left" style="padding: 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
+            {{#header}}
+                <div class="col theme-d2 loadindTableSpace">
+                    <div class="container-1200 padding-large padding-24" style="display: flow-root">
+                        <button class="left color-gray-light hover-shadow btn-floating btn-form-list"
+                                rel="{{identificador}}">
+                            <i class="material-icons left padding-right">keyboard_arrow_left</i>
+                        </button>
+                        <h4 class="left" style="padding: 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
+                    </div>
                 </div>
-            </div>
-            <div class="col theme-l1 padding-4"></div>
+                <div class="col theme-l1 padding-4"></div>
+            {{/header}}
 
             <div class="col relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
                 <div class="panel padding-24">
