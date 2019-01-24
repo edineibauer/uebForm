@@ -1,9 +1,9 @@
 <div class='form-control row font-large'>
-    <div class="container-1200 padding-24" style="display: flow-root">
+    <div class="container padding-24">
         <div class="col card">
             {{#header}}
                 <div class="col theme-d2 loadindTableSpace">
-                    <div class="container-1200 padding-large padding-24" style="display: flow-root">
+                    <div class="col padding-large padding-24">
                         <button class="left color-gray-light hover-shadow btn-floating btn-form-list"
                                 rel="{{identificador}}">
                             <i class="material-icons left padding-right">keyboard_arrow_left</i>
