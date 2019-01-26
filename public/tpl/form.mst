@@ -3,17 +3,17 @@
         <div class="col card">
             {{#header}}
                 <div class="col theme-d2 loadindTableSpace">
-                    <div class="col padding-large padding-24">
-                        <button class="left theme-aux hover-shadow btn-floating btn-form-list"
+                    <div class="col padding-large padding-24 s-padding-medium s-padding-16">
+                        <button class="left color-white hover-shadow btn-floating btn-form-list"
                                 rel="{{identificador}}">
-                            <i class="material-icons left padding-right theme-text">keyboard_arrow_left</i>
+                            <i class="material-icons left padding-rightd">keyboard_arrow_left</i>
                         </button>
                         <h4 class="left theme-text-aux" style="padding: 5px 0 0 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
 
                         <div class="right parent-save-form-mini">
-                            <button class="right theme-aux color-gray-light hover-shadow btn radius"
+                            <button class="right color-white hover-shadow btn radius"
                                     onclick="saveForm('{{identificador}}')">
-                                <i class="material-icons left theme-text">save</i>
+                                <i class="material-icons left">save</i>
                             </button>
                         </div>
                     </div>
