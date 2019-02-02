@@ -1,5 +1,5 @@
 <div class='form-control row font-large'>
-    <div class="container padding-24">
+    <div class="container padding-24 s-padding-0">
         <div class="col card">
             {{#header}}
                 <div class="col theme-d1 loadindTableSpace">
