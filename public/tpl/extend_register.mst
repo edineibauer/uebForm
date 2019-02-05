@@ -1,10 +1,10 @@
-<div class="col padding-small transition-easy extend_register" rel="{{id}}" style="height:38px;overflow: hidden">
+<div class="col padding-small transition-slow extend_register" rel="{{id}}" style="height:38px;overflow: hidden">
     <div class="col">
         <div class="left">
             <div class="left font-medium padding-4 extend_register_title" rel="{{id}}">{{titulo}}</div>
         </div>
         <div class="right">
-            <button class="right btn-small radius theme hover-theme opacity hover-opacity-off btn-del-extend-register transition-easy"
+            <button class="right btn-small radius theme hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow"
                     data-column="{{column}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px" >
                 <i class="material-icons left font-large">delete</i>
             </button>
@@ -14,6 +14,6 @@
             </button>
         </div>
     </div>
-    <div class="col extend_register_edit transition-easy" style="height: 0;overflow: hidden">
+    <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
     </div>
 </div>
