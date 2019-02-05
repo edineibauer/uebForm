@@ -1,0 +1,107 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative radius {{form.class}}"
+            style="background: #eee;border: solid 1px #ddd;{{#form.style}}{{form.style}}{{/form.style}}">
+
+        <div class="col padding-8 container s-padding-small" style="margin-bottom: 0!important;">
+            <div class="left s-padding-right">
+                <button class="addExtend no-select radius right opacity hover-opacity-off theme-d2 hover-shadow margin-0 right"
+                        style="height: 35px;"
+                        data-entity="{{relation}}"
+                        data-id=""
+                        data-field=""
+                        data-column="{{column}}"
+                        rel="{{identifier}}"
+                    {{#disabled}} disabled='disabled' {{/disabled}}
+                >
+                    <i class="material-icons left transition-easy">add</i>
+                </button>
+            </div>
+            <div class="left color-text-grey padding-4 container upper relative">
+                {{nome}}
+            </div>
+        </div>
+
+        <div class="extend_list col transition-easy" style="height: 0;overflow: hidden"></div>
+        <div class="extend_list_register col transition-easy" style="overflow: hidden">
+            {{#value}}
+                <div class="col padding-small transition-easy extend_register" rel="{{id}}" style="height:38px;overflow: hidden">
+                    <div class="col">
+                        <div class="left">
+                            <div class="left font-medium padding-4 extend_register_title" rel="{{id}}">{{titulo}}</div>
+                        </div>
+                        <div class="right">
+                            <button class="right btn-small radius theme hover-theme opacity hover-opacity-off btn-del-extend-register transition-easy"
+                                    data-column="{{column}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px" >
+                                <i class="material-icons left font-large">delete</i>
+                            </button>
+                            <button class="right btn-small radius theme hover-theme opacity hover-opacity-off btn-edit-extend-register"
+                                    data-column="{{column}}" data-entity="{{relation}}" data-id="{{id}}">
+                                <i class="material-icons left font-large">edit</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col extend_register_edit transition-easy" style="height: 0;overflow: hidden">
+                    </div>
+                </div>
+            {{/value}}
+        </div>
+        <!--
+        <div class="col">
+            {if $value}
+                {foreach item=data key=i from=$value}
+                    <div class="listmult-card col" style="border-top: solid 2px #DDD;padding:0 5px" rel="{{data.id}}">
+                        <div class="col padding-small container" style="width:30px">
+                            <i class="material-icons padding-8">{{icon}}</i>
+                        </div>
+                        <div class="rest relative" style="padding-top:4px">
+                            <div class="right" style="width: 170px; height: 45px">
+                                <button id="{{entity}}-{{column}}-btn"
+                                        onclick="editListMult('{{relation}}', '#{{entity}}-{{column}}', {{data.id}})"
+                                        class="btn btnRelation hover-shadow padding-medium color-white opacity hover-opacity-off editListMult">
+                                    <i class="material-icons transition-ease-25 left">edit</i>
+                                    <span class="editListMultSpan" style="padding-left:10px">editar</span>
+                                </button>
+                                <button onclick="removerListMult('#{{entity}}-{{column}}', {{data.id}})"
+                                        class="btn-floating color-hover-text-red hover-shadow color-white opacity hover-opacity-off margin-0 removerListMult">
+                                    <i class="material-icons transition-ease-25">delete</i>
+                                </button>
+                            </div>
+                            <div class="left container padding-8 font-light listmult-title">
+                                {foreach key=k item=it from=$data.valores}
+                                    <small class="color-text-grey">{{k}}:</small> {{it}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+            {/if}
+        </div>
+
+        <div class="tpl_list_mult hide listmult-card col" style="border-top: solid 2px #DDD;padding:0 5px" rel="__$0__">
+            <div class="col padding-small container" style="width:30px">
+                <i class="material-icons padding-8">{{icon}}</i>
+            </div>
+            <div class="rest relative" style="padding-top:4px">
+                <div class="right" style="width: 170px; height: 45px">
+                    <button id="{{entity}}-{{column}}-btn"
+                            onclick="editListMult('{{relation}}', '#{{entity}}-{{column}}', __$0__)"
+                            class="btn btnRelation hover-shadow padding-medium color-white opacity hover-opacity-off editListMult">
+                        <i class="material-icons transition-ease-25 left">edit</i>
+                        <span class="editListMultSpan" style="padding-left:10px">editar</span>
+                    </button>
+                    <button onclick="removerListMult('#{{entity}}-{{column}}', __$0__)"
+                            class="btn-floating color-hover-text-red hover-shadow color-white opacity hover-opacity-off margin-0 removerListMult">
+                        <i class="material-icons transition-ease-25">delete</i>
+                    </button>
+                </div>
+                <div class="left container padding-8 font-light listmult-title">__$1__</div>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<style>
+    .extend_register:nth-child(odd)  {
+        background: #dfdfdf;
+    }
+</style>
