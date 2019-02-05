@@ -1,4 +1,4 @@
-<div class='form-control row font-large'>
+<div class='form-control col font-large'>
     <div class="container padding-24 s-padding-0">
         <div class="col card">
             {{#header}}
