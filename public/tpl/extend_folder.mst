@@ -1,0 +1,41 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative radius border-bottom {{form.class}}"
+         {{#form.style}}style="{{form.style}}"{{/form.style}}>
+
+        <div class="col pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
+             onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" style="margin-top: 7px;">
+            <i class="material-icons left font-xxlarge color-text-gray">create_new_folder</i>
+            <div class="left color-text-grey upper relative" style="padding:7px 0 0 15px">
+                {{nome}}
+            </div>
+        </div>
+
+        <div class="extend_list_register col transition-slow" data-id="{{formIdentificador}}-{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
+            {{#value}}
+                <div class="col transition-slow extend_register radius" rel="{{id}}" style="height:46px;overflow: hidden">
+                    <div class="col s-padding-bottom">
+                        <div class="col right padding-medium" style="width: 46px">
+                            <button onclick="deleteExtendMult('{{column}}', '{{id}}')" rel="{{id}}" class="right btn-small radius color-gray-light hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow"
+                                    data-column="{{column}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px; width: 38px" >
+                                <i class="material-icons left font-large">delete</i>
+                            </button>
+                        </div>
+                        <div class="rest pointer padding-medium no-select edit-folder" data-id="{{column}}-{{id}}" onclick="edtiExtendFolder('{{relation}}', '{{column}}', '{{nome}}', '{{id}}')">
+                            <i class="material-icons left" style="color: burlywood;font-size: 30px;">folder</i>
+                            <div class="left font-medium padding-4 padding-left extend_register_title" rel="{{id}}">{{{tituloExtend}}}</div>
+                        </div>
+                    </div>
+                    <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
+                    </div>
+                </div>
+            {{/value}}
+        </div>
+    </div>
+</div>
+
+<style>
+    .extend_register:nth-child(odd)  {
+        background: #fbfbfb;
+        border:solid 1px #eee;
+    }
+</style>

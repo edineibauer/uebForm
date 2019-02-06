@@ -1,18 +1,20 @@
 <div class='form-control col padding-8 s-padding-0 font-large'>
-    <div class="col card">
+    <div class="col{{#header}} card{{/header}}">
         {{#header}}
             <div class="col theme-d1 loadindTableSpace">
-                <div class="col padding-large padding-24 s-padding-medium s-padding-16">
+                <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
                     <button class="left color-white hover-shadow btn-floating btn-form-list"
                             rel="{{identificador}}">
                         <i class="material-icons left padding-rightd">keyboard_arrow_left</i>
                     </button>
-                    <h4 class="left theme-text-aux"
-                        style="padding: 5px 0 0 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
+                    <h4 class="left theme-text-aux" style="padding: 5px 0 0 7px;">
+                        <span class='pointer' rel="{{identificador}}" onclick="openForm('{{identificador}}')">
+                            {{#goodName}}{{entity}}{{/goodName}}
+                        </span>
+                    </h4>
 
                     <div class="right parent-save-form-mini">
-                        <button class="right color-white hover-shadow btn radius"
-                                onclick="saveForm('{{identificador}}')">
+                        <button class="right color-white hover-shadow btn radius btn-form-save" rel="{{identificador}}">
                             <i class="material-icons left">save</i>
                         </button>
                     </div>

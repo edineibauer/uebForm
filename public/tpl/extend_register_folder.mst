@@ -1,0 +1,16 @@
+<div class="col transition-slow extend_register radius" rel="{{id}}" style="height:46px;overflow: hidden">
+    <div class="col s-padding-bottom">
+        <div class="col right padding-medium" style="width: 46px">
+            <button onclick="deleteExtendMult('{{column}}', '{{id}}')" rel="{{id}}" class="right btn-small radius color-gray-light hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow"
+                    data-column="{{column}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px; width: 38px" >
+                <i class="material-icons left font-large">delete</i>
+            </button>
+        </div>
+        <div class="rest pointer no-select padding-medium edit-folder" data-id="{{column}}-{{id}}" onclick="edtiExtendFolder('{{relation}}', '{{column}}', '{{nome}}', '{{id}}')">
+            <i class="material-icons left" style="color: burlywood;font-size: 30px;">folder</i>
+            <div class="left font-medium padding-4 padding-left extend_register_title" rel="{{id}}">{{{tituloExtend}}}</div>
+        </div>
+    </div>
+    <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
+    </div>
+</div>
