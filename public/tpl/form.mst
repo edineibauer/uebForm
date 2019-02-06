@@ -1,44 +1,44 @@
-<div class='form-control col font-large'>
-    <div class="container padding-24 s-padding-0">
-        <div class="col card">
-            {{#header}}
-                <div class="col theme-d1 loadindTableSpace">
-                    <div class="col padding-large padding-24 s-padding-medium s-padding-16">
-                        <button class="left color-white hover-shadow btn-floating btn-form-list"
-                                rel="{{identificador}}">
-                            <i class="material-icons left padding-rightd">keyboard_arrow_left</i>
+<div class='form-control col padding-8 s-padding-0 font-large'>
+    <div class="col card">
+        {{#header}}
+            <div class="col theme-d1 loadindTableSpace">
+                <div class="col padding-large padding-24 s-padding-medium s-padding-16">
+                    <button class="left color-white hover-shadow btn-floating btn-form-list"
+                            rel="{{identificador}}">
+                        <i class="material-icons left padding-rightd">keyboard_arrow_left</i>
+                    </button>
+                    <h4 class="left theme-text-aux"
+                        style="padding: 5px 0 0 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
+
+                    <div class="right parent-save-form-mini">
+                        <button class="right color-white hover-shadow btn radius"
+                                onclick="saveForm('{{identificador}}')">
+                            <i class="material-icons left">save</i>
                         </button>
-                        <h4 class="left theme-text-aux" style="padding: 5px 0 0 7px;">{{#goodName}}{{entity}}{{/goodName}}</h4>
-
-                        <div class="right parent-save-form-mini">
-                            <button class="right color-white hover-shadow btn radius"
-                                    onclick="saveForm('{{identificador}}')">
-                                <i class="material-icons left">save</i>
-                            </button>
-                        </div>
                     </div>
                 </div>
-                <div class="col theme-l1 padding-4"></div>
-            {{/header}}
-
-            <div class="col relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
-                <div class="panel padding-top s-padding-small" style="margin-bottom: 0!important;">
-                    {{#inputs}}
-                        {{{.}}}
-                    {{/inputs}}
-                </div>
-
-                {{#options.saveButton}}
-                    <div class="col panel padding-bottom parent-save-form" style="padding-top: 0!important;margin-top: 0!important;">
-                        <div class="col padding-tiny">
-                            <button class="btn theme-d2 hover-shadow opacity hover-opacity-off"
-                                    onclick="saveForm('{{identificador}}')">
-                                <i class="material-icons left padding-right">save</i>Salvar
-                            </button>
-                        </div>
-                    </div>
-                {{/options.saveButton}}
             </div>
+            <div class="col theme-l1 padding-4"></div>
+        {{/header}}
+
+        <div class="col relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
+            <div class="panel padding-top s-padding-small" style="margin-bottom: 0!important;">
+                {{#inputs}}
+                    {{{.}}}
+                {{/inputs}}
+            </div>
+
+            {{#options.saveButton}}
+                <div class="col panel padding-bottom parent-save-form"
+                     style="padding-top: 0!important;margin-top: 0!important;">
+                    <div class="col padding-tiny">
+                        <button class="btn theme-d2 hover-shadow opacity hover-opacity-off"
+                                onclick="saveForm('{{identificador}}')">
+                            {{{options.buttonText}}}
+                        </button>
+                    </div>
+                </div>
+            {{/options.saveButton}}
         </div>
     </div>
 </div>

@@ -9,13 +9,13 @@
                 <span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}
             </span>
         </div>
-        <div class="col radius color-white border" style="min-height: 100px">
+        <div class="col radius border-top" style="min-height: 100px">
             {{#allow.empty}}
                 <h3>Defina Os tipos de Arquivos Aceitos</h3>
             {{/allow.empty}}
             {{^allow.empty}}
 
-                <div class="col file_gallery padding-small padding-8">
+                <div class="col file_gallery padding-8">
                     {{^disabled}}
                         <div class="col padding-small file-more {{#isFull}}hide{{/isFull}}" style="width: auto; min-width: 200px">
                             <label for="{{formIdentificador}}-{{column}}" class="card pointer radius align-center pointer hover-shadow transition-easy padding-64 font-xlarge" style="height: 170px">
