@@ -2,10 +2,10 @@
     <div class="col parent-input parent-relation relative radius border-bottom {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
 
-        <div class="col pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
-             onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" style="margin-top: 7px;">
-            <i class="material-icons left font-xxlarge color-text-gray">create_new_folder</i>
-            <div class="left color-text-grey upper relative" style="padding:7px 0 0 15px">
+        <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
+             onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
+            <i class="material-icons left font-xxlarge theme-text">create_new_folder</i>
+            <div class="left theme-text upper relative" style="padding:7px 0 0 15px">
                 {{nome}}
             </div>
         </div>
@@ -21,8 +21,8 @@
                             </button>
                         </div>
                         <div class="rest pointer padding-medium no-select edit-folder" data-id="{{column}}-{{id}}" onclick="edtiExtendFolder('{{relation}}', '{{column}}', '{{nome}}', '{{id}}')">
-                            <i class="material-icons left" style="color: burlywood;font-size: 30px;">folder</i>
-                            <div class="left font-medium padding-4 padding-left extend_register_title" rel="{{id}}">{{{tituloExtend}}}</div>
+                            <i class="material-icons left" style="color: burlywood;font-size: 30px; widht: 30px">folder</i>
+                            <div class="rest font-medium padding-4 padding-left extend_register_title" style="height: 28px" rel="{{id}}">{{{tituloExtend}}}</div>
                         </div>
                     </div>
                     <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
