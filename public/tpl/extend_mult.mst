@@ -2,19 +2,20 @@
     <div class="col parent-input parent-relation relative radius border-bottom {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
 
-        <div class="col padding-small padding-8" style="margin-bottom: 0!important;">
-            <div class="left color-text-grey padding-4 upper relative">
-                {{nome}}
-            </div>
-            <button class="addExtend no-select radius right opacity hover-opacity-off color-gray hover-shadow margin-0 right"
-                    style="height: 35px;"
-                    onclick="addExtendMult('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{id}}')" rel="{{id}}"
+        <div class="padding-8 left padding-right pointer"
+             onclick="addExtendMult('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{id}}')"
+             style="margin-bottom: 0!important;">
+            <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-right left"
+                    style="height: 35px;" rel="{{id}}"
                 {{#disabled}} disabled='disabled' {{/disabled}} >
                 <i class="material-icons left transition-easy">add</i>
             </button>
+            <div class="left color-text-grey padding-4 upper relative">
+                {{nome}}
+            </div>
         </div>
 
-        <div class="extend_list col padding-small transition-slow" style="height: 0;overflow: hidden"></div>
+        <div class="extend_list col transition-slow radius" style="background: #f5f5f5;height: 0;overflow: hidden"></div>
         <div class="extend_list_register col transition-slow" rel="{{formIdentificador}}" style="overflow: hidden">
             {{#value}}
                 <div class="col padding-small padding-8 transition-slow extend_register radius" rel="{{id}}" style="height:46px;overflow: hidden">
