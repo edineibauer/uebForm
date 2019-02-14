@@ -8,6 +8,7 @@
                     data-column="{{column}}"
                     class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                     autocomplete="off"
+                    readonly
                     id="{{column}}"
                     rel="{{formIdentificador}}"
                     data-parent="{{parent}}"
