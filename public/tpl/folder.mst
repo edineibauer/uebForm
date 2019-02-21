@@ -1,0 +1,13 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative radius border-bottom {{form.class}}"
+         {{#form.style}}style="{{form.style}}"{{/form.style}}>
+
+        <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
+             onclick="addFolderType('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
+            <i class="material-icons left font-xxlarge theme-text">create_new_folder</i>
+            <div class="left theme-text upper relative" style="padding:7px 0 0 15px">
+                {{nome}}
+            </div>
+        </div>
+    </div>
+</div>
