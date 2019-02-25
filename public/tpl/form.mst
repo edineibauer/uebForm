@@ -5,7 +5,7 @@
                 <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
                     <button class="left color-white hover-shadow btn-floating btn-form-list"
                             rel="{{identificador}}">
-                        <i class="material-icons left padding-rightd">keyboard_arrow_left</i>
+                        <i class="material-icons left">keyboard_arrow_left</i>
                     </button>
                     <h4 class="left theme-text-aux" style="padding: 5px 0 0 7px;">
                         <span class='pointer' rel="{{identificador}}" onclick="openForm('{{identificador}}')">
