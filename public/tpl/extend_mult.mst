@@ -2,7 +2,7 @@
     <div class="col parent-input parent-relation relative border-bottom {{form.class}}"
             style="margin-top: 10px;{{#form.style}}{{form.style}}{{/form.style}}">
 
-        <div class="padding-12 left padding-right pointer"
+        <div class="padding-12 left padding-right pointer" data-column="{{column}}"
              onclick="addExtendMult('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{id}}')"
              style="margin-bottom: 0!important;">
             <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-right left"
