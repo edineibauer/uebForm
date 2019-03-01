@@ -1,0 +1,7 @@
+<ul class="col s12 card list-result-itens">
+    {{#data}}
+        <li rel="{{id}}" class="list-option col font-light container padding-tiny hover-opacity-off pointer opacity">
+            {{{text}}}
+        </li>
+    {{/data}}
+</ul>

@@ -1,0 +1,46 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative {{form.class}}"
+         style="{{#form.style}}{{form.style}}{{/form.style}}">
+
+        <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-left right"
+                style="height: 35px;margin-top: 5px;" rel="{{id}}"
+            {{#disabled}} disabled='disabled' {{/disabled}}
+                onclick="addList('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')">
+            <i class="material-icons list-btn-icon left transition-easy" rel="{{column}}">{{^value}}add{{/value}}{{#value}}edit{{/value}}</i>
+        </button>
+
+        <label for="{{column}}" class="padding-12 left padding-right pointer" data-column="{{column}}"
+               style="margin-bottom: 0!important; max-width: 300px">
+            <div class="left color-text-grey padding-4 upper relative">
+                {{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
+            </div>
+        </label>
+
+        <div class="rest relative list-input padding-small" rel="{{column}}">
+            <input type="text" placeholder="pesquisar..." autocomplete="off"
+                   class="formCrudInput list{{#disabled}} disabled{{/disabled}}"
+                   data-column="{{column}}"
+                   data-entity="{{relation}}"
+                   data-parent="{{entity}}"
+                   id="{{column}}"
+                   data-value="{{value}}"
+                   rel="{{formIdentificador}}"
+                   data-parent="{{parent}}"
+                {{#required}} required="required" {{/required}}
+                {{#disabled}}disabled="disabled"{{/disabled}}
+                {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
+                {{{form.atributos}}}
+            />
+            <span class="input-bar"></span>
+
+            <div class="col" style="margin-top:-20px" id="list-result-{{column}}"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .extend_register:nth-child(odd) {
+        background: #fbfbfb;
+        border: solid 1px #eee;
+    }
+</style>
