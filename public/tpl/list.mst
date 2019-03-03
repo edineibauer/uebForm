@@ -32,6 +32,9 @@
                 {{{form.atributos}}}
             />
             <span class="input-bar"></span>
+            <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+                <span class="left input-message color-text-red padding-right" rel="{{column}}"></span>
+            </div>
 
             <div class="col" style="margin-top:-20px" id="list-result-{{column}}"></div>
         </div>
