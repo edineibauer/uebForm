@@ -5,9 +5,12 @@
         <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
              onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" data-column="{{column}}" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
             <i class="material-icons left font-xxlarge theme-text">create_new_folder</i>
-            <div class="left theme-text upper relative" style="padding:7px 0 0 15px">
+            <div class="left formCrudInput theme-text upper relative" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:7px 0 0 15px">
                 {{nome}}
             </div>
+        </div>
+        <div class="left padding-24 info-container font-small" rel="{{column}}">
+            <span class="left input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
 
         <div class="extend_list_register col transition-slow" data-id="{{formIdentificador}}-{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
