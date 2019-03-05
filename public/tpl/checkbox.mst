@@ -2,7 +2,7 @@
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <span class="col">
             <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
-            <span class="left input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
+            <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
         </span>
         {{#allow.options}}
             <div class="{{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">

@@ -24,7 +24,7 @@
                 <span class="right align-right color-text-gray"  rel="{{column}}">
                     <span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}
                 </span>
-                <span class="left input-message color-text-red padding-right" rel="{{column}}"></span>
+                <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
             </div>
         </label>
     </div>

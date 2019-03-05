@@ -3,7 +3,7 @@
         <label class="left">
             <span class="col">
                 <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
-                <span class="left input-message color-text-red padding-left padding-left" style="font-size: 12px;" rel="{{column}}"></span>
+                <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;" rel="{{column}}"></span>
             </span>
             <div class="switch switch-squad{{#disabled}} disabled{{/disabled}}">
                 <input

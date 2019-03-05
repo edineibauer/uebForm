@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="left padding-24 info-container font-small" rel="{{column}}">
-            <span class="left input-message color-text-red padding-right" rel="{{column}}"></span>
+            <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
 
         <div class="extend_list_register col transition-slow" data-id="{{formIdentificador}}-{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
