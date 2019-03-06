@@ -10,10 +10,12 @@
             {{#columnStatus.have}}
                 <label class="right" style="height: 35px;">
                     <div class="switch switch-squad" style="margin:-8px 3px 0 0">
-                        <input type="checkbox" class="switch-status-table switchCheck"
+                        <input type="checkbox" class="switch-status-extend switchCheck"
                                data-status="{{columnStatus.value}}"
-                               data-entity="{{entity}}" data-id="{{id}}"
-                               rel="{{identificador}}"
+                               data-column="{{columnName}}"
+                               data-entity="{{entity}}"
+                               data-id="{{id}}"
+                               rel="{{formIdentificador}}"
                                {{#columnStatus.value}}checked='checked'{{/columnStatus.value}}
                         />
                         <div class="slider"></div>
