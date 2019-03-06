@@ -15,5 +15,6 @@
             <i class="material-icons pointer opacity hover-opacity-off padding-4">get_app</i>
         </a>
         <small class="right padding-medium font-small">{{sizeName}}</small>
+        <small class="right padding-medium font-small">{{data}}</small>
     {{/size}}
 </div>
