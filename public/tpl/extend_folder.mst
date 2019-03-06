@@ -4,8 +4,8 @@
 
         <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
              onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" data-column="{{column}}" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
-            <i class="material-icons left font-xxlarge theme-text">create_new_folder</i>
-            <div class="left formCrudInput theme-text upper relative" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:7px 0 0 15px">
+            <i class="material-icons left font-xlarge theme-text">create_new_folder</i>
+            <div class="left formCrudInput theme-text upper relative font-medium" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 15px">
                 {{nome}}
             </div>
         </div>
@@ -15,22 +15,7 @@
 
         <div class="extend_list_register col transition-slow" data-id="{{formIdentificador}}-{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
             {{#value}}
-                <div class="col transition-slow extend_register radius" rel="{{id}}" style="height:46px;overflow: hidden">
-                    <div class="col s-padding-bottom">
-                        <div class="col right padding-medium" style="width: 46px">
-                            <button onclick="deleteExtendMult('{{columnName}}', '{{id}}')" rel="{{id}}" class="right btn-small radius color-gray-light hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow"
-                                    data-column="{{columnName}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px; width: 38px" >
-                                <i class="material-icons left font-large">delete</i>
-                            </button>
-                        </div>
-                        <div class="rest pointer padding-medium no-select edit-folder" data-id="{{columnName}}-{{id}}" onclick="edtiExtendFolder('{{columnRelation}}', '{{columnName}}', '{{columnNome}}', '{{id}}')">
-                            <i class="material-icons left" style="color: burlywood;font-size: 30px; widht: 30px">folder</i>
-                            <div class="rest font-medium padding-4 padding-left extend_register_title" style="height: 28px" rel="{{id}}">{{{columnTituloExtend}}}</div>
-                        </div>
-                    </div>
-                    <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
-                    </div>
-                </div>
+                {{> file_source}}
             {{/value}}
         </div>
     </div>

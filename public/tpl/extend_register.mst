@@ -5,6 +5,19 @@
                     data-column="{{columnName}}" data-id="{{id}}" style="overflow: hidden;margin-left: 5px; width: 38px" >
                 <i class="material-icons left font-large">delete</i>
             </button>
+            {{#columnStatus.have}}
+                <label class="right" style="height: 40px;">
+                    <div class="switch switch-squad" style="margin:0 7px 0 0">
+                        <input type="checkbox" class="switch-status-table switchCheck"
+                               data-status="{{columnStatus.value}}"
+                               data-entity="{{entity}}" data-id="{{id}}"
+                               rel="{{identificador}}"
+                               {{#columnStatus.value}}checked='checked'{{/columnStatus.value}}
+                        />
+                        <div class="slider"></div>
+                    </div>
+                </label>
+            {{/columnStatus.have}}
         </div>
         <div class="rest pointer no-select" onclick="edtiExtendMult('{{columnRelation}}', '{{columnName}}', '{{id}}')">
             <button class="left btn-small radius theme hover-theme opacity hover-opacity-off btn-edit-extend-register transition-slow" rel="{{id}}" style="margin-top:1px">

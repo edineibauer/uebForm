@@ -4,8 +4,8 @@
 
         <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}" {{#disabled}} disabled='disabled' {{/disabled}}
              onclick="addFolderType('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
-            <i class="material-icons left font-xxlarge theme-text">create_new_folder</i>
-            <div class="left theme-text upper relative formCrudInput" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:7px 0 0 15px">
+            <i class="material-icons left font-xlarge theme-text">create_new_folder</i>
+            <div class="left theme-text upper relative font-medium formCrudInput" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 15px">
                 {{nome}}
             </div>
         </div>
