@@ -2,8 +2,8 @@
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="left">
             <span class="col">
-                <div class="left align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
-                <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;" rel="{{column}}"></span>
+                <div class="left align-left padding-right">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
+                <span class="rest input-message color-text-red" style="font-size: 12px;" rel="{{column}}"></span>
             </span>
             <div class="switch switch-squad{{#disabled}} disabled{{/disabled}}">
                 <input
