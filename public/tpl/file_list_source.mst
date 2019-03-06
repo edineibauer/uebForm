@@ -1,0 +1,19 @@
+<div class="col padding-small mock-file border-bottom transition-easy relative" id="mock-{{name}}"
+     style="background:#fbfbfb;overflow:hidden; height: 36px;">
+    {{{preview}}}
+
+    {{#size}}
+        <div class="left padding-small font-medium">
+            {{name}}.{{type}}
+        </div>
+
+        <div class="{{#disabled}} disabled{{/disabled}} right" style="height: 30px;">
+            <i rel="{{name}}" style="padding-right: 0;"
+               class="material-icons remove-file-gallery pointer padding-tiny font-xlarge opacity hover-opacity-off color-text-gray">delete</i>
+        </div>
+        <a href="{{url}}" download="{{nome}}.{{type}}" target="_blank" class="right">
+            <i class="material-icons pointer opacity hover-opacity-off padding-4">get_app</i>
+        </a>
+        <small class="right padding-medium font-small">{{sizeName}}</small>
+    {{/size}}
+</div>

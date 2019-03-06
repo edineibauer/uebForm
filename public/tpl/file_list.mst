@@ -15,13 +15,13 @@
             {{/allow.empty}}
             {{^allow.empty}}
 
-                <div class="col file_gallery padding-8">
+                <div class="col file_gallery padding-tiny padding-8">
                     {{^disabled}}
-                        <div class="col padding-small file-more {{#isFull}}hide{{/isFull}}" style="width: auto; min-width: 200px">
-                            <label for="{{formIdentificador}}-{{column}}" class="card pointer radius align-center pointer hover-shadow transition-easy padding-64 font-xlarge" style="height: 170px">
-                                Selecione
-                            </label>
-                        </div>
+                        <label for="{{formIdentificador}}-{{column}}" style="margin: 0 0 7px;"
+                               class="btn font-small left padding-small theme-d2 opacity hover-shadow hover-opacity-off radius{{#isFull}} hide{{/isFull}}">
+                            <i class="material-icons left font-large" style="padding-right: 7px">add</i>
+                            <span class="left" style="padding-right: 7px">Enviar</span>
+                        </label>
                     {{/disabled}}
 
                     {{#value}}
@@ -32,7 +32,7 @@
 
                 <input name="file" class="hide formCrudInput" type="file"
                        id="{{formIdentificador}}-{{column}}"
-                       data-format="source"
+                       data-format="source_list"
                        data-column="{{column}}"
                        data-parent="{{parent}}"
                        rel="{{formIdentificador}}"
@@ -43,4 +43,8 @@
             {{/allow.empty}}
         </div>
     </div>
+</div>
+
+<div class="hide">
+
 </div>
