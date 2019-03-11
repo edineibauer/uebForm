@@ -251,7 +251,7 @@ class Form
         for ($c = 1; $c < $max; $c++) {
             if ($meta = $d->search("indice", $c)) {
                 //pula algumas colunas pré-definidas
-                if (!empty($d->search(0)) && !($d->getEntity() !== "usuarios" || (!empty($d->search(0)) && !empty($_SESSION['userlogin']) && $_SESSION['userlogin']['id'] != $d->search(0))) && in_array($meta->getColumn(), ["status", "setor", "nivel"]))
+                if (!empty($d->search(0)) && !($d->getEntity() !== "usuarios" || (!empty($d->search(0)) && !empty($_SESSION['userlogin']) && $_SESSION['userlogin']['id'] != $d->search(0))) && in_array($meta->getColumn(), ["status", "setor"]))
                     continue;
 
                 //esconde input
