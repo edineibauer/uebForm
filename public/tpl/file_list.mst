@@ -9,7 +9,7 @@
                 <span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}
             </span>
         </div>
-        <div class="col radius border-top" style="min-height: 100px">
+        <div class="col radius border-top" style="min-height: 70px">
             {{#allow.empty}}
                 <h3>Defina Os tipos de Arquivos Aceitos</h3>
             {{/allow.empty}}
