@@ -22,10 +22,10 @@
             {{/columnStatus.have}}
         </div>
         <div class="rest pointer no-select" onclick="edtiExtendMult('{{columnRelation}}', '{{columnName}}', '{{id}}')">
-            <button class="left btn-small radius theme hover-theme opacity hover-opacity-off btn-edit-extend-register transition-slow" rel="{{id}}" style="margin-top:1px">
+            <button class="left btn-small radius theme hover-theme opacity hover-opacity-off btn-edit-extend-register transition-slow" rel="{{id}}" style="margin:1px 0 7px">
                 <i class="material-icons left font-large transition-slow">edit</i>
             </button>
-            <div class="left font-medium padding-4 padding-left extend_register_title" rel="{{id}}">{{{columnTituloExtend}}}</div>
+            <div style="height: 30px" class="rest font-medium padding-4 padding-left extend_register_title" rel="{{id}}">{{{columnTituloExtend}}}</div>
         </div>
     </div>
     <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">
