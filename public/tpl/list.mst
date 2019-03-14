@@ -12,7 +12,7 @@
 
         <div class="rest relative list-input" rel="{{column}}">
             <input type="text" placeholder="pesquisar..." autocomplete="off"
-                   class="list{{#disabled}} disabled{{/disabled}}"
+                   class="formCrudInput list{{#disabled}} disabled{{/disabled}}"
                    data-column="{{column}}"
                    data-entity="{{relation}}"
                    data-parent="{{parent}}"
