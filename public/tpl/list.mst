@@ -3,8 +3,8 @@
          style="{{#form.style}}{{form.style}}{{/form.style}}">
         <label for="{{column}}" class="col align-left font-small color-text-gray-dark" data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</label>
 
-        <div class="addExtend no-select radius theme-text-hover right btn-flat pointer padding-small"
-             style="height: 35px;margin-top: 5px;" rel="{{id}}"
+        <div class="addExtend no-select theme-text-hover right pointer btn-floating hover-shadow opacity hover-opacity-off theme-d2"
+             style="margin-right: 0;" rel="{{id}}"
             {{#disabled}} disabled='disabled' {{/disabled}}
              onclick="addList('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{parent}}', '{{nome}}', this)">
             <i class="material-icons list-btn-icon left transition-easy" rel="{{column}}">{{^value}}add{{/value}}{{#value}}edit{{/value}}</i>
