@@ -12,7 +12,7 @@
 
         <div class="rest relative list-input" rel="{{column}}">
             <input type="text" placeholder="pesquisar..." autocomplete="off"
-                   class="formCrudInput list{{#disabled}} disabled{{/disabled}}"
+                   class="list{{#disabled}} disabled{{/disabled}}"
                    data-column="{{column}}"
                    data-entity="{{relation}}"
                    data-parent="{{parent}}"
@@ -25,11 +25,12 @@
                 {{{form.atributos}}}
             />
             <span class="input-bar"></span>
-            <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
-                <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
-            </div>
 
             <div class="col" style="margin-top:-20px" id="list-result-{{column}}"></div>
+        </div>
+        <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+            <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
+            <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}" />
         </div>
     </div>
 </div>
