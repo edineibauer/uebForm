@@ -1,13 +1,16 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input parent-relation relative {{form.class}}"
          style="{{#form.style}}{{form.style}}{{/form.style}}">
-        <label for="{{column}}" class="col align-left font-small color-text-gray-dark" data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</label>
+        <label for="{{column}}" class="col align-left font-small color-text-gray-dark"
+               data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
+        </label>
 
         <div class="addExtend no-select theme-text-hover right pointer btn-floating hover-shadow opacity hover-opacity-off theme-d2"
              style="margin-right: 0;" rel="{{id}}"
             {{#disabled}} disabled='disabled' {{/disabled}}
-             onclick="addList('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{parent}}', '{{nome}}', this)">
-            <i class="material-icons list-btn-icon left transition-easy" rel="{{column}}">{{^value}}add{{/value}}{{#value}}edit{{/value}}</i>
+            {{^disabled}}onclick="addList('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{parent}}', '{{nome}}', this)"{{/disabled}}>
+            <i class="material-icons list-btn-icon left transition-easy" rel="{{column}}">{{^value}}
+                add{{/value}}{{#value}}edit{{/value}}</i>
         </div>
 
         <div class="rest relative list-input" rel="{{column}}">
@@ -30,7 +33,7 @@
         </div>
         <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
-            <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}" />
+            <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}"/>
         </div>
     </div>
 </div>
