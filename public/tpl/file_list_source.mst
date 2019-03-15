@@ -7,10 +7,12 @@
             {{name}}.{{type}}
         </div>
 
-        <div class="{{#disabled}} disabled{{/disabled}} right" style="height: 30px;">
-            <i rel="{{name}}" style="padding-right: 0;"
-               class="material-icons remove-file-gallery pointer padding-tiny font-xlarge opacity hover-opacity-off color-text-gray no-select">delete</i>
-        </div>
+        {{^disabled}}
+            <div class="right" style="height: 30px;">
+                <i rel="{{name}}" style="padding-right: 0;"
+                   class="material-icons remove-file-gallery pointer padding-tiny font-xlarge opacity hover-opacity-off color-text-gray no-select">delete</i>
+            </div>
+        {{/disabled}}
         <a href="{{url}}" download="{{nome}}.{{type}}" target="_blank" class="right no-select">
             <i class="material-icons pointer opacity hover-opacity-off padding-4">get_app</i>
         </a>
