@@ -3,7 +3,7 @@
     {{{preview}}}
 
     {{#size}}
-        <div class="left padding-small font-medium">
+        <div class="left padding-small font-medium" style="max-width: 65%">
             {{name}}.{{type}}
         </div>
 
