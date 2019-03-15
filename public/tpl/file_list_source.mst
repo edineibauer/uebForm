@@ -1,6 +1,8 @@
 <div class="col padding-small mock-file border-bottom transition-easy relative" id="mock-{{name}}"
      style="background:#fbfbfb;overflow:hidden; height: 36px;">
-    {{{preview}}}
+    <a href="{{url}}" target="_blank" class="left">
+        {{{preview}}}
+    </a>
 
     {{#size}}
         <div class="left padding-small font-medium" style="max-width: 65%">
