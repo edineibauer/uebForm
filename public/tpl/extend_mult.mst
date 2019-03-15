@@ -5,9 +5,9 @@
         <div class="padding-12 left padding-right pointer" data-column="{{column}}"
             {{^disabled}}onclick="addExtendMult('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{id}}')"{{/disabled}}
              style="margin-bottom: 0!important;">
-            <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-right left"
+            <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-right left{{#disabled}} disabled{{/disabled}}"
                     style="height: 35px;" rel="{{id}}"
-                {{#disabled}} disabled='disabled' {{/disabled}} >
+                {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}} >
                 <i class="material-icons left transition-easy">add</i>
             </button>
             <div class="left color-text-grey padding-4 upper relative">
