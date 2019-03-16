@@ -18,7 +18,7 @@
                 <div class="col file_gallery padding-tiny padding-8">
                     {{^disabled}}
                         <label for="{{formIdentificador}}-{{column}}" style="margin: 0 0 7px;"
-                               class="btn font-small left padding-small theme-d2 opacity hover-shadow hover-opacity-off radius{{#isFull}} hide{{/isFull}}">
+                               class="file-more btn font-small left padding-small theme-d2 opacity hover-shadow hover-opacity-off radius{{#isFull}} hide{{/isFull}}">
                             <i class="material-icons left font-large" style="padding-right: 7px">add</i>
                             <span class="left" style="padding-right: 7px">Enviar</span>
                         </label>
