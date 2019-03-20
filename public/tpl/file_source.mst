@@ -1,21 +1,21 @@
 <div class="col padding-small mock-file" style="width: auto; min-width: 170px" id="mock-{{name}}">
     <div class="card radius align-center hover-shadow transition-easy" style="overflow:hidden">
-        <div class="display-container file_source {{class}}" style="{{style}}" {{attr}}>
+        <div class="file_source {{class}}" style="position:relative;{{style}}" {{attr}}>
             {{{preview}}}
 
             {{#size}}
-                <div class="col display-bottommiddle padding-top" style="background-color: rgba(0,0,0, 0.25);">
-                    <a href="{{url}}" download="{{nome}}.{{type}}" target="_blank" alt="{{nome}}" class="display-bottomright align-center">
+                <div class="col padding-top" style="background-color: rgba(0,0,0, 0.25);">
+                    <a href="{{url}}" download="{{nome}}.{{type}}" target="_blank" alt="{{nome}}" class="right align-center">
                         <i class="material-icons text-shadow color-text-white pointer opacity hover-opacity-off padding-small">get_app</i>
                     </a>
 
                     <div class="color-text-white text-shadow">
-                        <small style="margin-bottom: -5px;display: block" class="font-small">{{sizeName}}</small>
-                        <p class="padding-4" style="margin: 0">{{nome}}</p>
+                        <small style="padding: 7px 15px;" class="left font-small">{{sizeName}}</small>
+                        <p class="padding-tiny margin-0">{{nome}}</p>
                     </div>
                 </div>
 
-                <div class="radius display-topright{{#disabled}} disabled{{/disabled}}" style="background: rgba(0,0,0, 0.4);height: 30px;">
+                <div class="radius {{#disabled}} disabled{{/disabled}}" style="position:absolute; top:0;right: 0;background: rgba(0,0,0, 0.4);height: 30px;">
                     <i rel="{{name}}" class="material-icons text-shadow remove-file-gallery pointer padding-tiny font-xlarge opacity hover-opacity-off color-text-white">close</i>
                 </div>
             {{/size}}
