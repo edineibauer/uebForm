@@ -1,6 +1,6 @@
 <div class="col padding-small mock-file" style="width: auto; min-width: 170px" id="mock-{{name}}">
-    <div class="card radius align-center hover-shadow transition-easy" style="overflow:hidden; height: 170px;">
-        <div class="display-container" style="height: 170px;">
+    <div class="card radius align-center hover-shadow transition-easy" style="overflow:hidden">
+        <div class="display-container file_source {{class}}" style="{{style}}" {{attr}}>
             {{{preview}}}
 
             {{#size}}
