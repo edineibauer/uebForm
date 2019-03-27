@@ -44,8 +44,3 @@
         </div>
     </div>
 </div>
-
-<div id="progress-wrp" class="hide">
-    <div class="progress-bar"></div>
-    <div class="status">0%</div>
-</div>

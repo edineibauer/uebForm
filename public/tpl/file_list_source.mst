@@ -9,6 +9,11 @@
             {{name}}.{{type}}
         </div>
 
+        <div class="hide progress-wrp" rel="{{name}}">
+            <div class="progress-bar"></div>
+            <div class="status">0%</div>
+        </div>
+
         {{^disabled}}
             <div class="right" style="height: 30px;">
                 <i rel="{{name}}" style="padding-right: 0;"
