@@ -15,7 +15,7 @@
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
 
-        <div class="extend_list_register col transition-slow{{#disabled}} disabled{{/disabled}}" data-id="{{formIdentificador}}-{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
+        <div class="extend_list_register col transition-slow{{#disabled}} disabled{{/disabled}}" data-id="{{formIdentificador}}-{{column}}" data-column="{{column}}" rel="{{formIdentificador}}" style="overflow: hidden">
             {{#value}}
                 {{> file_source}}
             {{/value}}
