@@ -23,14 +23,14 @@
                 </label>
             {{/columnStatus.have}}
         </div>
-        <div class="rest no-select padding-medium edit-folder" data-id="{{columnName}}-{{id}}">
+        <div class="rest no-select padding-medium edit-folder" style="cursor: move" data-id="{{columnName}}-{{id}}">
             <button onclick="edtiExtendFolder('{{columnRelation}}', '{{columnName}}', '{{columnNome}}', '{{id}}')" data-id="{{columnName}}-{{id}}"
-                    class="left btn-small pointer radius color-gray-light hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow"
+                    class="left btn-small pointer radius theme opacity hover-opacity-off btn-del-extend-register transition-slow"
                     style="overflow: hidden;margin-left: 5px; width: 38px">
                 <i class="material-icons left font-large">edit</i>
             </button>
             <div class="left font-medium padding-4 padding-left extend_register_title"
-                 rel="{{id}}" style="cursor: move">{{{columnTituloExtend}}}</div>
+                 rel="{{id}}" style="cursor: default">{{{columnTituloExtend}}}</div>
         </div>
     </div>
     <div class="col extend_register_edit transition-slow" style="height: 0;overflow: hidden">

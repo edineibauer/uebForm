@@ -5,7 +5,7 @@
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <div class="addExtend no-select theme-text-hover right btn-floating hover-shadow opacity hover-opacity-off theme-d2
+        <div class="addExtend no-select right btn-floating hover-shadow opacity hover-opacity-off theme-d2
             {{^disabled}} pointer{{/disabled}}
             {{#disabled}} disabled{{/disabled}}"
              style="margin-right: 0;" rel="{{id}}"
