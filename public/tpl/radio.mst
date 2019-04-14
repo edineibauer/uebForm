@@ -12,7 +12,7 @@
                            name="{{column}}"
                            data-column="{{column}}"
                            data-parent="{{parent}}"
-                           value="{{option}}"
+                           value="{{valor}}"
                            class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                            {{#disabled}}disabled="disabled"{{/disabled}}
                            {{#isChecked}}checked="checked"{{/isChecked}}
@@ -23,7 +23,7 @@
                     <span></span>
                 </span>
                     <div class="left{{#disabled}} disabled{{/disabled}}" style="margin-top: -12px;padding-left: 5px;">
-                        {{name}}
+                        {{representacao}}
                     </div>
                 </label>
             </div>

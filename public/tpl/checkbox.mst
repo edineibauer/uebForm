@@ -12,14 +12,14 @@
                            name="{{column}}"
                            data-column="{{column}}"
                            data-parent="{{parent}}"
-                           value="{{option}}"
+                           value="{{valor}}"
                            class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                            {{#disabled}}disabled="disabled"{{/disabled}}
                            {{#isChecked}}checked="checked"{{/isChecked}}
                            rel="{{formIdentificador}}"
                         {{#disabled}} disabled='disabled' {{/disabled}}/>
                     <div class="left font-large padding-small padding-8 pointer{{#disabled}} disabled{{/disabled}}">
-                        {{name}}
+                        {{representacao}}
                     </div>
                 </label>
             </div>

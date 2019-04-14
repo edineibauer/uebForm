@@ -19,8 +19,8 @@
                 {{/value}}
 
                 {{#allow.options}}
-                    <option value="{{option}}" {{#isChecked}}selected="selected"{{/isChecked}}>
-                        {{name}}
+                    <option value="{{valor}}" {{#isChecked}}selected="selected"{{/isChecked}}>
+                        {{representacao}}
                     </option>
                 {{/allow.options}}
             </select>
