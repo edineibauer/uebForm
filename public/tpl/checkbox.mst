@@ -12,6 +12,7 @@
                            name="{{column}}"
                            data-column="{{column}}"
                            data-parent="{{parent}}"
+                           data-max="{{size}}"
                            value="{{valor}}"
                            class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                            {{#disabled}}disabled="disabled"{{/disabled}}
