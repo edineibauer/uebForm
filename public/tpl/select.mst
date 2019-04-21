@@ -1,7 +1,7 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="col">
-            <span class="col align-left">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</span>
+            <span class="col align-left formLabel">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</span>
             <select data-format="{{format}}"
                     class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                     {{#disabled}}disabled="disabled"{{/disabled}}

@@ -1,7 +1,7 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input parent-relation relative {{form.class}}"
          style="{{#form.style}}{{form.style}}{{/form.style}}">
-        <label for="{{column}}" class="col align-left font-small color-text-gray-dark"
+        <label for="{{column}}" class="col align-left font-small color-text-gray-dark formLabel"
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
