@@ -5,7 +5,7 @@
             <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
         </span>
         {{#allow.options}}
-            <div class="{{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
+            <div class="no-select {{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
                 <label class="left">
                     <input type="checkbox"
                            data-format="{{format}}"

@@ -5,7 +5,7 @@
             <span class="left input-message color-text-red padding-left padding-left font-small" rel="{{column}}"></span>
         </span>
         {{#allow.options}}
-            <div class="md-radio {{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
+            <div class="md-radio no-select {{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
                 <label class="left pointer">
                     <input type="radio"
                            data-format="{{format}}"

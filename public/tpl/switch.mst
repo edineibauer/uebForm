@@ -5,7 +5,7 @@
                 <div class="left align-left padding-right formLabel">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
                 <span class="rest input-message color-text-red" style="font-size: 12px;" rel="{{column}}"></span>
             </span>
-            <div class="switch switch-squad{{#disabled}} disabled{{/disabled}}">
+            <div class="switch no-select switch-squad{{#disabled}} disabled{{/disabled}}">
                 <input
                         type="checkbox"
                         data-format="{{format}}"

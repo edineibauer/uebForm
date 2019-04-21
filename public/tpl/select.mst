@@ -3,7 +3,7 @@
         <label class="col">
             <span class="col align-left formLabel">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</span>
             <select data-format="{{format}}"
-                    class="formCrudInput{{#disabled}} disabled{{/disabled}}"
+                    class="no-select formCrudInput{{#disabled}} disabled{{/disabled}}"
                     {{#disabled}}disabled="disabled"{{/disabled}}
                     id="{{column}}"
                     data-column="{{column}}"
