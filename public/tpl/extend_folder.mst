@@ -2,7 +2,7 @@
     <div class="col parent-input parent-relation relative {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
 
-        <div class="btn left color-gray-light radius padding-small hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
+        <div class="btn left color-gray-light radius padding-medium hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
             {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}}
             {{^disabled}} onclick="addExtendFolder('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')"{{/disabled}}
              data-column="{{column}}" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">

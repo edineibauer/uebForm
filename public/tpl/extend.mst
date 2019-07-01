@@ -1,8 +1,5 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative form-crud-relation {{form.class}}" style="{{#form.style}}{{form.style}}{{/form.style}}">
-        <header class="col theme-border-d" style="border-bottom: solid 1px;">
-            <h4 class="upper theme-text-d align-left padding-4 color-theme">{{column}}</h4>
-        </header>
         <div class="col padding-16" data-column="{{column}}">
             {{#inputs}}
                 {{{.}}}
