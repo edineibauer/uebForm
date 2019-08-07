@@ -6,10 +6,10 @@
             {{#disabled}} disabled='disabled' title='atualizações não permitidas'{{/disabled}}
             {{^disabled}}onclick="addFolderType('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')"{{/disabled}}
              style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
-            <i class="material-icons left font-xlarge theme-text">create_new_folder</i>
+            <i class="material-icons left font-xlarge theme-text">add</i>
             <div class="left theme-text upper relative font-medium formCrudInput" data-column="{{column}}"
-                 data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 15px">
-                {{nome}}
+                 data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
+                Adicionar {{nome}}
             </div>
         </div>
         <div class="left padding-24 info-container font-small" rel="{{column}}">
