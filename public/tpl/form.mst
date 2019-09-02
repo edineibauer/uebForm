@@ -1,5 +1,5 @@
 <div class='form-control col padding-24 s-padding-0 font-large'>
-    <div class="col{{#header}} card{{/header}} radius border overflow-hidden">
+    <div class="col{{#header}} card radius border overflow-hidden{{/header}}">
         {{#header}}
             <div class="col theme-d1 loadindTableSpace">
                 <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
