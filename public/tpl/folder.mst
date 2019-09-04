@@ -19,9 +19,10 @@
             </div>
         </div>
         {{#value}}
-            <div class="left padding-16" rel="{{column}}">
+            <div class="left padding-16 registerRelationName" rel="{{column}}">
                 <span class="rest color-text-gray padding-right">{{{columnTituloExtend}}}</span>
             </div>
+            <div class='right pointer padding-medium padding-16 deleteRegisterRelation color-text-gray-dark color-hover-text-red' rel="{{column}}" onclick="deleteRegisterRelation('{{column}}')"><i class='material-icons'>delete</i></div>
         {{/value}}
     </div>
 </div>
