@@ -5,14 +5,23 @@
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <div class="addExtend no-select right btn-floating hover-shadow opacity hover-opacity-off theme-d2
-            {{^disabled}} pointer{{/disabled}}
-            {{#disabled}} disabled{{/disabled}}"
-             style="margin-right: 0;" rel="{{id}}"
+        <div class="btn right theme-d1 radius padding-medium hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+             style="border: solid 1px #dddddd;box-shadow: none;margin-right: 0;" rel="{{id}}"
             {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
-            {{^disabled}}onclick="addList('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{parent}}', '{{nome}}', this)"{{/disabled}}>
-            <i class="material-icons list-btn-icon left transition-easy" rel="{{column}}">{{^value}}
-                add{{/value}}{{#value}}edit{{/value}}</i>
+            {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}')"{{/disabled}}>
+            {{^value}}
+                <i class="material-icons color-text-gray-dark list-btn-icon left transition-easy" rel="{{column}}">add</i>
+                <div class="left theme-text relative font-medium" style="padding:1px 0 0 5px">
+                    adicionar
+                </div>
+            {{/value}}
+            {{#value}}
+                <i class="material-icons color-text-gray-dark list-btn-icon font-large left transition-easy" rel="{{column}}">edit</i>
+                <div class="left theme-text relative font-medium" style="padding:1px 0 0 5px">
+                    editar
+                </div>
+            {{/value}}
+
         </div>
 
         <div class="rest relative list-input" rel="{{column}}">

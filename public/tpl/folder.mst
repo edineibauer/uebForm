@@ -1,19 +1,27 @@
-<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+<div style="background: #f5f5f5;border: solid 1px #eee;" class='col radius margin-bottom padding-top padding-left relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input no-select parent-relation relative radius {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
-
-        <div class="btn left color-gray-light radius padding-medium hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
-            {{#disabled}} disabled='disabled' title='atualizações não permitidas'{{/disabled}}
-            {{^disabled}}onclick="addFolderType('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{nome}}')"{{/disabled}}
-             style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
-            <i class="material-icons left font-xlarge theme-text">add</i>
-            <div class="left theme-text upper relative font-medium formCrudInput" data-column="{{column}}"
-                 data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
-                Adicionar {{nome}}
-            </div>
-        </div>
-        <div class="left padding-24 info-container font-small" rel="{{column}}">
+        <h3 style="color: #888888;padding: 14px 15px 5px 0" class="left font-large font-bold">{{nome}}</h3>
+        <div class="left info-container font-small" style="padding-top: 20px;height: 40px;" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
+        <div class="btn right theme radius padding-medium hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
+            {{#disabled}} disabled='disabled' title='atualizações não permitidas'{{/disabled}}
+            {{^disabled}}onclick="editFormRelation('{{relation}}', '{{column}}')"{{/disabled}}
+             style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
+
+            {{^value}}<i class="material-icons left font-xlarge theme-text">add</i>{{/value}}
+            {{#value}}<i class="material-icons left font-large theme-text" style="margin-top: 2px">edit</i>{{/value}}
+
+            <div class="left theme-text relative font-medium formCrudInput" data-column="{{column}}"
+                 data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
+                {{^value}}adicionar{{/value}}{{#value}}editar{{/value}}
+            </div>
+        </div>
+        {{#value}}
+            <div class="left padding-16" rel="{{column}}">
+                <span class="rest color-text-gray padding-right">{{{columnTituloExtend}}}</span>
+            </div>
+        {{/value}}
     </div>
 </div>

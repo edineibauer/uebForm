@@ -1,19 +1,22 @@
-<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+<div style="background: #f5f5f5;border: solid 1px #eee;" class='radius col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input parent-relation relative border-bottom {{form.class}}"
             style="{{#form.style}}{{form.style}}{{/form.style}}">
 
-        <div class="padding-12 left padding-right pointer" data-column="{{column}}"
-            {{^disabled}}onclick="addExtendMult('{{formIdentificador}}', '{{relation}}', '{{column}}', '{{id}}')"{{/disabled}}
-             style="margin-bottom: 0!important;">
-            <button class="addExtend no-select radius opacity hover-opacity-off color-gray hover-shadow margin-right left{{#disabled}} disabled{{/disabled}}"
-                    style="height: 35px;" rel="{{id}}"
-                {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}} >
-                <i class="material-icons left transition-easy">add</i>
-            </button>
-            <div class="left color-text-grey padding-4 upper relative">
-                <div class="left align-left formLabel">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
-                <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
+        <div class="col" style="margin-bottom: 0!important;">
+            <h3 style="color: #888888;padding: 20px 15px 5px 12px" class="left font-large font-bold">
+                {{nome}}
+                {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
+            </h3>
+
+            <div class="btn right theme radius padding-medium hover-shadow pointer margin-bottom"
+                 onclick="addFormRelationSame('{{relation}}', '{{column}}')"
+                 data-column="{{column}}" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 12px;">
+                <i class="material-icons left font-xlarge theme-text">add</i>
+                <div class="left formCrudInput theme-text relative font-medium" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
+                    adicionar
+                </div>
             </div>
+
             <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}" />
         </div>
 
@@ -24,6 +27,21 @@
             {{/value}}
         </div>
     </div>
+</div>
+<div class="col info-container padding-tiny padding-4 margin-bottom" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+    <span class="right align-right color-text-gray"  rel="{{column}}">
+        {{#isNumeric}}
+            {{#valueLenght}}
+                {{^size}}>= {{valueLenght}}{{/size}}
+                {{#size}}{{valueLenght}} ~{{size}}{{/size}}
+            {{/valueLenght}}
+            {{^valueLenght}}
+                {{#size}}<={{size}}{{/size}}
+            {{/valueLenght}}
+        {{/isNumeric}}
+        {{^isNumeric}}<span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}{{/isNumeric}}
+    </span>
+    <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
 </div>
 
 <style>
