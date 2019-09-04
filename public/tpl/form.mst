@@ -7,7 +7,7 @@
                         <i class="material-icons left">keyboard_arrow_left</i>
                     </a>
                     <h4 class="left theme-text-aux" style="padding: 5px 0 0 7px;">
-                        <span class='pointer' rel="{{identificador}}" onclick="openForm('{{identificador}}')">
+                        <span class='pointer' rel="{{identificador}}">
                             {{#goodName}}{{entity}}{{/goodName}}
                         </span>
                     </h4>

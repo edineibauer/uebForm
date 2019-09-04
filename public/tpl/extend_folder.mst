@@ -7,8 +7,8 @@
             {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}}
             {{^disabled}} onclick="addRegisterRelation('{{relation}}', '{{column}}')"{{/disabled}}
              data-column="{{column}}" style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 12px;">
-            <i class="material-icons left font-xlarge theme-text">add</i>
-            <div class="left formCrudInput theme-text relative font-medium" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
+            <i class="material-icons left font-xlarge">add</i>
+            <div class="left formCrudInput relative font-medium" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
                 adicionar
             </div>
         </div>

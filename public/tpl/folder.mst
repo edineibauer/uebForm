@@ -10,10 +10,10 @@
             {{^disabled}}onclick="editFormRelation('{{relation}}', '{{column}}')"{{/disabled}}
              style="border: solid 1px #e3e3e3;box-shadow: none;margin-top: 7px;">
 
-            {{^value}}<i class="material-icons left font-xlarge theme-text">add</i>{{/value}}
-            {{#value}}<i class="material-icons left font-large theme-text" style="margin-top: 2px">edit</i>{{/value}}
+            {{^value}}<i class="material-icons left font-xlarge">add</i>{{/value}}
+            {{#value}}<i class="material-icons left font-large" style="margin-top: 2px">edit</i>{{/value}}
 
-            <div class="left theme-text relative font-medium formCrudInput" data-column="{{column}}"
+            <div class="left relative font-medium formCrudInput" data-column="{{column}}"
                  data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
                 {{^value}}adicionar{{/value}}{{#value}}editar{{/value}}
             </div>

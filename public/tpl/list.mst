@@ -11,13 +11,13 @@
             {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}')"{{/disabled}}>
             {{^value}}
                 <i class="material-icons color-text-gray-dark list-btn-icon left transition-easy" rel="{{column}}">add</i>
-                <div class="left theme-text relative font-medium" style="padding:1px 0 0 5px">
+                <div class="left relative font-medium" style="padding:1px 0 0 5px">
                     adicionar
                 </div>
             {{/value}}
             {{#value}}
                 <i class="material-icons color-text-gray-dark list-btn-icon font-large left transition-easy" rel="{{column}}">edit</i>
-                <div class="left theme-text relative font-medium" style="padding:1px 0 0 5px">
+                <div class="left relative font-medium" style="padding:1px 0 0 5px">
                     editar
                 </div>
             {{/value}}
