@@ -34,7 +34,7 @@
                 {{#size}}<={{size}}{{/size}}
             {{/valueLenght}}
         {{/isNumeric}}
-        {{^isNumeric}}<span class="input-info">{{valueLenght}}</span>{{#size}}/{{size}}{{/size}}{{/isNumeric}}
+        {{^isNumeric}}{{#size}}<span class="input-info">{{valueLenght}}</span>/{{size}}{{/size}}{{/isNumeric}}
     </span>
 </div>
 
