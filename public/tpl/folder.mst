@@ -2,7 +2,7 @@
     <div class="col parent-input no-select parent-relation relative radius {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <h3 style="color: #888888;padding: 14px 15px 5px 0" class="left font-large font-bold">{{nome}}</h3>
-        <div class="left info-container font-small" style="padding-top: 20px;height: 40px;" rel="{{column}}">
+        <div class="left info-container font-small" style="padding-top: 20px;height: 46px;" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
         <div class="btn right theme radius padding-medium hover-shadow pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
@@ -19,10 +19,10 @@
             </div>
         </div>
         {{#value}}
+            <div class='right pointer padding-medium padding-16 deleteRegisterRelation color-text-gray-dark color-hover-text-red' rel="{{column}}" onclick="deleteRegisterRelation('{{column}}')"><i class='material-icons'>delete</i></div>
             <div class="left padding-16 registerRelationName" rel="{{column}}">
                 <span class="rest color-text-gray padding-right">{{{columnTituloExtend}}}</span>
             </div>
-            <div class='right pointer padding-medium padding-16 deleteRegisterRelation color-text-gray-dark color-hover-text-red' rel="{{column}}" onclick="deleteRegisterRelation('{{column}}')"><i class='material-icons'>delete</i></div>
         {{/value}}
     </div>
 </div>
