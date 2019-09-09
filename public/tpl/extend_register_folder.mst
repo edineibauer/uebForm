@@ -1,5 +1,5 @@
-<div class="col extend_register radius" rel="{{id}}" style="height:46px;overflow: hidden">
-    <div class="col s-padding-bottom">
+<div class="col extend_register radius" rel="{{id}}" style="min-height:46px;overflow: hidden">
+    <div class="col">
         <div class="col right padding-medium" style="width: {{^columnStatus.have}}46{{/columnStatus.have}}{{#columnStatus.have}}135{{/columnStatus.have}}px">
             <button onclick="deleteExtendMult('{{columnName}}', '{{id}}')" rel="{{id}}"
                     class="right btn-small radius color-gray-light hover-theme opacity hover-opacity-off btn-del-extend-register transition-slow color-text-gray-dark color-hover-text-red"
