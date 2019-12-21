@@ -1,7 +1,7 @@
 <div class='form-control col padding-24 s-padding-0 font-large'>
     <div class="col{{#header}} card radius border overflow-hidden{{/header}}">
         {{#header}}
-            <div class="col theme-d1 loadindTableSpace">
+            <div class="col theme-d1 loadindTableSpace no-select">
                 <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
                     <a href="#back" class="left color-white hover-shadow btn-floating">
                         <i class="material-icons left">keyboard_arrow_left</i>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col theme-l1 padding-4"></div>
+            <div class="col theme-l1 padding-4 no-select"></div>
         {{/header}}
 
         <div class="col relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
@@ -30,7 +30,7 @@
             </div>
 
             {{#options.saveButton}}
-                <div class="col panel padding-bottom parent-save-form"
+                <div class="col panel no-select padding-bottom parent-save-form"
                      style="padding-top: 0!important;margin-top: 0!important;">
                     <div class="col padding-tiny">
                         <button class="btn radius theme-d2 hover-shadow opacity hover-opacity-off"
