@@ -35,7 +35,8 @@
                        data-format="source_list"
                        data-column="{{column}}"
                        data-parent="{{parent}}"
-                       rel="{{entity}}"
+                       data-entity="{{entity}}"
+                       rel="{{formIdentificador}}"
                        {{#multiples}}multiple{{/multiples}}
                         {{#minimo}} min="{{minimo}}" {{/minimo}}
                         {{#size}} max="{{size}}" {{/size}}
