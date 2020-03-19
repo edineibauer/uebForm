@@ -5,19 +5,34 @@
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <div class="btn right theme-d1 radius padding-medium hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+        <style>
+        .btnListAction {
+            padding: 8px 6px!important;
+            border-radius: 50px;
+            width: 40px;
+        }
+        @media (min-width: 700px) {
+            .btnListAction {
+                border-radius: 4px;
+                padding: 8px 16px!important;
+                width: auto;
+            }
+        }
+        </style>
+
+        <div class="btn btnListAction right theme-d1 hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
              style="border: solid 1px #dddddd;box-shadow: none;margin-right: 0;" rel="{{id}}"
             {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
             {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}')"{{/disabled}}>
             {{^value}}
                 <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny" rel="{{column}}">add</i>
-                <div class="left relative font-medium" style="padding:1px 0 0 5px">
+                <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
                     adicionar
                 </div>
             {{/value}}
             {{#value}}
                 <i class="material-icons list-btn-icon font-large left transition-easy font-large padding-tiny" rel="{{column}}">edit</i>
-                <div class="left relative font-medium" style="padding:1px 0 0 5px">
+                <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
                     editar
                 </div>
             {{/value}}
