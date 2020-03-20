@@ -122,7 +122,8 @@
                     /**
                      * Enter button action
                      * */
-                    if (e.which === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
+                    if (e.key === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
+                        $input.val("");
                         let option = $input.siblings("#list-result-" + column).find(".listMultOption").first();
                         addListMultBadge(option.attr("rel"), option.data("title"), $input);
                     }
