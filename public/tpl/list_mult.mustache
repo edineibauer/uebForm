@@ -1,0 +1,258 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative {{form.class}}"
+         style="{{#form.style}}{{form.style}}{{/form.style}}">
+        <label for="{{column}}" class="col align-left font-small color-text-gray-dark formLabel no-select"
+               data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
+        </label>
+
+        <div class="btn btnListAction right theme-d1 hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+             rel="{{id}}"
+            {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
+            {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}', 2)"{{/disabled}}>
+            <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny"
+               rel="{{column}}">add</i>
+            <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
+                novo
+            </div>
+        </div>
+
+        <div class="rest relative list-input list-input-mult" rel="{{column}}">
+            <div class="badgeListMult" rel="{{column}}"></div>
+            <input type="text" placeholder="pesquisar..." autocomplete="none"
+                   class="listMult{{#disabled}} disabled{{/disabled}}"
+                   data-column="{{column}}"
+                   data-entity="{{relation}}"
+                   data-parent="{{parent}}"
+                   id="{{column}}"
+                   data-value="{{value}}"
+                   rel="{{formIdentificador}}"
+                {{#required}} required="required" {{/required}}
+                {{#disabled}}disabled="disabled"{{/disabled}}
+                {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
+                {{{form.atributos}}}
+            />
+            <span class="input-bar"></span>
+
+            <div class="col" id="list-result-{{column}}"></div>
+        </div>
+        <div class="col info-container infoContainerListMult" rel="{{column}}">
+            <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    if (typeof searchListMult === "undefined") {
+        function searchListMult($input) {
+            let search = $input.val();
+            let column = $input.attr("data-column");
+            if ($input.is(":focus")) {
+
+                /**
+                 * Input focus action show results
+                 * */
+
+                let entity = $input.attr("data-entity");
+
+                if (typeof form.data[column] === null || isEmpty(form.data[column]))
+                    form.data[column] = [];
+
+                db.exeRead(entity).then(r => {
+                    let contagemMax = 0;
+                    let lista = "";
+
+                    $.each(r, function (i, datum) {
+                        if (form.data[column].indexOf(datum.id.toString()) === -1) {
+                            $.each(datum, function (col, val) {
+
+                                /**
+                                 * Busca em cada campo da entidade que não seja senha ou informação
+                                 **/
+                                if ((typeof dicionarios[entity][col] !== "undefined" && dicionarios[entity][col].format !== "password" && dicionarios[entity][col].key !== "information")) {
+                                    /**
+                                     * Busca em cada campo por um valor que seja parecido com o pesquisado no autocomplete
+                                     **/
+                                    if (val === "" || (typeof val === "string" && val.toLowerCase() === search.toLocaleString()) || (typeof val === "string" && (val.indexOf(search) > -1 || val.toLowerCase().indexOf(search) > -1))) {
+                                        lista += '<li rel="' + datum.id + '" data-title="' + val + '" class="listMultOption col font-light container padding-tiny hover-opacity-off pointer opacity"><span class="color-gray padding-tiny padding-left padding-right s-hide">' + col + '</span><span class="padding-left">' + val + '</span></li>';
+                                        contagemMax++;
+
+                                        return !1
+                                    }
+                                }
+                            });
+                        }
+
+                        /**
+                         * Máximo de resultados na lista
+                         */
+                        if (contagemMax > 14)
+                            return !1
+                    });
+
+                    return lista;
+                }).then(lista => {
+
+                    /**
+                     * Cria caixa com resultados
+                     * */
+                    if (!isEmpty(lista)) {
+                        $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + lista + '</ul>')
+                                .off("mousedown", ".listMultOption")
+                                .on("mousedown", ".listMultOption", function () {
+
+                                    /**
+                                     * Adiciona ação ao clicar em uma opção
+                                     */
+                                    addListMultBadge($(this).attr("rel"), $(this).data("title"), $input);
+                                });
+                    }
+                });
+
+                $input.off("blur").on("blur", function () {
+
+                    /**
+                     * Out from input action
+                     * */
+                    $input.val("");
+                    $input.siblings("#list-result-" + column).html("");
+
+                }).off("keydown").on("keydown", function (e) {
+
+                    /**
+                     * Enter button action
+                     * */
+                    if (e.which === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
+                        let option = $input.siblings("#list-result-" + column).find(".listMultOption").first();
+                        addListMultBadge(option.attr("rel"), option.data("title"), $input);
+                    }
+                });
+
+            } else {
+
+                /**
+                 * Out from input action
+                 * */
+                $input.siblings("#list-result-" + column).html("")
+            }
+        }
+
+        function inputSize() {
+            $("#{{column}}").css("width", "calc(100% - " + $("#{{column}}").siblings(".badgeListMult").width() + "px)");
+        }
+
+        inputSize();
+
+        function addListMultBadge(id, title, $input) {
+
+            /**
+             * se o form.data desta input não existir, cria ela
+             */
+            if (isEmpty(form.data[$input.attr("id")]))
+                form.data[$input.attr("id")] = [];
+
+            /**
+             * Adiciona o ID a lista no form.data
+             */
+            form.data[$input.attr("id")].push(id);
+
+            /**
+             * Adiciona o badge na input
+             */
+            $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '{{column}}');\" rel='{{column}}' data-id='" + id + "'>" + title + "</div>");
+            inputSize();
+        }
+
+        function removeBadge(id, column) {
+            if (confirm("Confirmação de remoção de item")) {
+                $(".badgeListMultOption[rel='" + column + "'][data-id='" + id + "']").remove();
+                removeItemArray(form.data[column], id.toString());
+                inputSize();
+            }
+        }
+    }
+
+    /**
+     * Atribui função ao click duplo nesta input
+     */
+    $("#{{column}}").off("dblclick").on("dblclick", function () {
+        searchListMult($(this))
+    }).on("keyup", function (e) {
+
+        //se for teclas numéricas, acentos ou letras
+        if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1)
+            searchListMult($(this));
+    });
+
+    /**
+     * Carregamento dos dados já salvos
+     */
+    dbLocal.exeRead("__relevant", 1).then(rel => {
+        {{#value}}
+            db.exeRead("{{relation}}", {{.}}).then(result => {
+                let findTitle = !1;
+                for (let i in rel) {
+                    for (let col in dicionarios.{{relation}}) {
+                        if (dicionarios.{{relation}}[col].format === rel[i]) {
+                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[col] + "</div>");
+                            inputSize();
+                            findTitle = !0;
+                            break;
+                        }
+                    }
+                    if (findTitle)
+                        break;
+                }
+            });
+        {{/value}}
+    });
+</script>
+
+<style>
+    #list-result-{{column}} {
+        margin-top: -20px
+    }
+
+    .listMult {
+        min-width: 150px;
+    }
+
+    .infoContainerListMult {
+        margin-top: -19px;
+        font-size: 12px;
+    }
+
+    .badgeListMult > .badge {
+        border-radius: 7px;
+        font-size: 14px;
+        margin: 10px 10px 0 0;
+        cursor: pointer;
+    }
+
+    .list-input-mult > .input-bar {
+        height: 2px;
+        background: #ccc;
+        margin-top: -2px;
+    }
+
+    .badgeListMult {
+        float: left !important;
+    }
+
+    .btnListAction {
+        padding: 8px 6px !important;
+        border-radius: 50px;
+        width: 40px;
+        border: solid 1px #dddddd;
+        box-shadow: none;
+        margin-right: 0;
+    }
+
+    @media (min-width: 700px) {
+        .btnListAction {
+            border-radius: 4px;
+            padding: 8px 16px !important;
+            width: auto;
+        }
+    }
+</style>
