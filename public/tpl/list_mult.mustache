@@ -137,11 +137,13 @@
             }
         }
 
-        function inputSize() {
-            $("#{{column}}").css("width", "calc(100% - " + $("#{{column}}").siblings(".badgeListMult").width() + "px)");
+        function inputListMultSize() {
+            $(".listMult").each(function(i, e) {
+                $(e).css("width", "calc(100% - " + $(e).siblings(".badgeListMult").width() + "px)");
+            });
         }
 
-        inputSize();
+        inputListMultSize();
 
         function addListMultBadge(id, title, $input) {
 
@@ -160,14 +162,14 @@
              * Adiciona o badge na input
              */
             $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '{{column}}');\" rel='{{column}}' data-id='" + id + "'>" + title + "</div>");
-            inputSize();
+            inputListMultSize();
         }
 
         function removeBadge(id, column) {
             if (confirm("Confirmação de remoção de item")) {
                 $(".badgeListMultOption[rel='" + column + "'][data-id='" + id + "']").remove();
                 removeItemArray(form.data[column], id.toString());
-                inputSize();
+                inputListMultSize();
             }
         }
     }
@@ -195,7 +197,7 @@
                     for (let col in dicionarios.{{relation}}) {
                         if (dicionarios.{{relation}}[col].format === rel[i]) {
                             $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[col] + "</div>");
-                            inputSize();
+                            inputListMultSize();
                             findTitle = !0;
                             break;
                         }
