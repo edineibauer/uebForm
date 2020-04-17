@@ -86,8 +86,6 @@
                                     if (val === "" || (typeof val === "string" && val.toLowerCase() === search.toLocaleString()) || (typeof val === "string" && (val.indexOf(search) > -1 || val.toLowerCase().indexOf(search) > -1))) {
                                         lista += '<li rel="' + datum.id + '" data-title="' + val + '" class="listMultOption col font-light container padding-tiny hover-opacity-off pointer opacity"><span class="color-gray padding-tiny padding-left padding-right s-hide">' + col + '</span><span class="padding-left">' + val + '</span></li>';
                                         contagemMax++;
-
-                                        return !1
                                     }
                                 }
                             }
