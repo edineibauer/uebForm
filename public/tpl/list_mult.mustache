@@ -58,18 +58,28 @@
                 if (typeof form.data[column] === null || isEmpty(form.data[column]))
                     form.data[column] = [];
 
-                db.exeRead(entity).then(r => {
-                    let contagemMax = 0;
-                    let lista = "";
+                dbLocal.exeRead("__relevant", 1).then(rel => {
+                    db.exeRead(entity).then(r => {
+                        let contagemMax = 0;
+                        let lista = "";
 
-                    $.each(r, function (i, datum) {
-                        if (form.data[column].indexOf(datum.id.toString()) === -1) {
-                            $.each(datum, function (col, val) {
+                        $.each(r, function (i, datum) {
+                            if (form.data[column].indexOf(datum.id.toString()) === -1) {
+                                let col = "";
+                                for (let rr in rel) {
+                                    for (let dd in dicionarios[entity]) {
+                                        if (dicionarios[entity][dd].format === rel[rr]) {
+                                            col = dd;
+                                            break;
+                                        }
+                                    }
+                                    if (col !== "")
+                                        break;
+                                }
 
-                                /**
-                                 * Busca em cada campo da entidade que não seja senha ou informação
-                                 **/
-                                if ((typeof dicionarios[entity][col] !== "undefined" && dicionarios[entity][col].format !== "password" && dicionarios[entity][col].key !== "information")) {
+                                if (col !== "") {
+                                    let val = datum[col];
+
                                     /**
                                      * Busca em cada campo por um valor que seja parecido com o pesquisado no autocomplete
                                      **/
@@ -80,33 +90,33 @@
                                         return !1
                                     }
                                 }
-                            });
-                        }
+                            }
+
+                            /**
+                             * Máximo de resultados na lista
+                             */
+                            if (contagemMax > 14)
+                                return !1
+                        });
+
+                        return lista;
+                    }).then(lista => {
 
                         /**
-                         * Máximo de resultados na lista
-                         */
-                        if (contagemMax > 14)
-                            return !1
+                         * Cria caixa com resultados
+                         * */
+                        if (!isEmpty(lista)) {
+                            $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + lista + '</ul>')
+                                    .off("mousedown", ".listMultOption")
+                                    .on("mousedown", ".listMultOption", function () {
+
+                                        /**
+                                         * Adiciona ação ao clicar em uma opção
+                                         */
+                                        addListMultBadge($(this).attr("rel"), $(this).data("title"), $input);
+                                    });
+                        }
                     });
-
-                    return lista;
-                }).then(lista => {
-
-                    /**
-                     * Cria caixa com resultados
-                     * */
-                    if (!isEmpty(lista)) {
-                        $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + lista + '</ul>')
-                                .off("mousedown", ".listMultOption")
-                                .on("mousedown", ".listMultOption", function () {
-
-                                    /**
-                                     * Adiciona ação ao clicar em uma opção
-                                     */
-                                    addListMultBadge($(this).attr("rel"), $(this).data("title"), $input);
-                                });
-                    }
                 });
 
                 $input.off("blur").on("blur", function () {
@@ -139,7 +149,7 @@
         }
 
         function inputListMultSize() {
-            $(".listMult").each(function(i, e) {
+            $(".listMult").each(function (i, e) {
                 $(e).css("width", "calc(100% - " + $(e).siblings(".badgeListMult").width() + "px)");
             });
         }
