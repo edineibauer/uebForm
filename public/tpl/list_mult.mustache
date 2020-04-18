@@ -175,7 +175,7 @@
         }
 
         function removeBadge(id, column) {
-            if (confirm("Confirmação de remoção de item")) {
+            if (confirm("Remover item?")) {
                 $(".badgeListMultOption[rel='" + column + "'][data-id='" + id + "']").remove();
                 removeItemArray(form.data[column], id.toString());
                 inputListMultSize();
