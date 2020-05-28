@@ -324,9 +324,10 @@ class Form
      */
     private function getFormDefault(string $format)
     {
-        $inputs = json_decode(file_get_contents(PATH_HOME . VENDOR . "entity-form/public/entity/input_type.json"), true);
+        $inputs = \EntityUi\InputType::getInputTypes();
+        $default = \EntityUi\InputType::getInputDefault();
 
-        return !empty($inputs[$format]['form']) ? array_replace_recursive($inputs['default']['form'], $inputs[$format]['form']) : $inputs['default']['form'];
+        return !empty($inputs[$format]['form']) ? array_replace_recursive($default['form'], (!empty($inputs[$format]) ? $inputs[$format]['form'] : [])) : $default['form'];
     }
 
     /**
