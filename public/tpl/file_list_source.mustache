@@ -1,12 +1,12 @@
 <div class="col padding-small mock-file border-bottom transition-easy relative" id="mock-{{name}}"
      style="background:#fbfbfb;overflow:hidden; height: 36px;">
     <a href="{{url}}" target="_blank" class="left file_list">
-        {{#isImage}}
+        {{#format.isImage}}
             <img src='{{url}}' alt='' title='Imagem {{nome}}' class='left radius'/>
-        {{/isImage}}
-        {{^isImage}}
+        {{/format.isImage}}
+        {{^format.isImage}}
             <svg class='icon svgIcon' ><use xlink:href='#{{icon}}'></use></svg>
-        {{/isImage}}
+        {{/format.isImage}}
     </a>
 
     {{#size}}
