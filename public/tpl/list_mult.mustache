@@ -205,7 +205,7 @@
                 for (let i in rel) {
                     for (let col in dicionarios.{{relation}}) {
                         if (dicionarios.{{relation}}[col].format === rel[i]) {
-                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[col] + "</div>");
+                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "</div>");
                             inputListMultSize();
                             findTitle = !0;
                             break;
