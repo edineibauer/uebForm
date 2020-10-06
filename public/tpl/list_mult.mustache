@@ -166,6 +166,7 @@
              * Adiciona o ID a lista no form.data
              */
             form.data[$input.attr("id")].push(id);
+            form.modified = !0;
 
             /**
              * Adiciona o badge na input
