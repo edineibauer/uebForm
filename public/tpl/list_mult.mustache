@@ -179,6 +179,8 @@
             if (confirm("Remover item?")) {
                 $(".badgeListMultOption[rel='" + column + "'][data-id='" + id + "']").remove();
                 removeItemArray(form.data[column], id.toString());
+                form.modified = !0;
+                form.saved = !1;
                 inputListMultSize();
             }
         }
