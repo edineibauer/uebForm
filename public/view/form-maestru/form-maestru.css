@@ -1,3 +1,7 @@
 #form-maestru {
     padding: 0 30px;
 }
+
+@html.darkmode .loadindTableSpace .btn-floating, @html.darkmode .loadindTableSpace .btn-form-save {
+    background: #444!important;
+}
