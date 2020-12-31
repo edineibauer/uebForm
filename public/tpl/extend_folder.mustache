@@ -3,7 +3,7 @@
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
 
         <h3 style="color: #888888;padding: 20px 15px 5px 12px" class="left font-large font-bold">{{nome}}</h3>
-        <div class="btn right theme radius padding-medium hover-shadow mode-border-colorLine pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
+        <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
             {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}}
             {{^disabled}} onclick="addRegisterRelation('{{relation}}', '{{column}}')"{{/disabled}}
              data-column="{{column}}" style="border: solid 1px;box-shadow: none;margin-top: 12px;">

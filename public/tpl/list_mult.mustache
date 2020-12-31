@@ -5,7 +5,7 @@
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <div class="btn btnListAction right theme-d1 hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+        <div class="btn btnListAction right mode-background-colorLine hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
              rel="{{id}}"
             {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
             {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}', 2)"{{/disabled}}>
