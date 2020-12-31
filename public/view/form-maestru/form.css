@@ -85,10 +85,6 @@
     background-color: #353535 !important;
 }
 
-@html.darkmode .switch-squad .slider:after {
-    background-color: #BBBBBB !important;
-}
-
 @html.darkmode .loadindTableSpace > div.col:not(.form-header) {
     padding-bottom: 10px !important;
 }
