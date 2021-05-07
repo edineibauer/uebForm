@@ -1,4 +1,4 @@
-@html.darkmode .grid-form-body, @html.darkmode .form-control > .card {
+@html.darkmode .grid-form-body, @html.darkmode .maestru-form-control > .card {
     border-color: #111 !important;
     background-color: #444444;
 }
@@ -102,11 +102,15 @@
     color: #333333!important;
 }
 
-@html.darkmode .form-control.color-text-gray-dark {
+@html.darkmode .maestru-form-control.color-text-gray-dark {
     padding-top: 100px!important;
     font-size: 20px;
 }
 
 @html.darkmode button.opacity {
     opacity: .9
+}
+
+label.col, .formLabel {
+    padding: 0
 }

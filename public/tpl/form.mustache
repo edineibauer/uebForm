@@ -1,7 +1,7 @@
-<div class='form-control col padding-24 s-padding-0 font-large'>
-    <div class="col{{#header}} card radius border s-border-0 s-radius-0 overflow-hidden{{/header}}">
+<div class='maestru-form-control col padding-24 s-padding-0 font-large'>
+    <div class="col{{#header}} card radius border s-border-0 s-radius-0 overflow-hidden{{/header}}" style="padding: 0">
         {{#header}}
-            <div class="col loadindTableSpace no-select">
+            <div class="col loadindTableSpace no-select" style="padding: 0">
                 <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
                     <a href="#back" class="left mode-background-colorLine mode-text-colorText btn-floating">
                         <i class="material-icons left">keyboard_arrow_left</i>
@@ -23,8 +23,8 @@
             <div class="col padding-4 no-select"></div>
         {{/header}}
 
-        <div class="col relative form-crud" id='{{identificador}}' data-entity="{{entity}}">
-            <div class="panel padding-top s-padding-small" style="margin-bottom: 0!important;">
+        <div class="col relative form-crud" style="padding: 0" id='{{identificador}}' data-entity="{{entity}}">
+            <div class="panel padding-top s-padding-small" style="padding: 0;margin-bottom: 0!important;">
                 {{#inputs}}
                     {{{.}}}
                 {{/inputs}}
@@ -35,7 +35,7 @@
                      style="padding-top: 0!important;margin-top: 0!important;">
                     <div class="col padding-tiny">
                         <button class="btn radius theme-d2 hover-shadow opacity hover-opacity-off"
-                                onclick="saveForm('{{identificador}}')">
+                                onclick="saveForm('{{identificador}}')" style="margin: 0">
                             {{{options.buttonText}}}
                         </button>
                     </div>
