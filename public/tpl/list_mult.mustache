@@ -202,7 +202,7 @@
             /**
              * Adiciona o badge na input
              */
-            $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '{{column}}');\" rel='{{column}}' data-id='" + id + "'>" + title + "</div>");
+            $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' rel='{{column}}' data-id='" + id + "'>" + title + "</div>");
             inputListMultSize();
         }
 
@@ -227,6 +227,8 @@
         }).on("keyup", ".listMult", function (e) {
             if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1)
                 searchListMult($(this));
+        }).off("click", ".badgeListMultOption").on("click", ".badgeListMultOption", function () {
+            removeBadge($(this).data("id"), $(this).attr("rel"));
         }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
             addRegisterAssociation($(this).data("entity"), $(this).data("column"));
         });
