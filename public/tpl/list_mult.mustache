@@ -1,14 +1,14 @@
-<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+<div class='col list_mult_context margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input parent-relation relative {{form.class}}"
          style="{{#form.style}}{{form.style}}{{/form.style}}">
         <label for="{{column}}" class="col align-left font-small color-text-gray-dark formLabel no-select"
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <div style="margin-right: 0" class="btn btnListAction right mode-background-colorLine hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
-             rel="{{id}}"
-            {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
-            {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}', 2)"{{/disabled}}>
+        <div style="margin-right: 0"
+             class="btn{{^disabled}} btnListAction{{/disabled}} btnListMult right mode-background-colorLine hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+             rel="{{id}}" data-entity="{{relation}}" data-column="{{column}}"
+            {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}>
             <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny"
                rel="{{column}}">add</i>
             <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
@@ -33,7 +33,7 @@
             />
             <span class="input-bar"></span>
 
-            <div class="col" id="list-result-{{column}}"></div>
+            <div class="col list-results" id="list-result-{{column}}"></div>
         </div>
         <div class="col info-container infoContainerListMult" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
@@ -42,8 +42,41 @@
 </div>
 
 <script>
+    (async function () {
+        async function addRegisterAssociation(entity, column) {
+            let identificadorExtend = Math.floor((Math.random() * 1000)) + "" + Date.now();
+            history.state.param.data = Object.assign({id: form.id}, form.data);
+            history.state.param.dataRelation = Object.assign({}, form.dataRelation);
 
-    if (typeof searchListMult === "undefined") {
+            // history.replaceState(history.state, null, HOME + app.route);
+            history.state.param.openForm = {
+                entity: entity,
+                column: column,
+                identificador: identificadorExtend,
+                tipo: 1
+            };
+            if (isNumber(form.data[column])) {
+                let data = await db.exeRead(entity, parseInt(form.data[column]));
+                if (!isEmpty(data))
+                    pageTransition(entity, "form", "forward", ".maestru-form-control", {
+                        data: data[0],
+                        parent: entity,
+                        column: column,
+                        store: !0,
+                        identificador: identificadorExtend
+                    });
+                else
+                    toast("Registro não encontrado", 2500, "toast-warning")
+            } else {
+                pageTransition(entity, "form", "forward", ".maestru-form-control", {
+                    parent: entity,
+                    column: column,
+                    store: !0,
+                    identificador: identificadorExtend
+                })
+            }
+        }
+
         function searchListMult($input) {
             let search = $input.val();
             let column = $input.attr("data-column");
@@ -59,7 +92,7 @@
                     form.data[column] = [];
 
                 dbLocal.exeRead("__relevant", 1).then(rel => {
-                    db.exeRead(entity).then(r => {
+                    db.exeRead(entity, search).then(r => {
                         let contagemMax = 0;
                         let lista = "";
 
@@ -152,8 +185,6 @@
             });
         }
 
-        inputListMultSize();
-
         function addListMultBadge(id, title, $input) {
 
             /**
@@ -184,76 +215,80 @@
                 inputListMultSize();
             }
         }
-    }
 
-    /**
-     * Atribui função ao click duplo nesta input
-     */
-    $("#{{column}}").off("dblclick").on("dblclick", function () {
-        searchListMult($(this))
-    }).on("keyup", function (e) {
+        inputListMultSize();
 
-        //se for teclas numéricas, acentos ou letras
-        if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1)
+        /**
+         * Atribui função ao click duplo nesta input
+         */
+        $(".list_mult_context").off("dblclick", ".listMult").on("dblclick", ".listMult", function () {
             searchListMult($(this));
-    });
 
-    /**
-     * Carregamento dos dados já salvos
-     */
-    dbLocal.exeRead("__relevant", 1).then(rel => {
-        {{#value}}
-            db.exeRead("{{relation}}", {{.}}).then(result => {
-                let findTitle = !1;
-                for (let i in rel) {
-                    for (let col in dicionarios.{{relation}}) {
-                        if (dicionarios.{{relation}}[col].format === rel[i]) {
-                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "</div>");
-                            inputListMultSize();
-                            findTitle = !0;
-                            break;
+        }).on("keyup", ".listMult", function (e) {
+            if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1)
+                searchListMult($(this));
+        }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
+            addRegisterAssociation($(this).data("entity"), $(this).data("column"));
+        });
+
+        /**
+         * Carregamento dos dados já salvos
+         */
+        dbLocal.exeRead("__relevant", 1).then(rel => {
+            {{#value}}
+                db.exeRead("{{relation}}", {{.}}).then(result => {
+                    let findTitle = !1;
+                    for (let i in rel) {
+                        for (let col in dicionarios.{{relation}}) {
+                            if (dicionarios.{{relation}}[col].format === rel[i]) {
+                                $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "</div>");
+                                inputListMultSize();
+                                findTitle = !0;
+                                break;
+                            }
                         }
+                        if (findTitle)
+                            break;
                     }
-                    if (findTitle)
-                        break;
-                }
-            });
-        {{/value}}
-    });
+                });
+            {{/value}}
+        });
+
+    }());
 </script>
 
 <style>
-    #list-result-{{column}} {
+    .list_mult_context .list-results {
         margin-top: -20px
     }
 
-    .listMult {
+    .list_mult_context .listMult {
         min-width: 150px;
     }
 
-    .infoContainerListMult {
+    .list_mult_context .infoContainerListMult {
         margin-top: -19px;
         font-size: 12px;
     }
 
-    .badgeListMult > .badge {
+    .list_mult_context .badgeListMult > .badge {
         border-radius: 7px;
         font-size: 14px;
         margin: 10px 10px 0 0;
         cursor: pointer;
     }
 
-    .list-input-mult > .input-bar {
+    .list_mult_context .list-input-mult > .input-bar {
         height: 2px;
         background: #ccc;
         margin-top: -2px;
     }
 
-    .badgeListMult {
+    .list_mult_context .badgeListMult {
         float: left !important;
     }
 
-    .btnListAction {
+    .list_mult_context .btnListMult {
         padding: 8px 6px !important;
         border-radius: 50px;
         width: 40px;
@@ -263,7 +298,7 @@
     }
 
     @media (min-width: 700px) {
-        .btnListAction {
+        .list_mult_context .btnListMult {
             border-radius: 4px;
             padding: 8px 16px !important;
             width: auto;
