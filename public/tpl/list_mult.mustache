@@ -49,7 +49,7 @@
             if (isNumber(form.data[column])) {
                 let data = await db.exeRead(entity, parseInt(form.data[column]));
                 if (!isEmpty(data))
-                    pageTransition(entity, ".maestru-form-control", {
+                    pageTransition("form/" + entity, ".maestru-form-control", {
                         data: data[0],
                         parent: entity,
                         column: column,
@@ -59,7 +59,7 @@
                 else
                     toast("Registro não encontrado", 2500, "toast-warning")
             } else {
-                pageTransition(entity, ".maestru-form-control", {
+                pageTransition("form/" + entity, ".maestru-form-control", {
                     parent: entity,
                     column: column,
                     store: !0,
