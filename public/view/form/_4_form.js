@@ -492,7 +492,7 @@ function formCrud(target, entity, id, fields, functionCallBack) {
             return permissionToAction(this.entity, action).then(have => {
                 if (have) {
                     return getTemplates().then(templates => {
-                        return Mustache.render(templates.form, this)
+                        return Mustache.render(templates.formCrud, this)
                     })
                 } else {
                     return "<h2 class='form-control col align-center padding-32 color-text-gray-dark'>Sem Permissão para " + (action === "update" ? "Atualizar" : "Adicionar") + "</h2>"
