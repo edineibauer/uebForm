@@ -150,12 +150,13 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
 
         checkRules(form.entity, column, value);
     }
-
-    let navigation = JSON.parse(localStorage.getItem("navigation_" + form.target));
-    navigation[navigation.length - 1].param.formaestru = form;
-
-    history.state.param.data = form.data;
-    history.state.param.dataRelation = form.dataRelation;
+    
+    let navigationName = "navigation_" + $("#" + form.target).closest(".r-network").attr("id");
+    let navigation = JSON.parse(localStorage.getItem(navigationName));
+    if(navigation) {
+        navigation[navigation.length - 1].param.form = form;
+        localStorage.setItem(navigationName, JSON.stringify(navigation))
+    }
 
 }).off("click", ".remove-file-gallery").on("click", ".remove-file-gallery", function () {
     if (confirm("Remover arquivo?"))
@@ -402,7 +403,6 @@ function formCrud(target, entity, id, fields, functionCallBack) {
         dataRelation: [],
         error: {},
         inputs: [],
-        target: $target.closest(".r-network").attr("id"),
         funcao: "",
         store: true,
         reloadAfterSave: !1,
@@ -411,6 +411,7 @@ function formCrud(target, entity, id, fields, functionCallBack) {
         saved: false,
         saving: false,
         loading: true,
+        target: target,
         $element: $target,
         options: {
             saveButton: !0,
