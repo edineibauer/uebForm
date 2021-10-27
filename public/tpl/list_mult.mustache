@@ -5,7 +5,7 @@
                data-column="{{column}}">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
         </label>
 
-        <!--<div style="margin-right: 0"
+        <div style="margin-right: 0"
              class="btn{{^disabled}} btnListAction{{/disabled}} btnListMult right mode-background-colorLine hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
              rel="{{id}}" data-entity="{{relation}}" data-column="{{column}}"
             {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}>
@@ -14,7 +14,7 @@
             <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
                 novo
             </div>
-        </div>-->
+        </div>
 
         <div class="rest relative list-input list-input-mult" rel="{{column}}">
             <div class="badgeListMult" rel="{{column}}"></div>
@@ -45,20 +45,11 @@
     (async function () {
         async function addRegisterAssociation(entity, column) {
             let identificadorExtend = Math.floor((Math.random() * 1000)) + "" + Date.now();
-            history.state.param.data = Object.assign({id: form.id}, form.data);
-            history.state.param.dataRelation = Object.assign({}, form.dataRelation);
 
-            // history.replaceState(history.state, null, HOME + app.route);
-            history.state.param.openForm = {
-                entity: entity,
-                column: column,
-                identificador: identificadorExtend,
-                tipo: 1
-            };
             if (isNumber(form.data[column])) {
                 let data = await db.exeRead(entity, parseInt(form.data[column]));
                 if (!isEmpty(data))
-                    pageTransition(entity, "form", "forward", ".maestru-form-control", {
+                    pageTransition(entity, ".maestru-form-control", {
                         data: data[0],
                         parent: entity,
                         column: column,
@@ -68,7 +59,7 @@
                 else
                     toast("Registro não encontrado", 2500, "toast-warning")
             } else {
-                pageTransition(entity, "form", "forward", ".maestru-form-control", {
+                pageTransition(entity, ".maestru-form-control", {
                     parent: entity,
                     column: column,
                     store: !0,
