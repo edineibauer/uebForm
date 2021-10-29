@@ -10,9 +10,9 @@ $(function ($) {
      * @param callback (function) (se informado, os dados salvos serão passados para esta função em vez de salvar no banco)
      * @returns {*}
      */
-    $.fn.form = function (entity, id, fields, callback) {
+    $.fn.form = async function (entity, id, fields, callback) {
         if (typeof entity === "string")
-            form = formCrud($(this).attr("id"), entity, id, fields, callback);
+            form = await formCrud($(this).attr("id"), entity, id, fields, callback);
 
         return this
     }
@@ -137,7 +137,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
             value = $input.val()
         }
         if (dicionario[column].format !== "list") {
-            data[column] = _getDefaultValue(dicionario[column], value);
+            data[column] = await _getDefaultValue(dicionario[column], value);
             if (typeof data[column] !== "number") {
                 let size = (typeof data[column] === "string" || $.isArray(data[column]) ? data[column].length : 0);
                 $input.siblings(".info-container").find(".input-info").html(size)
@@ -148,14 +148,8 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
             form.saved = !1;
         }
 
+        form.setColumnValue(column, value);
         checkRules(form.entity, column, value);
-    }
-    
-    let navigationName = "navigation_" + $("#" + form.target).closest(".r-network").attr("id");
-    let navigation = JSON.parse(localStorage.getItem(navigationName));
-    if(navigation) {
-        navigation[navigation.length - 1].param.form = form;
-        localStorage.setItem(navigationName, JSON.stringify(navigation))
     }
 
 }).off("click", ".remove-file-gallery").on("click", ".remove-file-gallery", function () {
@@ -304,8 +298,8 @@ async function searchList($input) {
 
             let content = "";
             for (let i = 0; i < 3; i++) {
-                if(typeof optionValues[i] === "object" && optionValues[i] !== null)
-                    content += "<div class='mode-text-colorText padding-tiny margin-right col'><small class='padding-tiny'>" + optionValues[i].column + ":</small> " + optionValues[i].content + (i === 2 || typeof optionValues[i+1] === "undefined" ? "" : ", ") + "</div>";
+                if (typeof optionValues[i] === "object" && optionValues[i] !== null)
+                    content += "<div class='mode-text-colorText padding-tiny margin-right col'><small class='padding-tiny'>" + optionValues[i].column + ":</small> " + optionValues[i].content + (i === 2 || typeof optionValues[i + 1] === "undefined" ? "" : ", ") + "</div>";
             }
             results.push({
                 id: datum.id,
@@ -387,15 +381,16 @@ function privateFormSetError(form, error, showMessages, destroy) {
     }
 }
 
-function formCrud(target, entity, id, fields, functionCallBack) {
+async function formCrud(target, entity, id, fields, functionCallBack) {
     let $target = $("#" + target);
-    if(!$target.length)
+    if (!$target.length)
         return {};
 
+    target = $target.parent().attr("id");
     fields = typeof fields === "object" && fields !== null && fields.constructor === Array && fields.length ? fields : null;
 
     let formCrud = {
-        identificador: id || Math.floor((Math.random() * 1000)) + "" + Date.now(),
+        identificador: Math.floor((Math.random() * 1000)) + "" + Date.now(),
         entity: entity,
         id: "",
         data: {},
@@ -423,24 +418,50 @@ function formCrud(target, entity, id, fields, functionCallBack) {
                 return ucFirst(replaceAll(replaceAll(render(text), "_", " "), "-", " "));
             }
         },
+        setColumnValue: async function(column, value) {
+            this.data[column] = await _getDefaultValue(dicionarios[this.entity][column], value);
+            let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
+            nav[nav.length - 1].param.form.data[column] = this.data[column];
+            localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+        },
+        resetFormOnNavigation: function() {
+            let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
+            if(isEmpty(nav[nav.length - 1].param.form))
+                nav[nav.length - 1].param.form = {};
+
+            nav[nav.length - 1].param.form.data = {};
+            localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+        },
         setData: async function (dados) {
             let $this = this;
-            let dicionario = dicionarios[$this.entity];
+            $this.id = "";
+            $this.data = {};
 
-            if (!isEmpty(dicionario)) {
-                $.each(dados, function (col, value) {
+            let dicionario = dicionarios[$this.entity];
+            if (isEmpty(dicionario)) {
+                toast("Erro: '" + $this.entity + "' não esta acessível", 5000, "toast-warning");
+            } else if (typeof dados === "undefined" || isEmpty(dados)) {
+                $this.data = _getDefaultValues($this.entity);
+            } else {
+                for(let col in dados) {
+                    let value = dados[col];
                     if (col === "id") {
                         $this.id = $this.data.id = (isNumberPositive(value) ? parseInt(value) : "");
                     } else if (typeof dicionario[col] === "object") {
-                        $this.data[col] = _getDefaultValue(dicionario[col], value)
+                        await $this.setColumnValue(col, value);
                     }
-                });
-
-            } else {
-                toast("Erro: '" + $this.entity + "' não esta acessível", 5000, "toast-warning");
+                }
             }
 
-            $this.dataOld = $this.data
+            $this.dataOld = Object.assign({}, $this.data);
+        },
+        setId: async function (id) {
+            if (isNumberPositive(id)) {
+                this.id = parseInt(id);
+                let loadData = await loadEntityData(this.entity, this.id);
+                this.dataRelation = loadData[1];
+                this.setData(loadData[0]);
+            }
         },
         setFuncao: function (funcao) {
             this.funcao = funcao;
@@ -463,21 +484,13 @@ function formCrud(target, entity, id, fields, functionCallBack) {
             if (typeof fields === "object")
                 $this.fields = fields;
 
-            let loadData = $this.data;
-            if (isNumberPositive(id)) {
-                $this.id = parseInt(id);
-                loadData = await loadEntityData(this.entity, id);
-                $this.dataRelation = loadData[1];
-                loadData = loadData[0];
-            } else if (isEmpty($this.data)) {
-                $this.id = "";
-                loadData = await _getDefaultValues(this.entity);
-            }
-
-            if (!isEmpty(loadData)) {
-                $this.data = loadData;
-                $this.dataOld = Object.assign({}, loadData)
-            }
+            $this.resetFormOnNavigation();
+            if (isNumberPositive(id))
+                await $this.setId(id);
+            else if (!isEmpty(id) && typeof id === "object" && id.constructor === Object)
+                await $this.setData(id);
+            else if (isEmpty($this.id) && isEmpty($this.data))
+                await $this.setData();
 
             $this.inputs = await getInputsTemplates($this, $this.entity);
             if (this.$element !== "") {
@@ -511,8 +524,6 @@ function formCrud(target, entity, id, fields, functionCallBack) {
 
             return validateForm(form.identificador).then(async validado => {
                 if (validado) {
-                    // await saveInternalForm();
-
                     /**
                      * Obtém dados do formulário
                      * */
@@ -528,11 +539,15 @@ function formCrud(target, entity, id, fields, functionCallBack) {
                         /**
                          * Show errors on form
                          */
-                        if(!dbCreate.response) {
+                        if (!dbCreate.response) {
                             form.error = dbCreate.data[form.entity];
                             privateFormSetError(form, form.error, showMessages, destroy);
 
                         } else {
+
+                            //remove data form relationFields
+                            form.dataRelation = dbCreate.data.relationData;
+                            await form.show(dbCreate.data);
 
                             /**
                              * Show success
@@ -541,29 +556,13 @@ function formCrud(target, entity, id, fields, functionCallBack) {
                                 toast("Salvo", 2000, 'toast-success');
 
                             /**
-                             * Recarrega formulário ou volta
+                             * Se tiver navegação para trás, volta, senão, mantém o formulário aberto para edição
                              */
-                            if(!form.reloadAfterSave)
-                                goBackMaestruNavigation();
+                            goBackMaestruNavigation(this.target, "back");
                         }
 
                     } else {
-
-                        /**
-                         * Cria novo id para o novo registro
-                         */
-                        if (typeof form.id === "undefined" || isNaN(form.id) || form.id < 1)
-                            form.id = form.data.id = Date.now();
-
-                        form.data.columnTituloExtend = await getRelevantTitle(form.entity, form.data);
-                        form.data.columnName = history.state.param.column;
-                        form.data.columnRelation = form.entity;
-                        form.data.columnStatus = {column: '', have: !1, value: !1};
-
-                        if (typeof form.funcao === "function")
-                            await form.funcao();
-
-                        goBackMaestruNavigation();
+                        form.funcao(form.data);
                     }
 
                 } else {
@@ -581,13 +580,19 @@ function formCrud(target, entity, id, fields, functionCallBack) {
         }
     };
 
-    if (typeof id === "object")
-        formCrud.setData(id);
-
     if (typeof functionCallBack === "function")
         formCrud.setFuncao(functionCallBack);
 
-    formCrud.show((isNumberPositive(id) ? parseInt(id) : null), fields);
+    await formCrud.show((isNumberPositive(id) || typeof id === "object" ? id : null), fields);
+
+    let navigation = JSON.parse(localStorage.getItem( "navigation_" + formCrud.target));
+    if (navigation) {
+        if (!isEmpty(formCrud.funcao) && typeof formCrud.funcao === "function")
+            formCrud.funcaoString = formCrud.funcao.toString();
+
+        navigation[navigation.length - 1].param.form = formCrud;
+        localStorage.setItem( "navigation_" + formCrud.target, JSON.stringify(navigation))
+    }
 
     return formCrud;
 }
@@ -613,7 +618,7 @@ async function getInputsTemplates(form, parent, col) {
         /**
          * System_id field on form aditional verification
          */
-        if(meta.column === "system_id" && USER.setor !== "admin" && (isEmpty(info['system']) || !!USER.system_id))
+        if (meta.column === "system_id" && USER.setor !== "admin" && (isEmpty(info['system']) || !!USER.system_id))
             continue;
 
         if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password"))
@@ -708,9 +713,9 @@ async function loadEntityData(entity, id) {
     let data = await db.exeRead(entity, id);
 
     if (!isEmpty(data)) {
-        for(let col in data[0]) {
+        for (let col in data[0]) {
             if (typeof dicionarios[entity][col] === 'object' && dicionarios[entity][col] !== null && dicionarios[entity][col].format !== "information" && dicionarios[entity][col].key !== "identifier")
-                dados[col] = _getDefaultValue(dicionarios[entity][col], data[0][col])
+                dados[col] = await _getDefaultValue(dicionarios[entity][col], data[0][col])
         }
         return [dados, data[0].relationData];
     }
@@ -821,8 +826,8 @@ function loadMask(form) {
     loadFolderDrag();
     $form.find("input[type='text'].formCrudInput, input[type='tel'].formCrudInput, input[type='number'].formCrudInput").trigger("change");
 
-    $(document).bind('keydown', function(e) {
-        if(e.ctrlKey && (e.which === 83)) {
+    $(document).bind('keydown', function (e) {
+        if (e.ctrlKey && (e.which === 83)) {
             e.preventDefault();
             form.save();
             return false;
@@ -873,7 +878,7 @@ async function addListSetTitle(form, entity, column, parent, id, $input) {
         if (!isEmpty(data))
             setInputFormatListValue(form, entity, column, data[0], $input);
 
-    } else if(typeof id === "object" && id !== null && id.constructor === Object && isNumberPositive(id.id)) {
+    } else if (typeof id === "object" && id !== null && id.constructor === Object && isNumberPositive(id.id)) {
         let formData = (parent !== "" ? fetchFromObject(form.data, parent) : form.data);
         formData[column] = id.id;
         setInputFormatListValue(form, entity, column, id, $input);
@@ -907,16 +912,6 @@ async function setInputFormatListValue(form, entity, column, data, $input) {
     }
 }
 
-function deleteRegisterRelation(column) {
-    if (confirm("Remover Registro Vinculado?")) {
-        let $btn = $(".deleteRegisterRelation[rel='" + column + "']").siblings(".btn");
-        $btn.find("i.material-icons").html("add");
-        $btn.find("div").html("adicionar");
-        form.data[column] = null;
-        $(".deleteRegisterRelation[rel='" + column + "'], .registerRelationName[rel='" + column + "']").remove();
-    }
-}
-
 function deleteRegisterAssociation(col, el) {
     if (confirm("Remover Associação com este registro?")) {
         form.data[col] = "";
@@ -929,109 +924,81 @@ function deleteRegisterAssociation(col, el) {
 }
 
 /**
- * Mult relation extend add
+ * Single form relation
  * */
-function addRegisterRelation(entity, column) {
+function editFormRelation(entity, column) {
+    pageTransition("form/" + entity, form.target, {
+        data: (!isEmpty(form.data[column]) ? form.data[column] : null),
+        functionCallBack: ((data) => {
+            data.id = Math.floor((Math.random() * 1000)) + "" + Date.now();
+            let nav = JSON.parse(localStorage.getItem("navigation_" + form.target));
+            nav[nav.length -2].param.form.data[column] = data;
+            localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+            goBackMaestruNavigation(form.target);
+        })
+    });
+}
+
+function deleteRegisterRelation(column) {
+    if (confirm("Remover o registro vinculado?")) {
+        let $btn = $(".deleteRegisterRelation[rel='" + column + "']").siblings(".btn");
+        $btn.find("i.material-icons").html("add");
+        $btn.find("div").html("adicionar");
+        form.data[column] = null;
+        form.setColumnValue(column, null);
+        $(".deleteRegisterRelation[rel='" + column + "'], .registerRelationName[rel='" + column + "']").remove();
+    }
+}
+
+/**
+ * Mult form relation
+ * */
+function editFormRelationMult(entity, column, id) {
     if (dicionarios[form.entity][column].size === !1 || typeof form.data[column] === "string" || form.data[column] === null || dicionarios[form.entity][column].size > form.data[column].length) {
-        let identificadorExtend = Math.floor((Math.random() * 1000)) + "" + Date.now();
-        history.state.param.openForm = {entity: entity, column: column, identificador: identificadorExtend, tipo: 2};
-        history.state.param.data = Object.assign({id: form.id}, form.data);
-        history.state.param.dataRelation = Object.assign({}, form.dataRelation);
-        history.state.param.modified = form.modified;
-        // history.replaceState(history.state, null, HOME + app.route);
-        pageTransition("form/" + entity, ".maestru-form-control", {
-            parent: entity,
-            column: column,
-            store: !1,
-            identificador: identificadorExtend
+        let f = null;
+        if(isNumberPositive(id) && !isEmpty(form.data[column]))
+            f = form.data[column].find(e => e.id == id);
+
+        pageTransition("form/" + entity, form.target, {
+            data: f,
+            functionCallBack: ((data) => {
+                let nav = JSON.parse(localStorage.getItem("navigation_" + form.target));
+                let navTarget = nav[nav.length -2];
+
+                if(isEmpty(navTarget.param.form.data[column]) || navTarget.param.form.data[column].constructor !== Array)
+                    navTarget.param.form.data[column] = [];
+
+                if(isNumberPositive(data.id)) {
+                    let elementPos = navTarget.param.form.data[column].map((x) => {return x.id; }).indexOf(data.id);
+                    if(elementPos > -1) {
+                        navTarget.param.form.data[column][elementPos] = data;
+                    } else {
+                        data.id = Math.floor((Math.random() * 1000)) + "" + Date.now();
+                        navTarget.param.form.data[column].push(data);
+                    }
+                } else {
+                    data.id = parseInt(Math.floor((Math.random() * 1000)) + "" + Date.now());
+                    navTarget.param.form.data[column].push(data);
+                }
+
+                localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+                goBackMaestruNavigation(form.target);
+            })
         });
     } else {
         toast("máximo de registros atingido", 2500, "toast-warning");
     }
 }
 
-/**
- * Single relation extend edit
- * */
-function editRegisterRelation(entity, column, id) {
-    let identificadorExtend = Math.floor((Math.random() * 1000)) + "" + Date.now();
-    history.state.param.openForm = {entity: entity, column: column, identificador: identificadorExtend, tipo: 2};
-    history.state.param.data = Object.assign({id: form.id}, form.data);
-    history.state.param.dataRelation = Object.assign({}, form.dataRelation);
-    history.state.param.modified = form.modified;
-    // history.replaceState(history.state, null, HOME + app.route);
-    let data = {};
-    $.each(form.data[column], function (i, e) {
-        if (e.id == id) {
-            data = e;
-            return !1;
-        }
-    })
-    pageTransition("form/" + entity,".maestru-form-control", {
-        data: data,
-        parent: entity,
-        column: column,
-        store: !1,
-        identificador: identificadorExtend
-    });
-}
-
-/**
- * Single relation extend
- * */
-function editFormRelation(entity, column) {
-    let identificadorExtend = Math.floor((Math.random() * 1000)) + "" + Date.now();
-    history.state.param.openForm = {entity: entity, column: column, identificador: identificadorExtend, tipo: 2};
-    history.state.param.modified = form.modified;
-    history.state.param.data = Object.assign({id: form.id}, form.data);
-    history.state.param.dataRelation = Object.assign({}, form.dataRelation);
-    // history.replaceState(history.state, null, HOME + app.route);
-
-    if (typeof form.data[column] === "object" && form.data[column] !== null && form.data[column].constructor === Array && form.data[column].length && typeof form.data[column][0] === "object")
-        pageTransition("form/" + entity, ".maestru-form-control", {
-            data: form.data[column][0],
-            parent: entity,
-            column: column,
-            store: !1,
-            identificador: identificadorExtend
-        });
-    else
-        pageTransition("form/" + entity, ".maestru-form-control", {
-            parent: entity,
-            column: column,
-            store: !1,
-            identificador: identificadorExtend
-        });
-}
-
 function deleteExtendMult(column, id) {
     if (confirm("Remover Registro?")) {
-        let entityReal = form.entity;
-        let columnReal = column;
-        if (typeof dicionarios[entityReal][column] === "undefined") {
-            $.each(dicionarios[entityReal], function (i, meta) {
-                if (meta.format === "extend" && typeof dicionarios[meta.relation][column] !== "undefined") {
-                    entityReal = meta.relation;
-                    columnReal = meta.column;
-                    return !1
-                }
-            })
+
+        let elementPos = form.data[column].map((x) => {return x.id; }).indexOf(parseInt(id));
+        if(elementPos > -1) {
+            form.data[column].splice(elementPos, 1);
+            form.setColumnValue(column, form.data[column]);
         }
-        if (columnReal !== column) {
-            $.each(form.data[columnReal][column], function (i, val) {
-                if (typeof val === "object" && isNumber(val.id) && parseInt(val.id) === parseInt(id)) {
-                    form.data[columnReal][column].splice(i, 1);
-                    return !1
-                }
-            })
-        } else {
-            $.each(form.data[column], function (i, val) {
-                if (typeof val === "object" && isNumber(val.id) && parseInt(val.id) === parseInt(id)) {
-                    form.data[column].splice(i, 1);
-                    return !1
-                }
-            })
-        }
+
         let $reg = form.$element.find(".extend_register[rel='" + id + "']");
         let $regList = $reg.closest(".extend_list_register");
         $regList.css("height", $regList.css("height")).css("height", (parseInt($regList.css("height")) - parseInt($reg.css("height"))) + "px");
