@@ -1,11 +1,11 @@
 <div style="border: solid 1px;" class='col mode-background-colorBox mode-border-colorLine radius margin-bottom padding-top padding-left relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input no-select parent-relation relative radius {{form.class}}"
          {{#form.style}}style="{{form.style}}"{{/form.style}}>
-        <h3 style="color: #888888;padding: 19px 15px 5px 0" class="left font-large font-bold">{{nome}}</h3>
+        <h3 style="color: var(--colorText);padding: 15px 15px 5px 0" class="left font-large font-bold">{{nome}}</h3>
         <div class="left info-container font-small" style="padding-top: 20px;height: 46px;" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
         </div>
-        <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
+        <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine mode-text-colorText pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
             {{#disabled}} disabled='disabled' title='atualizações não permitidas'{{/disabled}}
             {{^disabled}}onclick="editFormRelation('{{relation}}', '{{column}}')"{{/disabled}}
              style="border: solid 1px;box-shadow: none;margin-top: 7px;">

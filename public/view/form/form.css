@@ -16,8 +16,8 @@
 }
 
 @html.darkmode .extend_register:nth-child(odd) {
-    background-color: #333333 !important;
-    border-color: #555555!important;
+    background-color: var(--colorLine) !important;
+    border: none!important;
 }
 
 @html.darkmode .color-white, @html.darkmode .form-crud, @html.darkmode .file_gallery > .mock-file{

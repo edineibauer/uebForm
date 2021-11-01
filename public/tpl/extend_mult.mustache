@@ -3,12 +3,12 @@
             style="{{#form.style}}{{form.style}}{{/form.style}}">
 
         <div class="col" style="margin-bottom: 0!important;">
-            <h3 style="color: #888888;padding: 20px 15px 5px 12px" class="left font-large font-bold">
+            <h3 style="color: var(--colorText);padding: 20px 15px 5px 12px" class="left font-large font-bold">
                 {{nome}}
                 {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
             </h3>
 
-            <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine pointer margin-bottom"
+            <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine mode-text-colorText pointer margin-bottom"
                  onclick="addFormRelationSame('{{relation}}', '{{column}}')"
                  data-column="{{column}}" style="border: solid 1px;box-shadow: none;margin-top: 12px;">
                 <i class="material-icons left font-xlarge">add</i>
@@ -43,10 +43,3 @@
     </span>
     <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
 </div>
-
-<style>
-    .extend_register:nth-child(odd)  {
-        background: #fbfbfb;
-        border:solid 1px #eee;
-    }
-</style>
