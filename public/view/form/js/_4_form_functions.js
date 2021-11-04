@@ -324,20 +324,6 @@ async function searchList($input) {
 }
 
 /**
- * Salva formulários internos
- * */
-function saveInternalForm() {
-    return Promise.all([]);
-    let saveInterno = [];
-    $.each(form.$element.find(".form-crud"), function (e) {
-        if (typeof form === "object")
-            saveInterno.push(form.save(0, 1))
-    });
-
-    return Promise.all(saveInterno);
-}
-
-/**
  * Altera a interface do formulário para mostrar que o mesmo esta salvando
  * */
 function setFormSaveStatus(form, status) {
@@ -433,32 +419,24 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
             nav[nav.length - 1].param.form.data[column] = this.data[column];
             localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
         },
-        resetFormOnNavigation: function() {
-            let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
-            if(isEmpty(nav[nav.length - 1].param.form))
-                nav[nav.length - 1].param.form = {};
-
-            nav[nav.length - 1].param.form.data = {};
-            localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
-        },
         setData: async function (dados) {
+            if (isEmpty(dicionarios[this.entity])) {
+                toast("Erro: '" + this.entity + "' não esta acessível", 5000, "toast-warning");
+                return;
+            }
+
             let $this = this;
             $this.id = "";
             $this.data = {};
 
-            let dicionario = dicionarios[$this.entity];
-            if (isEmpty(dicionario)) {
-                toast("Erro: '" + $this.entity + "' não esta acessível", 5000, "toast-warning");
-            } else if (typeof dados === "undefined" || isEmpty(dados)) {
+            if (typeof dados === "undefined" || isEmpty(dados)) {
                 $this.data = _getDefaultValues($this.entity);
             } else {
                 for(let col in dados) {
-                    let value = dados[col];
-                    if (col === "id") {
-                        $this.id = $this.data.id = (isNumberPositive(value) ? parseInt(value) : "");
-                    } else if (typeof dicionario[col] === "object") {
-                        await $this.setColumnValue(col, value);
-                    }
+                    if (col === "id")
+                        $this.id = $this.data.id = (isNumberPositive(dados[col]) ? parseInt(dados[col]) : "");
+                    else if (typeof dicionarios[$this.entity][col] === "object")
+                        $this.data[col] = await _getDefaultValue(dicionarios[$this.entity][col], dados[col]);
                 }
             }
 
@@ -468,28 +446,18 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
             if (isNumberPositive(id)) {
                 let loadData = await loadEntityData(this.entity, parseInt(id));
                 this.dataRelation = loadData[1];
-                this.setData(loadData[0]);
+                await this.setData(loadData[0]);
             }
         },
         setFuncao: function (funcao) {
             this.funcao = funcao;
             this.store = false;
         },
-        setStore: function (store) {
-            this.store = store == 1 || store === !0 || store === "true"
-        },
-        setButtonActive: function (save) {
-            this.options.saveButton = save == 1 || save === !0 || save === "true"
-        },
-        setButtonText: function (text) {
-            this.options.buttonText = text
-        },
         show: async function (id, fields) {
             let $this = this;
             if (typeof fields === "object")
                 $this.fields = fields;
 
-            $this.resetFormOnNavigation();
             if (isNumberPositive(id))
                 await $this.setId(id);
             else if (!isEmpty(id) && typeof id === "object" && id.constructor === Object)
@@ -840,9 +808,15 @@ function loadMask(form) {
         $(this).removeAttr("readonly")
     });
 
-    $.each($form.find(".list"), function () {
+    $.each($form.find(".list"), async function () {
         let value = (typeof form.dataRelation !== "undefined" && typeof form.dataRelation[$(this).attr("id")] !== "undefined" && !isEmpty(form.dataRelation[$(this).attr("id")]) ? form.dataRelation[$(this).attr("id")] : $(this).data("value"));
-        addListSetTitle(form, $(this).data("entity"), $(this).data("column"), value, $(this).parent());
+
+        if (isNumberPositive(value)) {
+            let entity = $(this).data("entity");
+            let data = await db.exeRead(entity, value);
+            if (!isEmpty(data))
+                await setInputFormatListValue(form, entity, $(this).data("column"), data[0], $(this).parent());
+        }
     });
 
     checkUserOptions();
@@ -884,11 +858,8 @@ async function addListSetTitle(form, entity, column, id, $input) {
         form.setColumnValue(column, id);
         let data = await db.exeRead(entity, id);
         if (!isEmpty(data))
-            setInputFormatListValue(form, entity, column, data[0], $input);
+            await setInputFormatListValue(form, entity, column, data[0], $input);
 
-    } else if (typeof id === "object" && id !== null && id.constructor === Object && isNumberPositive(id.id)) {
-        form.setColumnValue(column, id.id);
-        setInputFormatListValue(form, entity, column, id, $input);
     }
 }
 
