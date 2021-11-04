@@ -8,11 +8,12 @@ $(function ($) {
      * @param id (inteiro) (se informado, abre o formulário com os dados deste ID
      * @param fields (array de strings) (se informado, limita o formulário aos campos informados)
      * @param callback (function) (se informado, os dados salvos serão passados para esta função em vez de salvar no banco)
+     * @param pendenteSave (bool) (se informado e for true, o formulário fica como alterado pendente de salvar)
      * @returns {*}
      */
-    $.fn.form = async function (entity, id, fields, callback) {
+    $.fn.form = async function (entity, id, fields, callback, pendenteSave) {
         if (typeof entity === "string")
-            form = await formCrud($(this).attr("id"), entity, id, fields, callback);
+            form = await formCrud($(this).attr("id"), entity, id, fields, callback, pendenteSave);
 
         return this
     }
@@ -33,28 +34,14 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
     if ($input.attr("rel") !== "undefined" && typeof form === "object" && form.identificador === $input.attr("rel")) {
         let column = $input.data("column");
         let format = $input.data("format");
-        let parent = $input.data("parent");
         let value = null;
-        let data = {};
         let dicionario = dicionarios[form.entity];
-
-        if (form.entity !== parent) {
-            parent = parent.replace(form.entity + ".", "");
-            if (parent.indexOf(".") !== -1) {
-                $.each(parent.split('.'), async function (i, e) {
-                    dicionario = dicionarios[dicionario[e].relation]
-                })
-            } else {
-                dicionario = dicionarios[dicionario[parent].relation]
-            }
-            fetchCreateObject(form.data, parent + "." + column);
-            data = fetchFromObject(form.data, parent)
-        } else {
-            data = form.data
-        }
+        let data = form.data
 
         if (['checkbox', 'radio'].indexOf(format) > -1)
-            $(".error-support[rel='" + column + "-" + parent + "']").remove(); else $input.css("border-bottom-color", "#999");
+            $(".error-support[rel='" + column + "']").remove();
+        else
+            $input.css("border-bottom-color", "#999");
 
         $input.parent().parent().parent().find(".input-message").html("");
         if (format === "checkbox") {
@@ -143,10 +130,8 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                 $input.siblings(".info-container").find(".input-info").html(size)
             }
         }
-        if (!form.loading) {
-            form.modified = !0;
-            form.saved = !1;
-        }
+        if (!form.loading)
+            form.modified = true;
 
         form.setColumnValue(column, value);
         checkRules(form.entity, column, value);
@@ -180,16 +165,9 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
 function removeFileForm($btn, tempo) {
     let $input = $btn.closest(".file_gallery").siblings("input[type='file']");
     let column = $input.data("column");
-    let parent = $input.data("parent");
     let max = $input.attr("max");
     let name = $btn.attr("rel");
-
-    if (form.entity !== parent) {
-        parent = parent.replace(form.entity + ".", "");
-        data = fetchFromObject(form.data, parent)
-    } else {
-        data = form.data
-    }
+    let data = form.data;
 
     if ($.isArray(data[column]) && data[column].length > 0) {
         $.each(data[column], function (id, e) {
@@ -197,8 +175,7 @@ function removeFileForm($btn, tempo) {
                 data[column].splice(id, 1);
                 $input.val("");
                 $input.parent().siblings(".info-container").find(".input-info").html(data[column].length);
-                form.modified = !0;
-                form.saved = !1;
+                form.modified = true;
 
                 if (typeof tempo === "number") {
                     setTimeout(function () {
@@ -365,7 +342,7 @@ function privateFormSetError(form, error, showMessages, destroy) {
     }
 }
 
-async function formCrud(target, entity, id, fields, functionCallBack) {
+async function formCrud(target, entity, id, fields, functionCallBack, pendenteSave) {
     let $target = $("#" + target);
     if (!$target.length)
         return {};
@@ -386,8 +363,7 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
         store: true,
         columnRelation: null,
         header: true,
-        modified: false,
-        saved: false,
+        modified: (typeof pendenteSave !== "undefined" && pendenteSave),
         saving: false,
         loading: true,
         target: target,
@@ -413,7 +389,6 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
         setColumnValue: async function(column, value) {
             this.data[column] = await _getDefaultValue(dicionarios[this.entity][column], value);
             form.modified = true;
-            form.saved = false;
 
             let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
             nav[nav.length - 1].param.form.data[column] = this.data[column];
@@ -465,7 +440,7 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
             else if (isEmpty($this.id) && isEmpty($this.data))
                 await $this.setData();
 
-            $this.inputs = await getInputsTemplates($this, $this.entity);
+            $this.inputs = await getInputsTemplates($this);
             if (this.$element !== "") {
                 this.$element.find(".maestru-form-control").remove();
                 this.$element.prepend(await $this.getShow());
@@ -503,7 +478,7 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
                     let dados = Object.assign({}, form.data);
                     dados.id = (isNumberPositive(form.id) ? form.id : dados.id);
 
-                    form.saved = !0;
+                    form.modified = false;
                     if (form.store) {
                         let dbCreate = await db.exeCreate(form.entity, dados);
 
@@ -538,6 +513,7 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
                                     } else if(isEmpty(routeBefore.param.form.data[routeBefore.param.form.columnRelation])) {
                                         n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data.id);
                                     }
+                                    n[n.length - 2].param.form.modified = true;
 
                                     localStorage.setItem("navigation_" + target, JSON.stringify(n));
                                 }
@@ -590,7 +566,7 @@ async function formCrud(target, entity, id, fields, functionCallBack) {
     return formCrud;
 }
 
-async function getInputsTemplates(form, parent, col) {
+async function getInputsTemplates(form, col) {
     let templates = await getTemplates();
     let inputs = [];
     let promessas = [];
@@ -622,7 +598,6 @@ async function getInputsTemplates(form, parent, col) {
          */
         if ((isEmpty(form.fields) && isEmpty(col)) || (!isEmpty(form.fields) && form.fields.indexOf(meta.column) > -1) || (!isEmpty(col) && col === meta.column)) {
             let metaInput = Object.assign({}, meta);
-            metaInput.parent = parent;
             metaInput.value = form.data[meta.column] || "";
             metaInput.isNumeric = ["float", "decimal", "smallint", "int", "tinyint"].indexOf(metaInput.type) > -1;
             metaInput.valueLenght = (metaInput.isNumeric && isNumber(metaInput.minimo) ? metaInput.minimo : metaInput.value.length);
@@ -655,7 +630,7 @@ async function getInputsTemplates(form, parent, col) {
                     dicionario: dicionarios[metaInput.relation],
                     identificador: form.identificador,
                     data: metaInput.value
-                }, parent + "." + meta.column).then(inp => {
+                }).then(inp => {
                     metaInput.inputs = inp;
                     inputs.splice(p, 0, Mustache.render(templates[metaInput.form.input], metaInput))
                 }));
@@ -893,7 +868,7 @@ async function setInputFormatListValue(form, entity, column, data, $input) {
 function deleteRegisterAssociation(col, el) {
     if (confirm("Remover Associação com este registro?")) {
         form.setColumnValue(col, null);
-        getInputsTemplates(form, form.entity, col).then(inputTemplate => {
+        getInputsTemplates(form, col).then(inputTemplate => {
             $(el).closest(".parent-input").parent().replaceWith(inputTemplate[0])
         })
     }
@@ -920,6 +895,7 @@ function editFormRelation(entity, column) {
             let formBefore = nav[nav.length -2].param.form;
             formBefore.data[formBefore.columnRelation] = data;
             formBefore.columnRelation = null;
+            formBefore.modified = true;
             localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
             goBackMaestruNavigation(form.target);
         })
@@ -968,6 +944,8 @@ function editFormRelationMult(entity, column, id) {
                     data.id = parseInt(Math.floor((Math.random() * 1000)) + "" + Date.now());
                     navTarget.param.form.data[navTarget.param.form.columnRelation].push(data);
                 }
+
+                navTarget.param.form.modified = true;
 
                 localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
                 goBackMaestruNavigation(form.target);

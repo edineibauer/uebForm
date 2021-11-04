@@ -10,8 +10,7 @@ $(async function () {
         await sleep(50);
 
     if(!isEmpty(app.param.form)) {
-        console.log(app.param.form);
-        $target.form(app.param.form.entity, app.param.form.data, app.param.form.fields, !isEmpty(app.param.form.funcaoString) ? eval(app.param.form.funcaoString) : null);
+        $target.form(app.param.form.entity, app.param.form.data, app.param.form.fields, !isEmpty(app.param.form.funcaoString) ? eval(app.param.form.funcaoString) : null, app.param.form.modified);
     } else {
 
         let entity = app.param.entity || app.param.url[0];

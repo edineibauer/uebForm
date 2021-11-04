@@ -12,12 +12,12 @@
                  onclick="addFormRelationSame('{{relation}}', '{{column}}')"
                  data-column="{{column}}" style="border: solid 1px;box-shadow: none;margin-top: 12px;">
                 <i class="material-icons left font-xlarge">add</i>
-                <div class="left formCrudInput relative font-medium" data-column="{{column}}" data-parent="{{entity}}" id="{{column}}" style="padding:1px 0 0 5px">
+                <div class="left formCrudInput relative font-medium" data-column="{{column}}" id="{{column}}" style="padding:1px 0 0 5px">
                     adicionar
                 </div>
             </div>
 
-            <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}" />
+            <input type="hidden" class="formCrudInput" data-column="{{column}}" />
         </div>
 
         <div class="extend_list col transition-slow radius mode-background-colorBox mode-border-colorLine" style="height: 0;overflow: hidden"></div>

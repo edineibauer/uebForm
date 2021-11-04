@@ -30,7 +30,6 @@
                    class="formCrudInput list{{#disabled}} disabled{{/disabled}}"
                    data-column="{{column}}"
                    data-entity="{{relation}}"
-                   data-parent="{{parent}}"
                    id="{{column}}"
                    data-value="{{value}}"
                    rel="{{formIdentificador}}"
@@ -45,7 +44,7 @@
         </div>
         <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
             <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
-            <input type="hidden" class="formCrudInput" data-column="{{column}}" data-parent="{{parent}}"/>
+            <input type="hidden" class="formCrudInput" data-column="{{column}}"/>
         </div>
     </div>
 </div>
