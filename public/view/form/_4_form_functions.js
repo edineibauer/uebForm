@@ -1046,7 +1046,7 @@ function searchListMult($input) {
                 let lista = "";
 
                 $.each(r, function (i, datum) {
-                    if (form.data[column].indexOf(datum.id.toString()) === -1) {
+                    if (form.data[column].indexOf(parseInt(datum.id)) === -1) {
                         let col = "";
                         for (let rr in rel) {
                             for (let dd in dicionarios[entity]) {
