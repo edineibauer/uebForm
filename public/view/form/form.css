@@ -10,6 +10,11 @@
     border-radius: 4px!important;
     background-color: var(--colorBackground)!important;
     color: var(--colorText)!important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .badgeListMultOption > i.material-icons {
