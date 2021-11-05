@@ -704,7 +704,9 @@ function getExtraMeta(identificador, entity, meta) {
         $.each(meta.allow.options, function (i, e) {
             e.formIdentificador = identificador;
             if (meta.format === "checkbox")
-                meta.allow.options[i].isChecked = (meta.value && (meta.value == e.valor || ($.isArray(meta.value) && (meta.value.indexOf(parseInt(e.valor)) > -1 || meta.value.indexOf(e.valor.toString()) > -1)) || (isJson(meta.value) && $.isArray(JSON.parse(meta.value)) && (JSON.parse(meta.value).indexOf(parseInt(e.valor)) > -1 || JSON.parse(meta.value).indexOf(e.valor.toString()) > -1)))); else meta.allow.options[i].isChecked = (meta.value && meta.value == e.valor)
+                meta.allow.options[i].isChecked = (!isEmpty(meta.value) && (meta.value == e.valor || ($.isArray(meta.value) && (meta.value.indexOf(parseInt(e.valor)) > -1 || meta.value.indexOf(e.valor.toString()) > -1))));
+            else
+                meta.allow.options[i].isChecked = (meta.value && meta.value == e.valor)
         })
 
     } else if (meta.format === "extend_folder" || meta.format === "extend_mult" && !isEmpty(meta.value) && meta.value.constructor === Array && meta.value.length) {
