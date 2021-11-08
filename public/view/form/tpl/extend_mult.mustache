@@ -3,9 +3,10 @@
             style="{{#form.style}}{{form.style}}{{/form.style}}">
 
         <div class="col" style="margin-bottom: 0!important;">
-            <h3 style="color: var(--colorText);padding: 20px 15px 5px 12px" class="left font-large font-bold">
-                {{nome}}
-                {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}
+            <h3 style="color: var(--colorText);padding: 20px 15px 5px 12px" class="left h3Label font-large font-bold">
+                <div class="left d-inline">{{nome}}</div>
+                {{#required}}<sup class="color-text-red left d-inline" style="margin-top: 5px"><b>*</b></sup>{{/required}}
+                {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
             </h3>
 
             <div class="btn right mode-background-colorLine radius padding-medium hover-shadow mode-border-colorLine mode-text-colorText pointer margin-bottom"

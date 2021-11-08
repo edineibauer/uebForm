@@ -695,6 +695,7 @@ function getExtraMeta(identificador, entity, meta) {
     meta.formIdentificador = identificador;
     meta.entity = entity;
     meta.home = HOME;
+    meta.haveAjuda = !isEmpty(meta.ajuda);
     meta.valueJson = typeof meta.value === "object" && meta.value !== null ? JSON.stringify(meta.value) : (isJson(meta.value) ? meta.value : null);
     meta.multiples = meta.size && meta.size > 1;
     meta.allow.empty = typeof meta.allow.options === "object" && $.isEmptyObject(meta.allow.options);
@@ -794,6 +795,18 @@ function loadMask(form) {
             if (!isEmpty(data))
                 await setInputFormatListValue(form, entity, $(this).data("column"), data[0], $(this).parent());
         }
+    });
+
+    $form.find(".ajuda").off("click").on("click", function () {
+        $(this).parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
+        $(document).off("mouseup").on("mouseup", async function (e) {
+            let container = $(".ajudatext");
+            if (container.is(e.target) || container.has(e.target).length > 0)
+                return;
+
+            $(document).off("mouseup");
+            container.remove();
+        });
     });
 
     checkUserOptions();

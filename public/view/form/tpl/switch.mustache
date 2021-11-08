@@ -2,7 +2,11 @@
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
         <label class="left">
             <span class="col">
-                <div class="left align-left padding-right formLabel no-select">{{nome}} {{#required}}<sup class="color-text-red"><b>*</b></sup>{{/required}}</div>
+                <div class="left align-left padding-right formLabel no-select">
+                    <div class="left d-inline">{{nome}}</div>
+                    {{#required}}<sup class="color-text-red left d-inline" style="margin-top: 5px"><b>*</b></sup>{{/required}}
+                    {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
+                </div>
                 <span class="rest input-message color-text-red" style="font-size: 12px;" rel="{{column}}"></span>
             </span>
             <div class="switch no-select switch-squad{{#disabled}} disabled{{/disabled}}">
