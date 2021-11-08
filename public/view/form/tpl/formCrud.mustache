@@ -1,7 +1,7 @@
 <div class='maestru-form-control col padding-24 s-padding-0 font-large'>
-    <div class="col{{#header}} card radius border s-border-0 s-radius-0 overflow-hidden{{/header}}" style="padding: 0">
+    <div class="col{{#header}} card radius border s-border-0 s-radius-0 p-0 overflow-hidden{{/header}}">
         {{#header}}
-            <div class="col loadindTableSpace no-select" style="padding: 0">
+            <div class="col loadindTableSpace no-select p-0">
                 <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
                     <a href="#back" class="left mode-background-colorLine mode-text-colorText btn-floating">
                         <i class="material-icons left">keyboard_arrow_left</i>
@@ -23,19 +23,18 @@
             <div class="col padding-4 no-select"></div>
         {{/header}}
 
-        <div class="col relative form-crud" style="padding: 0" id='{{identificador}}' data-entity="{{entity}}">
-            <div class="panel padding-top s-padding-small" style="margin-bottom: 0!important;">
+        <div class="col relative form-crud p-0" id='{{identificador}}' data-entity="{{entity}}">
+            <div class="panel padding-top s-padding-small mb-0">
                 {{#inputs}}
                     {{{.}}}
                 {{/inputs}}
             </div>
 
             {{#options.saveButton}}
-                <div class="col panel no-select padding-bottom parent-save-form"
-                     style="padding-top: 0!important;margin-top: 0!important;">
+                <div class="col panel no-select padding-bottom parent-save-form pt-0 mt-0">
                     <div class="col padding-tiny">
-                        <button class="btn radius theme-d2 hover-shadow opacity hover-opacity-off"
-                                onclick="saveForm('{{identificador}}')" style="margin: 0">
+                        <button class="btn radius mode-background-colorBackground m-0 mode-text-colorText hover-shadow opacity hover-opacity-off"
+                                onclick="saveForm('{{identificador}}')">
                             {{{options.buttonText}}}
                         </button>
                     </div>
@@ -44,76 +43,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    .extend_register_title {
-        max-width: calc(100% - 43px);
-    }
-
-    .info-container {
-        height: 19px;
-        overflow: hidden;
-    }
-
-    .svgIcon {
-        float: left;
-        width: 27px;
-        height: 27px;
-        position: relative !important;
-    }
-
-    .file_source img {
-        width: 100%;
-        height: 100%;
-    }
-
-    .file_list img {
-        height: 30px;
-    }
-
-    .progress-wrp {
-        border: 1px solid #bbbbbb;
-        height: 30px;
-        border-radius: 50px;
-        text-align: left;
-        background: #fff;
-        position: absolute;
-        top: 3px;
-        right: 38px;
-        max-width: 240px;
-        width: 100%;
-        z-index: 18;
-    }
-
-    .progress-wrp .progress-bar {
-        border-radius: 50px;
-        height: 100%;
-        background-color: darkseagreen;
-        width: 0;
-    }
-
-    .progress-wrp .status {
-        top: 1px;
-        left: 47%;
-        position: absolute;
-        display: inline-block;
-        color: #000000;
-    }
-
-    .parent-save-form > div > button {
-        float: initial;
-        margin: auto;
-        display: block;
-        padding: 10px 30px;
-    }
-
-    @media only screen and (min-width: 993px) {
-        .parent-save-form > div > button {
-            float: left;
-        }
-    }
-
-</style>
 
 <div hidden>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
