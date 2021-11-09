@@ -286,6 +286,19 @@
     opacity: .9
 }
 
-label.col, .formLabel {
-    padding: 0
+.form-crud .col {
+    padding: 0!important;
+}
+
+.md-radio--fake {
+    margin-left: 0;
+}
+
+.form-header {
+    padding: 20px 15px 12px
+}
+
+.parent-save-form {
+    padding: 0 15px 10px;
+    margin-top: 0!important;
 }

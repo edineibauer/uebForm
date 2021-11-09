@@ -2,7 +2,7 @@
     <div class="col{{#header}} card radius border s-border-0 s-radius-0 p-0 overflow-hidden{{/header}}">
         {{#header}}
             <div class="col loadindTableSpace no-select p-0">
-                <div class="col padding-large padding-24 s-padding-medium s-padding-16 form-header" rel="{{identificador}}">
+                <div class="col form-header" rel="{{identificador}}">
                     <a href="#back" class="left mode-background-colorLine mode-text-colorText btn-floating">
                         <i class="material-icons left">keyboard_arrow_left</i>
                     </a>
@@ -31,7 +31,7 @@
             </div>
 
             {{#options.saveButton}}
-                <div class="col panel no-select padding-bottom parent-save-form pt-0 mt-0">
+                <div class="col panel no-select padding-bottom parent-save-form">
                     <div class="col padding-tiny">
                         <button class="btn radius mode-background-colorBackground m-0 mode-text-colorText hover-shadow opacity hover-opacity-off"
                                 onclick="saveForm('{{identificador}}')">
