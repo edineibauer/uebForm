@@ -178,6 +178,10 @@
     margin-right: 0;
 }
 
+.form select {
+    border-color: #999;
+}
+
 @media (min-width: 700px) {
     .list_mult_context .btnListMult {
         border-radius: 4px;
