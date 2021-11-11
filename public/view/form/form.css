@@ -105,6 +105,19 @@
     }
 }
 
+.file_gallery {
+    padding: 5px 3px!important;
+    background: var(--colorLine);
+}
+
+.file_gallery > .mock-file:nth-child(odd) {
+    background: var(--colorLine);
+}
+
+.file-more {
+    margin: 5px 0 7px 5px;
+}
+
 .extend_register {
     transition: height ease .3s;
 }
@@ -124,7 +137,7 @@
     float: right;
     font-size: 13px;
     padding: 0 0 0 5px;
-    margin-top: -1px;
+    margin-top: 4px;
 }
 
 .list_mult_context .list-results {
@@ -288,7 +301,7 @@
 }
 
 .form-crud .col {
-    padding: 0!important;
+    padding: 0;
 }
 
 .md-radio--fake {

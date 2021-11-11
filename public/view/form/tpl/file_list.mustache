@@ -19,10 +19,10 @@
             {{/allow.empty}}
             {{^allow.empty}}
 
-                <div class="col file_gallery padding-tiny padding-8">
+                <div class="col file_gallery">
                     {{^disabled}}
-                        <label for="{{entity}}-{{column}}" style="margin: 0 0 7px;"
-                               class="file-more btn font-small left padding-small mode-text-colorText mode-background-colorLine hover-shadow hover-opacity-off radius{{#isFull}} hide{{/isFull}}">
+                        <label for="{{entity}}-{{column}}"
+                               class="file-more btn font-small float-right padding-small mode-text-colorText mode-background-colorLine hover-shadow hover-opacity-off radius{{#isFull}} hide{{/isFull}}">
                             <i class="material-icons left font-large" style="padding-right: 7px">add</i>
                             <span class="left" style="padding-right: 7px">Enviar</span>
                         </label>
