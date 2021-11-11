@@ -107,7 +107,6 @@
 
 .file_gallery {
     padding: 5px 3px!important;
-    background: var(--colorLine);
 }
 
 .file_gallery > .mock-file:nth-child(odd) {
@@ -193,7 +192,7 @@
 
 @html.darkmode .grid-form-body, @html.darkmode .maestru-form-control > .card {
     border-color: #111 !important;
-    background-color: #444444;
+    background-color: var(--colorBox);
 }
 
 @html.darkmode .extend_register, @html.darkmode .extend_register > .col {
@@ -205,10 +204,10 @@
     border: none!important;
 }
 
-@html.darkmode .color-white, @html.darkmode .form-crud, @html.darkmode .file_gallery > .mock-file{
-    background-color: #444444 !important;
+@html.darkmode .color-white, @html.darkmode .form-crud, @html.darkmode {
+    background-color: var(--colorBox) !important;
     color: #eeeeee !important;
-    border-color: #333333 !important;
+    border-color: var(--colorLine) !important;
 }
 
 @html.darkmode .border-top {
@@ -216,8 +215,8 @@
 }
 
 @html.darkmode .form-crud input, @html.darkmode .form-crud select, @html.darkmode .w3-css input, @html.darkmode .form-crud textarea {
-    color: #FFFFFF !important;
-    background-color: #444444 !important;
+    color: var(--colorText) !important;
+    background-color: var(--colorBox) !important;
 }
 
 @html.darkmode .form-crud select {
@@ -244,11 +243,11 @@
 }
 
 @html.darkmode .table-all tr:nth-child(odd) {
-    background-color: #444444 !important;
+    background-color: var(--colorBox) !important;
 }
 
 @html.darkmode .table-all tr:nth-child(odd) button, @html.darkmode .pagination {
-    background-color: #333333 !important;
+    background-color: var(--colorLine) !important;
 }
 
 @html.darkmode .grid_content_card_header > ul.col {
@@ -260,7 +259,7 @@
 }
 
 @html.darkmode .pagination {
-    color: #FFFFFF;
+    color: var(--colorText);
     border-top: 0 !important;
 }
 
@@ -288,7 +287,7 @@
 
 @html.darkmode .list-input > .col {
     padding: 0!important;
-    color: #333333!important;
+    color: var(--colorLine)!important;
 }
 
 @html.darkmode .maestru-form-control.color-text-gray-dark {
