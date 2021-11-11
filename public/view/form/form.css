@@ -7,12 +7,12 @@
 }
 
 .maestru-form-control > .card {
-    border-color: var(--colorBackground)!important;
+    border-color: var(--colorBackground) !important;
 }
 
 .parent-input {
-    padding-left: 0!important;
-    padding-right: 0!important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .formLabel sup,
@@ -24,7 +24,7 @@
 
 .formLabel .d-inline,
 .h3Label .d-inline {
-    display: inline!important;
+    display: inline !important;
 }
 
 .ajuda {
@@ -106,7 +106,11 @@
 }
 
 .file_gallery {
-    padding: 5px 3px!important;
+    padding: 5px 3px !important;
+}
+
+.switch input:checked + .slider {
+    background: var(--colorBackground);
 }
 
 .file_gallery > .mock-file:nth-child(odd) {
@@ -122,9 +126,9 @@
 }
 
 .badgeListMultOption {
-    border-radius: 4px!important;
-    background-color: var(--colorBackground)!important;
-    color: var(--colorText)!important;
+    border-radius: 4px !important;
+    background-color: var(--colorBackground) !important;
+    color: var(--colorText) !important;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -191,7 +195,7 @@
 }
 
 @html.darkmode .loadindTableSpace .btn-floating, @html.darkmode .loadindTableSpace .btn-form-save {
-    background: #444!important;
+    background: #444 !important;
 }
 
 @html.darkmode .grid-form-body, @html.darkmode .maestru-form-control > .card {
@@ -205,7 +209,7 @@
 
 @html.darkmode .extend_register:nth-child(odd) {
     background-color: var(--colorLine) !important;
-    border: none!important;
+    border: none !important;
 }
 
 @html.darkmode .color-white, @html.darkmode .form-crud, @html.darkmode {
@@ -215,7 +219,7 @@
 }
 
 @html.darkmode .border-top {
-    border-color: #666666!important;
+    border-color: #666666 !important;
 }
 
 @html.darkmode .form-crud input, @html.darkmode .form-crud select, @html.darkmode .w3-css input, @html.darkmode .form-crud textarea {
@@ -273,10 +277,6 @@
     border-radius: 7px;
 }
 
-@html.darkmode .switch .slider {
-    background-color: #353535 !important;
-}
-
 @html.darkmode .loadindTableSpace > div.col:not(.form-header) {
     padding-bottom: 10px !important;
 }
@@ -290,12 +290,12 @@
 }
 
 @html.darkmode .list-input > .col {
-    padding: 0!important;
-    color: var(--colorLine)!important;
+    padding: 0 !important;
+    color: var(--colorLine) !important;
 }
 
 @html.darkmode .maestru-form-control.color-text-gray-dark {
-    padding-top: 100px!important;
+    padding-top: 100px !important;
     font-size: 20px;
 }
 
@@ -317,5 +317,5 @@
 
 .parent-save-form {
     padding: 0 15px 10px;
-    margin-top: 0!important;
+    margin-top: 0 !important;
 }
