@@ -1,5 +1,4 @@
-function validateDicionario(entity, dicionario, form, action, parent) {
-    parent = parent || "";
+function validateDicionario(entity, dicionario, form, action) {
     let promessas = [];
     let entityData = (SERVICEWORKER ? db.exeRead(entity) : new Promise((s, f) => {s([])}));
     return Promise.all([entityData]).then(entityData => {
@@ -7,27 +6,21 @@ function validateDicionario(entity, dicionario, form, action, parent) {
 
         $.each(dicionario, function (i, meta) {
             if (meta.key !== "identifier") {
-                if (meta.format === "extend") {
-                    promessas.push(validateDicionario(meta.relation, dicionarios[meta.relation], form, action, parent + (parent !== "" ? "." : "") + meta.column))
-                } else {
-                    if (parent !== "")
-                        fetchCreateObject(form.error, parent + "." + meta.column);
-                    let data = (parent !== "" ? fetchFromObject(form.data, parent) : form.data);
-                    if (data !== null) {
-                        let dataOld = (parent !== "" ? fetchFromObject(form.dataOld, parent) : form.dataOld);
-                        let error = (parent !== "" ? fetchFromObject(form.error, parent) : form.error);
-                        let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+                let data = form.data;
+                if (data !== null) {
+                    let dataOld = form.dataOld;
+                    let error = form.error;
+                    let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+                    if (!isEmpty(value)) {
+                        promessas.push(validateMetaUnique(meta, value, form.id, entityData, error));
+                        validateMetaEspecialFields(meta, value, error)
+                    }
+                    if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
+                        validateMetaUpdate(meta, data, dataOld, action);
+                        validateMetaNull(meta, value, error);
                         if (!isEmpty(value)) {
-                            promessas.push(validateMetaUnique(meta, value, form.id, entityData, error));
-                            validateMetaEspecialFields(meta, value, error)
-                        }
-                        if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
-                            validateMetaUpdate(meta, data, dataOld, action);
-                            validateMetaNull(meta, value, error);
-                            if (!isEmpty(value)) {
-                                validateMetaSize(meta, value, error);
-                                validateMetaRegExp(meta, value, error)
-                            }
+                            validateMetaSize(meta, value, error);
+                            validateMetaRegExp(meta, value, error)
                         }
                     }
                 }
@@ -72,7 +65,7 @@ function validateForm(id) {
     clearFormError(form);
     return havePermission(form.entity, form.data, action).then(permission => {
         if (permission) {
-            return validateDicionario(form.entity, dicionarios[form.entity], form, action).then(d => {
+            return validateDicionario(form.entity, dicionarios[form.entity], form, action).then(() => {
                 return formNotHaveError(form.error)
             })
         }
@@ -191,21 +184,20 @@ function validateMetaEspecialFields(meta, value, error) {
     }
 }
 
-function showErrorField($element, errors, dicionario, parent, first) {
+function showErrorField($element, errors, dicionario) {
     $.each(errors, function (col, erro) {
         if (typeof erro === 'object') {
-            showErrorField($element, erro, dicionarios[dicionario[col].relation], parent + "." + col, first)
+            showErrorField($element, erro, dicionarios[dicionario[col].relation])
         } else if (erro !== "") {
-            let $field = $element.find(".formCrudInput[data-column='" + col + "'][data-parent='" + parent + "']");
+            let $field = $element.find(".formCrudInput[data-column='" + col + "']");
             if ("radio" === $field.attr("type")) {
-                $('head').append("<style class='error-support' rel='" + col + "-" + parent + "'>[data-column='" + col + "'][data-parent='" + parent + "'] ~.md-radio--fake{border-color:red !important;}</style>")
+                $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "'] ~.md-radio--fake{border-color:red !important;}</style>")
             } else if ("checkbox" === $field.attr("type")) {
-                $('head').append("<style class='error-support' rel='" + col + "-" + parent + "'>[data-column='" + col + "'][data-parent='" + parent + "']:before{border-color:red !important;}</style>")
+                $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "']:before{border-color:red !important;}</style>")
             } else {
                 $field.css("border-bottom-color", "red")
             }
             $field.parent().parent().parent().find(".input-message").html(erro);
-            first = 0
         }
     })
 }

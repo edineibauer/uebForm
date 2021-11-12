@@ -333,7 +333,7 @@ function privateFormSetError(form, error, showMessages, destroy) {
             navigator.vibrate(100);
 
         toast("Corrija o formulário", 1500, "toast-warning");
-        showErrorField(form.$element, error, dicionarios[form.entity], form.entity, 1);
+        showErrorField(form.$element, error, dicionarios[form.entity]);
         setFormSaveStatus(form, 1)
     }
     if (typeof destroy !== "undefined") {
@@ -623,19 +623,7 @@ async function getInputsTemplates(form, col) {
             metaInput.form = (typeof metaInput.form !== "object" ? {} : metaInput.form);
             metaInput.form.class = (!isEmpty(metaInput.form.class) ? metaInput.form.class : "") + (typeof meta.form.display !== "undefined" && !meta.form.display ? " hide" : "");
 
-            if (metaInput.format === "extend") {
-                let p = position;
-                promessas.push(getInputsTemplates({
-                    entity: metaInput.relation,
-                    dicionario: dicionarios[metaInput.relation],
-                    identificador: form.identificador,
-                    data: metaInput.value
-                }).then(inp => {
-                    metaInput.inputs = inp;
-                    inputs.splice(p, 0, Mustache.render(templates[metaInput.form.input], metaInput))
-                }));
-
-            } else if (typeof templates[metaInput.form.input] === "string") {
+            if (typeof templates[metaInput.form.input] === "string") {
                 let file_source = "";
                 switch (metaInput.format) {
                     case 'source_list':
