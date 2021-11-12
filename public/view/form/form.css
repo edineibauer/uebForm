@@ -303,6 +303,14 @@
     opacity: .9
 }
 
+.w3-css .switch .slider {
+    background: var(--colorBackground);
+}
+
+.w3-css .switch .slider:after {
+    background: var(--colorText);
+}
+
 .form-crud .col {
     padding: 0;
 }
