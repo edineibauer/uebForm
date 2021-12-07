@@ -99,7 +99,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                     /**
                      * Upload the file
                      */
-                    AJAX.uploadFile(file).then(mock => {
+                    await AJAX.uploadFile(file).then(mock => {
 
                         /**
                          * Set the file on form
