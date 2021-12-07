@@ -4,28 +4,35 @@ function validateDicionario(entity, dicionario, form, action) {
     return Promise.all([entityData]).then(entityData => {
         entityData = entityData[0];
 
-        $.each(dicionario, function (i, meta) {
-            if (meta.key !== "identifier") {
-                let data = form.data;
-                if (data !== null) {
-                    let dataOld = form.dataOld;
-                    let error = form.error;
-                    let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+        for(let i in dicionario) {
+            let meta = dicionario[i];
+
+            if (meta.key === "identifier")
+                continue;
+
+            if(meta.format === "password" && !isNumberPositive(form.id) && typeof dicionario.usuarios_id === "object")
+                meta.default = false;
+
+            let data = form.data;
+            if (data !== null) {
+                let dataOld = form.dataOld;
+                let error = form.error;
+                let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+                if (!isEmpty(value)) {
+                    promessas.push(validateMetaUnique(meta, value, form.id, entityData, error));
+                    validateMetaEspecialFields(meta, value, error)
+                }
+                if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
+                    validateMetaUpdate(meta, data, dataOld, action);
+                    validateMetaNull(meta, value, error);
                     if (!isEmpty(value)) {
-                        promessas.push(validateMetaUnique(meta, value, form.id, entityData, error));
-                        validateMetaEspecialFields(meta, value, error)
-                    }
-                    if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
-                        validateMetaUpdate(meta, data, dataOld, action);
-                        validateMetaNull(meta, value, error);
-                        if (!isEmpty(value)) {
-                            validateMetaSize(meta, value, error);
-                            validateMetaRegExp(meta, value, error)
-                        }
+                        validateMetaSize(meta, value, error);
+                        validateMetaRegExp(meta, value, error)
                     }
                 }
             }
-        });
+        }
+
         return Promise.all(promessas)
     })
 }

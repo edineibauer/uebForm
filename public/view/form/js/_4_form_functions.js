@@ -602,6 +602,20 @@ async function getInputsTemplates(form, col) {
             metaInput.isFull = metaInput.valueLenght === metaInput.size;
             metaInput.disabled = isNumberPositive(form.id) && !metaInput.update;
 
+            if (metaInput.format === "password") {
+                if(isNumberPositive(form.id)) {
+                    if (metaInput.value.length === 32)
+                        metaInput.value = "";
+                } else {
+                    for(let mm of dic) {
+                        if(mm.column === "usuarios_id") {
+                            metaInput.default = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (!isEmpty(metaInput.default) && metaInput.default.length > 7)
                 metaInput.default = Mustache.render(metaInput.default, {
                     vendor: VENDOR,
@@ -612,9 +626,6 @@ async function getInputsTemplates(form, col) {
                 });
 
             metaInput = getExtraMeta(form.identificador, form.entity, metaInput);
-
-            if (metaInput.format === "password" && metaInput.value.length === 32)
-                metaInput.value = "";
 
             metaInput.form = (typeof metaInput.form !== "object" ? {} : metaInput.form);
             metaInput.form.class = (!isEmpty(metaInput.form.class) ? metaInput.form.class : "") + (typeof meta.form.display !== "undefined" && !meta.form.display ? " hide" : "");
@@ -829,7 +840,23 @@ async function addListSetTitle(form, entity, column, id, $input) {
 }
 
 async function setInputFormatListValue(form, entity, column, id, $input) {
+    let $inputText = $input.find("input").prop("disabled", true).attr("readonly", "readonly");
+    $inputText.val("Carregando valor .");
+    $input.siblings(".btn").addClass("hide");
+    let loadingText = setInterval(function () {
+        if($inputText.val() === "Carregando valor .")
+            $inputText.val("Carregando valor ..");
+        else if($inputText.val() === "Carregando valor ..")
+            $inputText.val("Carregando valor ...");
+        else
+            $inputText.val("Carregando valor .");
+    }, 300);
+
     let title = await getRelevantTitle(entity, (await db.exeRead(entity, id))[0]);
+    clearInterval(loadingText);
+    $input.siblings(".btn").removeClass("hide");
+    $inputText.prop("disabled", false).removeAttr("readonly");
+
     $input.siblings(".btn").find(".list-btn-icon").html("edit");
     $input.siblings(".btn").find("div").html("editar");
     $input.prop("disabled", !1).addClass("border-bottom").removeClass("padding-small").css({
