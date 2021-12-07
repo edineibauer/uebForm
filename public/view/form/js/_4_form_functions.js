@@ -119,17 +119,18 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
         } else if (dicionario[column].form.input === "switch") {
             value = $input.prop("checked")
         } else if (dicionario[column].format === "list") {
-            searchList($input)
+            searchList($input);
+            return;
         } else {
             value = $input.val()
         }
-        if (dicionario[column].format !== "list") {
-            data[column] = await _getDefaultValue(dicionario[column], value);
-            if (typeof data[column] !== "number") {
-                let size = (typeof data[column] === "string" || $.isArray(data[column]) ? data[column].length : 0);
-                $input.siblings(".info-container").find(".input-info").html(size)
-            }
+
+        data[column] = await _getDefaultValue(dicionario[column], value);
+        if (typeof data[column] !== "number") {
+            let size = (typeof data[column] === "string" || $.isArray(data[column]) ? data[column].length : 0);
+            $input.siblings(".info-container").find(".input-info").html(size)
         }
+
         if (!form.loading)
             form.modified = true;
 
@@ -292,8 +293,10 @@ async function searchList($input) {
             $input.val("");
             $input.siblings("#list-result-" + column).html("")
         }).off("keydown").on("keydown", function (e) {
-            if (e.which === 13 && $input.siblings("#list-result-" + column).find(".list-option").length)
-                addListSetTitle(form, entity, column, $input.siblings("#list-result-" + column).find(".list-option").first().attr("rel"), $input.parent())
+            if (e.which === 13 && $input.siblings("#list-result-" + column).find(".list-option").length) {
+                let $opt = $input.siblings("#list-result-" + column).find(".list-option").first();
+                addListSetTitle(form, entity, column, $opt.attr("rel"), $input.parent());
+            }
         })
     } else {
         $input.siblings("#list-result-" + column).html("")
@@ -768,13 +771,8 @@ function loadMask(form) {
 
     $.each($form.find(".list"), async function () {
         let value = $(this).data("value");
-
-        if (isNumberPositive(value)) {
-            let entity = $(this).data("entity");
-            let data = await db.exeRead(entity, value);
-            if (!isEmpty(data))
-                await setInputFormatListValue(form, entity, $(this).data("column"), data[0], $(this).parent());
-        }
+        if (isNumberPositive(value))
+            await setInputFormatListValue(form, $(this).data("entity"), $(this).data("column"), value, $(this).parent());
     });
 
     $form.find(".ajuda").off("click").on("click", function () {
@@ -825,25 +823,13 @@ function loadFolderDrag() {
 
 async function addListSetTitle(form, entity, column, id, $input) {
     if (isNumberPositive(id)) {
-        form.setColumnValue(column, id);
-        let data = await db.exeRead(entity, id);
-        if (!isEmpty(data))
-            await setInputFormatListValue(form, entity, column, data[0], $input);
-
+        await form.setColumnValue(column, id);
+        await setInputFormatListValue(form, entity, column, id, $input);
     }
 }
 
-async function setInputFormatListValue(form, entity, column, data, $input) {
-    let point = ".";
-    $input.find("input[type='text']").prop("disabled", !0).val("carregando valor");
-    let intt = setInterval(function () {
-        $input.find("input[type='text']").val("carregando valor " + point);
-        point = (point === "." ? ".." : (point === ".." ? "..." : "."))
-    }, 300);
-
-    let title = await getRelevantTitle(entity, data);
-
-    clearInterval(intt);
+async function setInputFormatListValue(form, entity, column, id, $input) {
+    let title = await getRelevantTitle(entity, (await db.exeRead(entity, id))[0]);
     $input.siblings(".btn").find(".list-btn-icon").html("edit");
     $input.siblings(".btn").find("div").html("editar");
     $input.prop("disabled", !1).addClass("border-bottom").removeClass("padding-small").css({
