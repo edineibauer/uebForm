@@ -10,6 +10,9 @@ function validateDicionario(entity, dicionario, form, action) {
             if (meta.key === "identifier")
                 continue;
 
+            if (meta.column === "system_id" && USER.setor !== "admin")
+                continue;
+
             if(meta.format === "password" && !isNumberPositive(form.id) && typeof dicionario.usuarios_id === "object")
                 meta.default = false;
 
