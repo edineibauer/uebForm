@@ -356,7 +356,6 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         id: "",
         data: {},
         dataOld: {},
-        dataRelation: [],
         error: {},
         inputs: [],
         funcao: "",
@@ -405,7 +404,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             $this.data = {};
 
             if (typeof dados === "undefined" || isEmpty(dados)) {
-                $this.data = _getDefaultValues($this.entity);
+                $this.data = await _getDefaultValues($this.entity);
             } else {
                 for(let col in dados) {
                     if (col === "id")
@@ -418,11 +417,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             $this.dataOld = Object.assign({}, $this.data);
         },
         setId: async function (id) {
-            if (isNumberPositive(id)) {
-                let loadData = await loadEntityData(this.entity, parseInt(id));
-                this.dataRelation = loadData[1];
-                await this.setData(loadData[0]);
-            }
+            if (isNumberPositive(id))
+                await this.setData(await loadEntityData(this.entity, parseInt(id)));
         },
         setFuncao: function (funcao) {
             this.funcao = funcao;
@@ -523,7 +519,6 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                              * Se tiver navegação para trás, volta, senão, mantém o formulário aberto para edição
                              */
                             if(!localStorage.getItem("navigation_" + target) || n.length < 2) {
-                                form.dataRelation = dbCreate.data.relationData;
                                 await form.show(dbCreate.data);
                             } else {
                                 goBackMaestruNavigation(this.target, "back");
@@ -615,10 +610,8 @@ async function getInputsTemplates(form, col) {
 
             metaInput = getExtraMeta(form.identificador, form.entity, metaInput);
 
-            if (metaInput.format === "password") {
+            if (metaInput.format === "password" && metaInput.value.length === 32)
                 metaInput.value = "";
-                metaInput.nome = "Definir nova senha"
-            }
 
             metaInput.form = (typeof metaInput.form !== "object" ? {} : metaInput.form);
             metaInput.form.class = (!isEmpty(metaInput.form.class) ? metaInput.form.class : "") + (typeof meta.form.display !== "undefined" && !meta.form.display ? " hide" : "");
@@ -673,10 +666,9 @@ async function loadEntityData(entity, id) {
             if (typeof dicionarios[entity][col] === 'object' && dicionarios[entity][col] !== null && dicionarios[entity][col].format !== "information")
                 dados[col] = await _getDefaultValue(dicionarios[entity][col], data[0][col])
         }
-        return [dados, data[0].relationData];
     }
 
-    return [{}, []];
+    return dados;
 }
 
 function getExtraMeta(identificador, entity, meta) {
@@ -775,7 +767,7 @@ function loadMask(form) {
     });
 
     $.each($form.find(".list"), async function () {
-        let value = (typeof form.dataRelation !== "undefined" && typeof form.dataRelation[$(this).attr("id")] !== "undefined" && !isEmpty(form.dataRelation[$(this).attr("id")]) ? form.dataRelation[$(this).attr("id")] : $(this).data("value"));
+        let value = $(this).data("value");
 
         if (isNumberPositive(value)) {
             let entity = $(this).data("entity");
