@@ -2,9 +2,8 @@
 
 namespace Form;
 
-use Conn\Read;
+use Config\Config;
 use Conn\SqlCommand;
-use Entity\Entity;
 use Entity\Meta;
 use Entity\Metadados;
 
@@ -71,11 +70,15 @@ class ExeReadEntity
 
     private function start()
     {
+        $permission = Config::getPermission($_SESSION["userlogin"]["setor"]);
+
+        if(!$permission[$this->report['entidade']]["read"])
+            return;
+
         $info = Metadados::getInfo($this->report['entidade']);
         $dicionario = Metadados::getDicionario($this->report['entidade']);
         $querySelect = "";
         $queryDeclarationString = "FROM " . PRE . $this->report['entidade'] . " as " . $this->report['entidade'];
-        $relations = [];
 
         /**
          * Select the own entity fields
@@ -86,6 +89,10 @@ class ExeReadEntity
         }
 
         $queryLogic = "WHERE";
+
+        //restringe leitura a somente dados do system_id de acesso
+        if(!isset($permission[$this->report['entidade']]["explore"]) || !$permission[$this->report['entidade']]["explore"])
+            $queryLogic = "WHERE {$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]}";
 
         if(!empty($this->report['search'])) {
             foreach ($dicionario as $meta) {
