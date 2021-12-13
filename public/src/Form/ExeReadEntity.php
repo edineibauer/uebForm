@@ -90,10 +90,6 @@ class ExeReadEntity
 
         $queryLogic = "WHERE";
 
-        //restringe leitura a somente dados do system_id de acesso
-        if($_SESSION["userlogin"]["setor"] !== "admin" && (!isset($permission[$this->report['entidade']]["explore"]) || !$permission[$this->report['entidade']]["explore"]))
-            $queryLogic = "WHERE {$this->report['entidade']}.system_id = " . (!empty($_SESSION["userlogin"]["system_id"]) ? $_SESSION["userlogin"]["system_id"] : 99999999999999);
-
         if(!empty($this->report['search'])) {
             foreach ($dicionario as $meta) {
                 if(!in_array($meta['key'], ["information", "identifier"]))
@@ -159,6 +155,10 @@ class ExeReadEntity
         } else {
             $querySelect .= ", 1 as contagem";
         }
+
+        //restringe leitura a somente dados do system_id de acesso
+        if($_SESSION["userlogin"]["setor"] !== "admin" && (!isset($permission[$this->report['entidade']]["explore"]) || !$permission[$this->report['entidade']]["explore"]))
+            $queryLogic .= ($queryLogic !== "WHERE" ? " AND ({$this->report['entidade']}.system_id = " . (!empty($_SESSION["userlogin"]["system_id"]) ? $_SESSION["userlogin"]["system_id"] : 99999999999999) . ")" : "");
 
         $query = "SELECT " . $querySelect . " " . $queryDeclarationString . " " . ($queryLogic !== "WHERE" ? $queryLogic . " " : "") . $queryGroup . " " . $queryOrder . " LIMIT " . $this->limit . " OFFSET " . $this->offset;
 
