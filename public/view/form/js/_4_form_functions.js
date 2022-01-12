@@ -259,32 +259,19 @@ async function searchList($input) {
         let entity = $input.data("entity");
         let templates = await getTemplates();
         let relevants = await dbLocal.exeRead("__relevant", 1);
+        let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
         let dataRead = await db.exeRead(entity, search, 10);
         let results = [];
-        $.each(dataRead, function (i, datum) {
+        for(let datum of dataRead) {
+            let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
+            if(colStatus && !datum[colStatus])
+                continue;
 
-            let optionValues = [];
-            $.each(datum, function (col, val) {
-                let dc = dicionarios[entity][col];
-                if (typeof dc !== "undefined" && dc.format !== "password" && dc.key !== "information" && dc.column !== "system_id" && dc.key !== "identifier" && dc.nome !== "" && relevants.indexOf(dc.format) > -1)
-                    optionValues.push({content: val, column: col, peso: relevants.indexOf(dc.format)})
-            });
-
-            optionValues = orderBy(optionValues, 'peso').reverse();
-
-            let content = "";
-            for (let i = 0; i < 3; i++) {
-                if (typeof optionValues[i] === "object" && optionValues[i] !== null)
-                    content += "<div class='mode-text-colorText padding-tiny margin-right col'><small class='padding-tiny'>" + optionValues[i].column + ":</small> " + optionValues[i].content + (i === 2 || typeof optionValues[i + 1] === "undefined" ? "" : ", ") + "</div>";
-            }
             results.push({
                 id: datum.id,
-                text: content
-            })
-
-            if (results.length > 14)
-                return !1
-        });
+                text: (await getRelevantTitle(entity, datum))
+            });
+        }
         $input.siblings("#list-result-" + column).off("mousedown", ".list-option").on("mousedown", ".list-option", function () {
             addListSetTitle(form, entity, column, $(this).attr("rel"), $input.parent())
         }).html(Mustache.render(templates.list_result, {data: results}))
@@ -787,7 +774,7 @@ function loadMask(form) {
     });
 
     $form.find(".ajuda").off("click").on("click", function () {
-        $(this).parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
+        $(this).parent().parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
         $(document).off("mouseup").on("mouseup", async function (e) {
             let container = $(".ajudatext");
             if (container.is(e.target) || container.has(e.target).length > 0)
@@ -983,106 +970,77 @@ function deleteExtendMult(column, id) {
     }
 }
 
-function searchListMult($input) {
+async function searchListMult($input) {
     let search = $input.val();
     let column = $input.attr("data-column");
-    if ($input.is(":focus")) {
-
+    if (!$input.is(":focus")) {
         /**
-         * Input focus action show results
+         * Out from input action
          * */
+        $input.siblings("#list-result-" + column).html("");
+        return;
+    }
 
-        let entity = $input.attr("data-entity");
+    /**
+     * Input focus action show results
+     * */
 
-        if (typeof form.data[column] === null || isEmpty(form.data[column]))
-            form.setColumnValue(column, []);
+    let entity = $input.attr("data-entity");
 
-        dbLocal.exeRead("__relevant", 1).then(rel => {
-            db.exeRead(entity, search).then(r => {
-                let contagemMax = 0;
-                let lista = "";
+    if (typeof form.data[column] === null || isEmpty(form.data[column]))
+        form.setColumnValue(column, []);
 
-                $.each(r, function (i, datum) {
-                    if (form.data[column].indexOf(parseInt(datum.id)) === -1) {
-                        let col = "";
-                        for (let rr in rel) {
-                            for (let dd in dicionarios[entity]) {
-                                if (dicionarios[entity][dd].format === rel[rr]) {
-                                    col = dd;
-                                    break;
-                                }
-                            }
-                            if (col !== "")
-                                break;
-                        }
+    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
+    let templates = await getTemplates();
+    let r = await db.exeRead(entity, search, 15);
+    let results = [];
 
-                        if (col !== "") {
-                            let val = datum[col];
+    for(let datum of r) {
+        let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
+        if((colStatus && !datum[colStatus]) || form.data[column].indexOf(parseInt(datum.id)) > -1)
+            continue;
 
-                            /**
-                             * Busca em cada campo por um valor que seja parecido com o pesquisado no autocomplete
-                             **/
-                            if (val === "" || (typeof val === "string" && val.toLowerCase() === search.toLocaleString()) || (typeof val === "string" && (val.indexOf(search) > -1 || val.toLowerCase().indexOf(search) > -1))) {
-                                lista += '<li rel="' + datum.id + '" data-title="' + val + '" class="listMultOption col font-light container padding-tiny hover-opacity-off pointer opacity"><span class="color-gray padding-tiny padding-left padding-right s-hide">' + col + '</span><span class="padding-left">' + val + '</span></li>';
-                                contagemMax++;
-                            }
-                        }
-                    }
+        results.push({
+            id: datum.id,
+            text: (await getRelevantTitle(entity, datum))
+        });
+    }
 
-                    /**
-                     * Máximo de resultados na lista
-                     */
-                    if (contagemMax > 14)
-                        return !1
-                });
+    /**
+     * Cria caixa com resultados
+     * */
+    if (!isEmpty(results)) {
+        $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result, {data: results}) + '</ul>')
+            .off("mousedown", ".list-option")
+            .on("mousedown", ".list-option", function () {
 
-                return lista;
-            }).then(lista => {
-
+                console.log($(this).attr("rel"), $(this).find("span").text());
                 /**
-                 * Cria caixa com resultados
-                 * */
-                if (!isEmpty(lista)) {
-                    $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + lista + '</ul>')
-                        .off("mousedown", ".listMultOption")
-                        .on("mousedown", ".listMultOption", function () {
-
-                            /**
-                             * Adiciona ação ao clicar em uma opção
-                             */
-                            addListMultBadge($(this).attr("rel"), $(this).data("title"), $input);
-                        });
-                }
+                 * Adiciona ação ao clicar em uma opção
+                 */
+                addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
             });
-        });
+    }
 
-        $input.off("blur").on("blur", function () {
-
-            /**
-             * Out from input action
-             * */
-            $input.val("");
-            $input.siblings("#list-result-" + column).html("");
-
-        }).off("keydown").on("keydown", function (e) {
-
-            /**
-             * Enter button action
-             * */
-            if (e.key === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
-                $input.val("");
-                let option = $input.siblings("#list-result-" + column).find(".listMultOption").first();
-                addListMultBadge(option.attr("rel"), option.data("title"), $input);
-            }
-        });
-
-    } else {
+    $input.off("blur").on("blur", function () {
 
         /**
          * Out from input action
          * */
-        $input.siblings("#list-result-" + column).html("")
-    }
+        $input.val("");
+        $input.siblings("#list-result-" + column).html("");
+
+    }).off("keydown").on("keydown", function (e) {
+
+        /**
+         * Enter button action
+         * */
+        if (e.key === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
+            $input.val("");
+            let option = $input.siblings("#list-result-" + column).find(".listMultOption").first();
+            addListMultBadge(option.attr("rel"), option.data("title"), $input);
+        }
+    });
 }
 
 function inputListMultSize() {
