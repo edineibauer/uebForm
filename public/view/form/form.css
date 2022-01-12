@@ -32,6 +32,16 @@
     cursor: help;
 }
 
+.saveStatusCallBack {
+    float: left;
+    padding: 10px;
+}
+
+.saveStatusCallBack.topSave {
+    float: right;
+    padding: 5px 10px;
+}
+
 .ajudatext {
     padding: 2px 6px 1px;
     font-size: 11px;

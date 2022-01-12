@@ -297,11 +297,11 @@ function setFormSaveStatus(form, status) {
     form.saving = typeof status === "undefined";
     if (form.saving) {
         form.$element.find(".loadindTableSpace").find(".btn-form-list").addClass("disabled").prop("disabled", "disabled");
-        form.$element.find(".parent-save-form-mini").find("button").html("<img src='" + HOME + "assetsPublic/img/loading.gif?v=" + VERSION + "' height='22' style='height: 22px;margin: 1px;' class='right'>");
+        form.$element.find(".parent-save-form-mini").find("button").html("<img src='" + HOME + "assetsPublic/img/loading.gif?v=" + VERSION + "' height='22' style='height: 22px;margin: 1px;' class='left'><div class='left padding-left-8'>Salvando</div>");
         form.$element.find(".parent-save-form").find("button").html("<img src='" + HOME + "assetsPublic/img/loading.gif?v=" + VERSION + "' height='20' style='height: 20px;margin-bottom: -3px;margin-right: 12px;'>Salvando");
     } else {
         form.$element.find(".loadindTableSpace").find(".btn-form-list").removeClass("disabled").prop("disabled", "");
-        form.$element.find(".parent-save-form-mini").find("button").html("<i class='material-icons left'>save</i>")
+        form.$element.find(".parent-save-form-mini").find("button").html("<i class='material-icons left'>save</i><div class='left padding-left-8'>salvar</div>")
         form.$element.find(".parent-save-form").find("button").html(form.options.buttonText);
     }
 }
@@ -466,7 +466,21 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
                     form.modified = false;
                     if (form.store) {
+
+                        /**
+                         * Faz request ao servidor perguntando sobre o andamento do status de salvamento do formulário
+                         * */
+                        let checkStatus = setInterval(async function () {
+                            $(".saveStatusCallBack").text(await AJAX.get("formSaveStatus/" + form.entity));
+                        }, 1500);
+
+                        /**
+                         * Salva o formulário
+                         * */
                         let dbCreate = await db.exeCreate(form.entity, dados);
+
+                        //desliga o status do save no servidor
+                        clearInterval(checkStatus);
 
                         setFormSaveStatus(form, 1);
 
