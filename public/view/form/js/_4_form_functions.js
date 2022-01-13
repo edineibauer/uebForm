@@ -1028,7 +1028,6 @@ async function searchListMult($input) {
             .off("mousedown", ".list-option")
             .on("mousedown", ".list-option", function () {
 
-                console.log($(this).attr("rel"), $(this).find("span").text());
                 /**
                  * Adiciona ação ao clicar em uma opção
                  */
