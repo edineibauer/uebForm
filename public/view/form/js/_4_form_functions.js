@@ -472,7 +472,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                          * */
                         let checkStatus = setInterval(async function () {
                             $(".saveStatusCallBack").text(await AJAX.get("formSaveStatus/" + form.entity));
-                        }, 1500);
+                        }, 1000);
 
                         /**
                          * Salva o formulário
