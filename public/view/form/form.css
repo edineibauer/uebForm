@@ -43,7 +43,7 @@
 }
 
 .ajudatext {
-    padding: 2px 6px 1px;
+    padding: 4px 6px 3px;
     font-size: 11px;
     font-weight: 400;
     background: var(--colorBackground);
@@ -53,6 +53,9 @@
     position: absolute;
     margin-top: -4px;
     z-index: 10;
+    right: 0;
+    left: -5px;
+    top: 30px;
 }
 
 .info-container {
