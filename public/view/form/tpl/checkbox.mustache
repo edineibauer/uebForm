@@ -1,13 +1,13 @@
 <div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
     <div class="col parent-input relative {{form.class}}" {{form.atributos}} {{#form.style}}style="{{form.style}}"{{/form.style}}>
-        <span class="col">
-            <div class="left align-left formLabel no-select formLabel no-select">
+        <label class="col">
+            <span class="col align-left formLabel no-select formLabel no-select">
                 <div class="left d-inline">{{nome}}</div>
                 {{#required}}<sup class="color-text-red left d-inline" style="margin-top: 5px"><b>*</b></sup>{{/required}}
                 {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
-            </div>
-            <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
-        </span>
+                <span class="rest input-message color-text-red padding-left padding-left" style="font-size: 12px;padding-top: 6px;" rel="{{column}}"></span>
+            </span>
+        </label>
         {{#allow.options}}
             <div class="no-select {{#form.orientation}}col s12{{/form.orientation}}{{^form.orientation}}left{{/form.orientation}}">
                 <label class="left">
@@ -19,7 +19,7 @@
                            value="{{valor}}"
                            class="formCrudInput{{#disabled}} disabled{{/disabled}}"
                            {{#disabled}}disabled="disabled"{{/disabled}}
-                           {{#isChecked}}checked="checked"{{/isChecked}}
+                        {{#isChecked}}checked="checked"{{/isChecked}}
                            rel="{{formIdentificador}}"
                         {{#disabled}} disabled='disabled' {{/disabled}}/>
                     <div class="left font-large padding-small padding-8 pointer{{#disabled}} disabled{{/disabled}}">

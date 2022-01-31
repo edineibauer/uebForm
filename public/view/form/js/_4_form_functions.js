@@ -1080,7 +1080,7 @@ function addListMultBadge(id, title, $input) {
     /**
      * Adiciona o badge na input
      */
-    $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' rel='{{column}}' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
+    $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '" + column + "')\" rel='" + column + "' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
     inputListMultSize();
 }
 
