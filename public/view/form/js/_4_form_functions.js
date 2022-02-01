@@ -788,6 +788,11 @@ function loadMask(form) {
     });
 
     $form.find(".ajuda").off("click").on("click", function () {
+        if($(this).parent().parent().find(".ajudatext").length) {
+            $(".ajudatext").remove();
+            return;
+        }
+
         $(this).parent().parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
         $(document).off("mouseup").on("mouseup", async function (e) {
             let container = $(".ajudatext");
