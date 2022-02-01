@@ -788,10 +788,8 @@ function loadMask(form) {
     });
 
     $form.find(".ajuda").off("click").on("click", function () {
-        if($(this).parent().parent().find(".ajudatext").length) {
-            $(".ajudatext").remove();
+        if($(this).parent().parent().find(".ajudatext").length)
             return;
-        }
 
         $(this).parent().parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
         $(document).off("mouseup").on("mouseup", async function (e) {
@@ -799,6 +797,7 @@ function loadMask(form) {
             if (container.is(e.target) || container.has(e.target).length > 0)
                 return;
 
+            await sleep(50);
             $(document).off("mouseup");
             container.remove();
         });
