@@ -787,20 +787,12 @@ function loadMask(form) {
             await setInputFormatListValue(form, $(this).data("entity"), $(this).data("column"), value, $(this).parent());
     });
 
-    $form.find(".ajuda").off("click").on("click", function () {
+    $form.find(".ajuda").off("mouseup").on("mouseup", async function () {
         if($(this).parent().parent().find(".ajudatext").length)
             return;
 
+        await sleep(10);
         $(this).parent().parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
-        $(document).off("mouseup").on("mouseup", async function (e) {
-            let container = $(".ajudatext");
-            if (container.is(e.target) || container.has(e.target).length > 0)
-                return;
-
-            await sleep(50);
-            $(document).off("mouseup");
-            container.remove();
-        });
     });
 
     checkUserOptions();
@@ -1096,3 +1088,10 @@ function removeBadge(id, column) {
         inputListMultSize();
     }
 }
+
+$(function () {
+    $(document).off("mouseup").on("mouseup", async function (e) {
+        await sleep(5);
+        $(".ajudatext").remove();
+    });
+})
