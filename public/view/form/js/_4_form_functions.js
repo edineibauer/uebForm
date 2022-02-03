@@ -147,7 +147,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
     })
 }).off("click", ".btn-form-save").on("click", ".btn-form-save", function () {
     form.save()
-}).off("dblclick", ".list").on("dblclick", ".list", function () {
+}).off("click", ".list").on("click", ".list", function () {
     searchList($(this))
 }).off("click", ".switch-status-extend").on("click", ".switch-status-extend", function () {
     let column = $(this).data("column");
@@ -981,13 +981,14 @@ function deleteExtendMult(column, id) {
 }
 
 async function searchListMult($input) {
+    let $search = $input.siblings(".list-results");
     let search = $input.val();
     let column = $input.attr("data-column");
     if (!$input.is(":focus")) {
         /**
          * Out from input action
          * */
-        $input.siblings("#list-result-" + column).html("");
+        $search.html("");
         return;
     }
 
@@ -1020,7 +1021,7 @@ async function searchListMult($input) {
      * Cria caixa com resultados
      * */
     if (!isEmpty(results)) {
-        $input.siblings("#list-result-" + column).html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result, {data: results}) + '</ul>')
+        $search.html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result, {data: results}) + '</ul>')
             .off("mousedown", ".list-option")
             .on("mousedown", ".list-option", function () {
 
@@ -1029,6 +1030,8 @@ async function searchListMult($input) {
                  */
                 addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
             });
+    } else {
+        $search.html('<ul class="col s12 card list-result-itens border radius" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
     }
 
     $input.off("blur").on("blur", function () {
@@ -1037,24 +1040,30 @@ async function searchListMult($input) {
          * Out from input action
          * */
         $input.val("");
-        $input.siblings("#list-result-" + column).html("");
+        $search.html("");
 
     }).off("keydown").on("keydown", function (e) {
 
         /**
          * Enter button action
          * */
-        if (e.key === 13 && $input.siblings("#list-result-" + column).find(".listMultOption").length) {
-            $input.val("");
-            let option = $input.siblings("#list-result-" + column).find(".listMultOption").first();
-            addListMultBadge(option.attr("rel"), option.data("title"), $input);
+        if (e.which === 13 && !isEmpty(results)) {
+            let option = $search.find(".list-option").first();
+            addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
+            $input.val("").blur();
+            $search.html("");
         }
     });
 }
 
 function inputListMultSize() {
     $(".listMult").each(function (i, e) {
-        $(e).css("width", "calc(100% - " + $(e).siblings(".badgeListMult").width() + "px)");
+        let wb = $(e).siblings(".badgeListMult").width();
+        let pr = $(e).siblings(".badgeListMult").parent().width();
+        if(wb + 151 > pr)
+            $(e).css("width", "100%");
+        else
+            $(e).css("width", "calc(100% - " + wb + "px)");
     });
 }
 

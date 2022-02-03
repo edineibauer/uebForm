@@ -8,16 +8,18 @@
             {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
         </label>
 
-        <div style="margin-right: 0"
-             class="btn{{^disabled}} btnListAction{{/disabled}} btnListMult right mode-background-colorLine mode-text-colorText hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
-             rel="{{id}}" data-entity="{{relation}}" data-column="{{column}}"
-            {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}>
-            <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny"
-               rel="{{column}}">add</i>
-            <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
-                novo
+        {{#autocompletenovo}}
+            <div style="margin-right: 0"
+                 class="btn{{^disabled}} btnListAction{{/disabled}} btnListMult right mode-background-colorLine mode-text-colorText hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+                 rel="{{id}}" data-entity="{{relation}}" data-column="{{column}}"
+                {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}>
+                <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny"
+                   rel="{{column}}">add</i>
+                <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
+                    novo
+                </div>
             </div>
-        </div>
+        {{/autocompletenovo}}
 
         <div class="rest relative list-input list-input-mult" rel="{{column}}">
             <div class="badgeListMult" rel="{{column}}"></div>
@@ -50,7 +52,7 @@
         /**
          * Atribui função ao click duplo nesta input
          */
-        $(".list_mult_context").off("dblclick", ".listMult").on("dblclick", ".listMult", function () {
+        $(".list_mult_context").off("click", ".listMult").on("click", ".listMult", function () {
             searchListMult($(this));
 
         }).on("keyup", ".listMult", function (e) {
