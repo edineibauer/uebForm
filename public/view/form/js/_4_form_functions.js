@@ -253,11 +253,14 @@ function createSource(mock, $input, tipo, prepend) {
 }
 
 async function searchList($input) {
-    let search = $input.val();
     let column = $input.data("column");
+    let $search = $input.siblings("#list-result-" + column);
+    let search = $input.val();
     if ($input.is(":focus")) {
         let entity = $input.data("entity");
         let templates = await getTemplates();
+        $search.html(Mustache.render(templates.list_result_skeleton));
+
         let relevants = await dbLocal.exeRead("__relevant", 1);
         let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
         let dataRead = await db.exeRead(entity, search, 10);
@@ -272,21 +275,21 @@ async function searchList($input) {
                 text: (await getRelevantTitle(entity, datum))
             });
         }
-        $input.siblings("#list-result-" + column).off("mousedown", ".list-option").on("mousedown", ".list-option", function () {
+        $search.off("mousedown", ".list-option").on("mousedown", ".list-option", function () {
             addListSetTitle(form, entity, column, $(this).attr("rel"), $input.parent())
         }).html(Mustache.render(templates.list_result, {data: results}))
 
         $input.off("blur").on("blur", function () {
             $input.val("");
-            $input.siblings("#list-result-" + column).html("")
+            $search.html("")
         }).off("keydown").on("keydown", function (e) {
-            if (e.which === 13 && $input.siblings("#list-result-" + column).find(".list-option").length) {
-                let $opt = $input.siblings("#list-result-" + column).find(".list-option").first();
+            if (e.which === 13 && $search.find(".list-option").length) {
+                let $opt = $search.find(".list-option").first();
                 addListSetTitle(form, entity, column, $opt.attr("rel"), $input.parent());
             }
         })
     } else {
-        $input.siblings("#list-result-" + column).html("")
+        $search.html("")
     }
 }
 
@@ -1001,8 +1004,11 @@ async function searchListMult($input) {
     if (typeof form.data[column] === null || isEmpty(form.data[column]))
         form.setColumnValue(column, []);
 
-    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
     let templates = await getTemplates();
+    $search.html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result_skeleton) + '</ul>');
+
+    await sleep(2000);
+    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
     let r = await db.exeRead(entity, search, 15);
     let results = [];
 
@@ -1020,6 +1026,7 @@ async function searchListMult($input) {
     /**
      * Cria caixa com resultados
      * */
+    $search.html("");
     if (!isEmpty(results)) {
         $search.html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result, {data: results}) + '</ul>')
             .off("mousedown", ".list-option")
@@ -1031,7 +1038,7 @@ async function searchListMult($input) {
                 addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
             });
     } else {
-        $search.html('<ul class="col s12 card list-result-itens border radius" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
+        $search.html('<ul class="col s12 card list-result-itens border radius opacity" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
     }
 
     $input.off("blur").on("blur", function () {
