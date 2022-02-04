@@ -1016,7 +1016,6 @@ async function searchListMult($input) {
     let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
     let r = await db.exeRead(entity, search, 15);
 
-    $search.html("");
     if(ativoSearch) {
         let results = [];
         for (let datum of r) {
@@ -1055,6 +1054,8 @@ async function searchListMult($input) {
                 $search.html("");
             }
         });
+    } else {
+        $search.html("");
     }
 }
 
