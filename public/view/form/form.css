@@ -37,6 +37,14 @@
     padding: 10px;
 }
 
+.list-option.active {
+    opacity: 1!important;
+}
+
+.list-option.active .td-title {
+    color: var(--colorPrimary)!important;
+}
+
 .saveStatusCallBack.topSave {
     float: right;
     padding: 5px 10px;

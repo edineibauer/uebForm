@@ -117,10 +117,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
         } else if (['tel', 'cpf', 'cnpj', 'ie', 'cep', 'card_number'].indexOf(format) > -1) {
             value = $input.cleanVal()
         } else if (dicionario[column].form.input === "switch") {
-            value = $input.prop("checked")
-        } else if (dicionario[column].format === "list") {
-            searchList($input);
-            return;
+            value = $input.prop("checked");
         } else {
             value = $input.val()
         }
@@ -147,8 +144,6 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
     })
 }).off("click", ".btn-form-save").on("click", ".btn-form-save", function () {
     form.save()
-}).off("click", ".list").on("click", ".list", function () {
-    searchList($(this))
 }).off("click", ".switch-status-extend").on("click", ".switch-status-extend", function () {
     let column = $(this).data("column");
     let id = $(this).data("id");
@@ -253,6 +248,7 @@ function createSource(mock, $input, tipo, prepend) {
 }
 
 async function searchList($input) {
+    let ativoSearch = true;
     let column = $input.data("column");
     let $search = $input.siblings("#list-result-" + column);
     let search = $input.val();
@@ -261,33 +257,42 @@ async function searchList($input) {
         let templates = await getTemplates();
         $search.html(Mustache.render(templates.list_result_skeleton));
 
+        $input.off("blur").on("blur", function () {
+            $input.val("");
+            $search.html("");
+            ativoSearch = false;
+        });
+
         let relevants = await dbLocal.exeRead("__relevant", 1);
         let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
         let dataRead = await db.exeRead(entity, search, 10);
-        let results = [];
-        for(let datum of dataRead) {
-            let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
-            if(colStatus && !datum[colStatus])
-                continue;
 
-            results.push({
-                id: datum.id,
-                text: (await getRelevantTitle(entity, datum))
-            });
-        }
-        $search.off("mousedown", ".list-option").on("mousedown", ".list-option", function () {
-            addListSetTitle(form, entity, column, $(this).attr("rel"), $input.parent())
-        }).html(Mustache.render(templates.list_result, {data: results}))
+        if(ativoSearch) {
+            let results = [];
+            for(let datum of dataRead) {
+                let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
+                if(colStatus && !datum[colStatus])
+                    continue;
 
-        $input.off("blur").on("blur", function () {
-            $input.val("");
-            $search.html("")
-        }).off("keydown").on("keydown", function (e) {
-            if (e.which === 13 && $search.find(".list-option").length) {
-                let $opt = $search.find(".list-option").first();
-                addListSetTitle(form, entity, column, $opt.attr("rel"), $input.parent());
+                results.push({
+                    id: datum.id,
+                    text: (await getRelevantTitle(entity, datum))
+                });
             }
-        })
+
+            $search.off("mousedown", ".list-option").on("mousedown", ".list-option", function () {
+                addListSetTitle(form, entity, column, $(this).attr("rel"), $input.parent())
+            }).html(Mustache.render(templates.list_result, {data: results}));
+
+            $input.off("keyup").on("keyup", function (e) {
+                if (e.which === 13 && !isEmpty(results)) {
+                    let $opt = $search.find(".list-option.active").length ? $search.find(".list-option.active") : $search.find(".list-option").first();
+                    addListSetTitle(form, entity, column, $opt.attr("rel"), $input.parent());
+                }
+            })
+        } else {
+            $search.html("");
+        }
     } else {
         $search.html("")
     }
@@ -864,22 +869,19 @@ async function setInputFormatListValue(form, entity, column, id, $input) {
         "margin-bottom": "20px"
     }).html(title);
 
-    $input.siblings(".list-remove-btn").remove();
     let dicionario = dicionarios[form.entity];
 
-    if (isNaN(form.id) || dicionario[column].update) {
-        $("<div class='right pointer list-remove-btn color-text-gray-dark color-hover-text-red' style='padding: 7px 10px' onclick=\"deleteRegisterAssociation('" + column + "', this)\"><i class='material-icons'>close</i></div>").insertBefore($input);
+    $input.siblings(".list-remove-btn").removeClass("hide");
+
+    if (isNaN(form.id) || dicionario[column].update)
         form.modified = !0;
-    }
 }
 
 function deleteRegisterAssociation(col, el) {
-    if (confirm("Remover Associação com este registro?")) {
-        form.setColumnValue(col, null);
-        getInputsTemplates(form, col).then(inputTemplate => {
-            $(el).closest(".parent-input").parent().replaceWith(inputTemplate[0])
-        })
-    }
+    form.setColumnValue(col, null);
+    getInputsTemplates(form, col).then(inputTemplate => {
+        $(el).addClass("hide").closest(".parent-input").parent().replaceWith(inputTemplate[0]);
+    })
 }
 
 /**
@@ -984,13 +986,11 @@ function deleteExtendMult(column, id) {
 }
 
 async function searchListMult($input) {
+    let ativoSearch = true;
     let $search = $input.siblings(".list-results");
     let search = $input.val();
     let column = $input.attr("data-column");
     if (!$input.is(":focus")) {
-        /**
-         * Out from input action
-         * */
         $search.html("");
         return;
     }
@@ -1005,62 +1005,57 @@ async function searchListMult($input) {
         form.setColumnValue(column, []);
 
     let templates = await getTemplates();
-    $search.html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result_skeleton) + '</ul>');
-
-    await sleep(2000);
-    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
-    let r = await db.exeRead(entity, search, 15);
-    let results = [];
-
-    for(let datum of r) {
-        let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
-        if((colStatus && !datum[colStatus]) || form.data[column].indexOf(parseInt(datum.id)) > -1)
-            continue;
-
-        results.push({
-            id: datum.id,
-            text: (await getRelevantTitle(entity, datum))
-        });
-    }
-
-    /**
-     * Cria caixa com resultados
-     * */
-    $search.html("");
-    if (!isEmpty(results)) {
-        $search.html('<ul class="col s12 card list-result-itens border radius">' + Mustache.render(templates.list_result, {data: results}) + '</ul>')
-            .off("mousedown", ".list-option")
-            .on("mousedown", ".list-option", function () {
-
-                /**
-                 * Adiciona ação ao clicar em uma opção
-                 */
-                addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
-            });
-    } else {
-        $search.html('<ul class="col s12 card list-result-itens border radius opacity" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
-    }
+    $search.html(Mustache.render(templates.list_result_skeleton));
 
     $input.off("blur").on("blur", function () {
-
-        /**
-         * Out from input action
-         * */
         $input.val("");
         $search.html("");
+        ativoSearch = false;
+    });
 
-    }).off("keydown").on("keydown", function (e) {
+    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
+    let r = await db.exeRead(entity, search, 15);
+
+    $search.html("");
+    if(ativoSearch) {
+        let results = [];
+        for (let datum of r) {
+            let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
+            if ((colStatus && !datum[colStatus]) || form.data[column].indexOf(parseInt(datum.id)) > -1)
+                continue;
+
+            results.push({
+                id: datum.id,
+                text: (await getRelevantTitle(entity, datum))
+            });
+        }
 
         /**
-         * Enter button action
+         * Cria caixa com resultados
          * */
-        if (e.which === 13 && !isEmpty(results)) {
-            let option = $search.find(".list-option").first();
-            addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
-            $input.val("").blur();
-            $search.html("");
+        if (!isEmpty(results)) {
+            $search.html(Mustache.render(templates.list_result, {data: results}))
+                .off("mousedown", ".list-option")
+                .on("mousedown", ".list-option", function () {
+
+                    /**
+                     * Adiciona ação ao clicar em uma opção
+                     */
+                    addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
+                });
+        } else {
+            $search.html('<ul class="col s12 card list-result-itens border radius opacity" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
         }
-    });
+
+        $input.off("keydown").on("keydown", function (e) {
+            if (e.which === 13 && !isEmpty(results)) {
+                let option = $search.find(".list-option.active").length ? $search.find(".list-option.active") : $search.find(".list-option").first();
+                addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
+                $input.val("").blur();
+                $search.html("");
+            }
+        });
+    }
 }
 
 function inputListMultSize() {

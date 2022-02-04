@@ -48,16 +48,38 @@
 <script>
     (async function () {
         inputListMultSize();
+        var timeWrite = 0;
 
         /**
          * Atribui função ao click duplo nesta input
          */
-        $(".list_mult_context").off("click", ".listMult").on("click", ".listMult", function () {
+        $(".list_mult_context").off("focus", ".listMult").on("focus", ".listMult", function () {
             searchListMult($(this));
 
-        }).on("keyup", ".listMult", function (e) {
-            if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1)
-                searchListMult($(this));
+        }).off("keyup", ".listMult").on("keyup", ".listMult", function (e) {
+            let $search = $(this).siblings(".list-results");
+            if(e.which === 40) {
+                if(!$search.find("li.active").length) {
+                    $search.find("li:first-of-type").addClass("active");
+                } else if($search.find("li.active").next().length) {
+                    $search.find("li.active").removeClass("active").next().addClass("active");
+                }
+
+            } else if(e.which === 38) {
+                if(!$search.find("li.active").length) {
+                    $search.find("li:last-of-type").addClass("active");
+                } else if($search.find("li.active").prev().length) {
+                    $search.find("li.active").removeClass("active").prev().addClass("active");
+                }
+
+            } else if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 39, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1) {
+                let $this = $(this);
+                clearTimeout(timeWrite);
+                timeWrite = setTimeout(function () {
+                    searchListMult($this);
+                }, 300);
+            }
+
         }).off("click", ".badgeListMultOption").on("click", ".badgeListMultOption", function () {
             removeBadge($(this).data("id"), $(this).attr("rel"));
         }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
