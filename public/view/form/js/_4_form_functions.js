@@ -944,6 +944,9 @@ function editFormRelationMult(entity, column, id) {
 
                 if(isNumberPositive(data.id)) {
                     let elementPos = navTarget.param.form.data[navTarget.param.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id);
+                    if(elementPos === -1)
+                        elementPos = navTarget.param.form.data[navTarget.param.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id.toString());
+
                     if(elementPos > -1) {
                         navTarget.param.form.data[navTarget.param.form.columnRelation][elementPos] = data;
                     } else {
@@ -1023,7 +1026,7 @@ async function searchListMult($input) {
         let results = [];
         for (let datum of r) {
             let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
-            if ((colStatus && !datum[colStatus]) || form.data[column].indexOf(parseInt(datum.id)) > -1)
+            if ((colStatus && !datum[colStatus]) || form.data[column].indexOf(parseInt(datum.id)) > -1 || form.data[column].indexOf(datum.id) > -1)
                 continue;
 
             results.push({
