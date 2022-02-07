@@ -966,22 +966,25 @@ function editFormRelationMult(entity, column, id) {
     }
 }
 
-function deleteExtendMult(column, id) {
-    if (confirm("Remover Registro?")) {
+async function deleteExtendMult(column, id) {
+    let elementPos = form.data[column].map((x) => { return x.id; }).indexOf(parseInt(id));
+    if(elementPos === -1)
+        elementPos = form.data[column].map((x) => { return x.id; }).indexOf(id);
 
-        let elementPos = form.data[column].map((x) => {return x.id; }).indexOf(parseInt(id));
-        if(elementPos > -1) {
-            form.data[column].splice(elementPos, 1);
-            form.setColumnValue(column, form.data[column]);
-        }
+    if(elementPos > -1) {
+        form.data[column].splice(elementPos, 1);
+        form.setColumnValue(column, form.data[column]);
 
         let $reg = form.$element.find(".extend_register[rel='" + id + "']");
         let $regList = $reg.closest(".extend_list_register");
         $regList.css("height", $regList.css("height")).css("height", (parseInt($regList.css("height")) - parseInt($reg.css("height"))) + "px");
         $reg.css("height", $reg.css("height")).css("height", 0).removeClass("padding-small");
-        setTimeout(function () {
-            $reg.remove()
-        }, 300)
+
+        await sleep(300);
+        $reg.remove()
+
+    } else {
+        toast("Registro não encontrado para remover", "toast-warning");
     }
 }
 
