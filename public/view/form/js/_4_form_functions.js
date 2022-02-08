@@ -795,12 +795,17 @@ function loadMask(form) {
             await setInputFormatListValue(form, $(this).data("entity"), $(this).data("column"), value, $(this).parent());
     });
 
-    $form.find(".ajuda").off("mouseup").on("mouseup", async function () {
+    $form.find(".ajuda").off("click").on("click", async function (e) {
+        e.preventDefault();
         if($(this).parent().parent().find(".ajudatext").length)
             return;
 
         await sleep(10);
-        $(this).parent().parent().append("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>");
+        let $ajuda = $("<div class='ajudatext left d-inline'>" + $(this).attr("title") + "</div>").appendTo($(this).parent().parent()).on("click", function(e) {
+            e.preventDefault();
+        });
+        await sleep(10000);
+        $ajuda.remove();
     });
 
     checkUserOptions();
