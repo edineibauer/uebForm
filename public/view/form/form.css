@@ -22,6 +22,10 @@
     padding-left: 3px;
 }
 
+input[type='date'] {
+    height: 42px;
+}
+
 .formLabel .d-inline,
 .h3Label .d-inline {
     display: inline !important;
