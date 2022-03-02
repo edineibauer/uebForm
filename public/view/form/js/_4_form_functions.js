@@ -464,7 +464,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
             setFormSaveStatus(form);
 
-            return validateForm(form.identificador).then(async validado => {
+            return validateForm().then(async validado => {
                 if (validado) {
                     /**
                      * Obtém dados do formulário

@@ -70,7 +70,7 @@ function validateRules(entity, meta, value, error, data, dataOld, action) {
     return find
 }
 
-function validateForm(id) {
+function validateForm() {
     let action = isNumberPositive(form.id) ? 'update' : 'create';
     clearFormError(form);
     return havePermission(form.entity, form.data, action).then(permission => {
@@ -78,6 +78,8 @@ function validateForm(id) {
             return validateDicionario(form.entity, dicionarios[form.entity], form, action).then(() => {
                 return formNotHaveError(form.error)
             })
+        } else {
+            form.error = {"id" : "Sem permissão para " + (isNumberPositive(form.id) ? "atualizar" : "criar")};
         }
         return !1
     })
@@ -199,15 +201,19 @@ function showErrorField($element, errors, dicionario) {
         if (typeof erro === 'object') {
             showErrorField($element, erro, dicionarios[dicionario[col].relation])
         } else if (erro !== "") {
-            let $field = $element.find(".formCrudInput[data-column='" + col + "']");
-            if ("radio" === $field.attr("type")) {
-                $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "'] ~.md-radio--fake{border-color:red !important;}</style>")
-            } else if ("checkbox" === $field.attr("type")) {
-                $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "']:before{border-color:red !important;}</style>")
+            if(col === "id") {
+                toast(erro, 3000, "toast-error");
             } else {
-                $field.css("border-bottom-color", "red")
+                let $field = $element.find(".formCrudInput[data-column='" + col + "']");
+                if ("radio" === $field.attr("type")) {
+                    $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "'] ~.md-radio--fake{border-color:red !important;}</style>")
+                } else if ("checkbox" === $field.attr("type")) {
+                    $('head').append("<style class='error-support' rel='" + col + "'>[data-column='" + col + "']:before{border-color:red !important;}</style>")
+                } else {
+                    $field.css("border-bottom-color", "red")
+                }
+                $field.parent().parent().parent().find(".input-message").html(erro);
             }
-            $field.parent().parent().parent().find(".input-message").html(erro);
         }
     })
 }
