@@ -36,7 +36,10 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
         let format = $input.data("format");
         let value = null;
         let dicionario = dicionarios[form.entity];
-        let data = form.data
+        let data = form.data;
+
+        if(format === 'list_mult')
+            return;
 
         if (['checkbox', 'radio'].indexOf(format) > -1)
             $(".error-support[rel='" + column + "']").remove();
