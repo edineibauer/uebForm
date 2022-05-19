@@ -758,12 +758,10 @@ function loadMask(form) {
 
     if ($form.find(".percent").length) {
         let $v = $form.find('.percent').find("input");
-        let v = parseFloat($v.val());
-        if(v.toString() !== '') {
-            if (/\./.test(v.toString()))
-                v = v.toFixed(2);
-            $v.val(v);
-        }
+        let v = $v.val();
+        if(v !== '' && /\./.test(v))
+            $v.val(parseFloat(v).toFixed(2));
+
         $v.mask('##0,00%', {reverse: !0});
     }
 
