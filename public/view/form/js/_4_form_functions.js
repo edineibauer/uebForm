@@ -756,8 +756,16 @@ function loadMask(form) {
     if ($form.find(".cep").length)
         $form.find(".cep").find("input").mask('99999-999', {reverse: !0});
 
-    if ($form.find(".percent").length)
-        $form.find('.percent').find("input").mask('##0,00%', {reverse: !0});
+    if ($form.find(".percent").length) {
+        let $v = $form.find('.percent').find("input");
+        let v = parseFloat($v.val());
+        if(v.toString() !== '') {
+            if (/\./.test(v.toString()))
+                v = v.toFixed(2);
+            $v.val(v);
+        }
+        $v.mask('##0,00%', {reverse: !0});
+    }
 
     if ($form.find(".valor").length)
         $form.find(".valor").find("input").mask('#.##0,00', {reverse: !0});
