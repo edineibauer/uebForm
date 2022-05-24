@@ -15,7 +15,9 @@ class Status
     public static function setMensagem(string $entity, string $mensagem) {
         Helper::createFolderIfNoExist(PATH_HOME . "_cdn");
         Helper::createFolderIfNoExist(PATH_HOME . "_cdn/formSaveStatus");
-        Helper::createFolderIfNoExist(PATH_HOME . "_cdn/formSaveStatus/" . $_SESSION["userlogin"]["id"]);
-        Config::createFile(PATH_HOME . "_cdn/formSaveStatus/" . $_SESSION["userlogin"]["id"] . "/" . $entity . ".txt", $mensagem);
+        if(isset($_SESSION) && !empty($_SESSION["userlogin"]["id"])) {
+            Helper::createFolderIfNoExist(PATH_HOME . "_cdn/formSaveStatus/" . $_SESSION["userlogin"]["id"]);
+            Config::createFile(PATH_HOME . "_cdn/formSaveStatus/" . $_SESSION["userlogin"]["id"] . "/" . $entity . ".txt", $mensagem);
+        }
     }
 }
