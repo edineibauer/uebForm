@@ -72,7 +72,7 @@ class ExeReadEntity
     {
         $permission = Config::getPermission($_SESSION["userlogin"]["setor"]);
 
-        if($_SESSION["userlogin"]["setor"] !== "admin" && !$permission[$this->report['entidade']]["read"])
+        if($_SESSION["userlogin"]["setor"] !== "admin" && (empty($permission[$this->report['entidade']]) || !$permission[$this->report['entidade']]["read"]))
             return;
 
         $info = Metadados::getInfo($this->report['entidade']);
