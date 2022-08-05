@@ -576,13 +576,25 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
     return formCrud;
 }
 
+function isSystemParent(myEntityParent, entity, info) {
+    if(typeof entity === "string" && entity.length > 1) {
+        if(myEntityParent === entity)
+            return true;
+        else
+            return isSystemParent(myEntityParent, info[entity]['system'], info);
+    } else {
+        //entidade do formulário não tem um system parent
+        return false;
+    }
+}
+
 async function getInputsTemplates(form, col) {
     let templates = await getTemplates();
     let inputs = [];
     let promessas = [];
     let position = 0;
     let dic = orderBy(dicionarios[form.entity], "indice").reverse();
-    let info = (await dbLocal.exeRead('__info', 1))[form.entity];
+    let info = (await dbLocal.exeRead('__info', 1));
 
     for (let meta of dic) {
 
@@ -595,10 +607,20 @@ async function getInputsTemplates(form, col) {
         let myPerfilIsSocial = isEditingMyPerfil && (USER.login_social === "2" || USER.login_social === "1");
 
         /**
-         * System_id field on form aditional verification
+         * Verifica se mostra o campo system_id
+         * irá mostrar caso seja um admin
+         * ou caso seja um usuário system parent
          */
-        if (meta.column === "system_id" && USER.setor !== "admin")
-            continue;
+        if (meta.column === "system_id" && USER.setor !== "admin") {
+            let formEntityParent = info[form.entity]['system'];
+            if(typeof formEntityParent === "string" && formEntityParent.length > 1) {
+                let myEntityParent = info[USER.setor]['system'];
+                if (myEntityParent === formEntityParent || !isSystemParent(myEntityParent, info[formEntityParent]['system'], info))
+                    continue;
+            } else {
+                continue;
+            }
+        }
 
         if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password"))
             continue;
