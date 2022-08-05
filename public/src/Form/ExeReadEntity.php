@@ -156,9 +156,35 @@ class ExeReadEntity
             $querySelect .= ", 1 as contagem";
         }
 
-        //restringe leitura a somente dados do system_id de acesso
-        if($_SESSION["userlogin"]["setor"] !== "admin" && !empty($_SESSION["userlogin"]["system_id"]) && (!isset($permission[$this->report['entidade']]["explore"]) || !$permission[$this->report['entidade']]["explore"]))
-            $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "({$this->report['entidade']}.system_id IS NULL OR {$this->report['entidade']}.system_id = " . $_SESSION["userlogin"]["system_id"] . ")";
+        /**
+         * restringe leitura a somente dados do system_id de acesso
+         * Aplica regra recursiva sobre sistema pai
+         */
+        if ($_SESSION["userlogin"]["setor"] !== "admin" && !empty($info['system'])) {
+
+            // permite registros que não tem vinculos com nenhum sistema (criados pelo admin)
+            $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "(({$this->report['entidade']}.system_id IS NULL AND {$this->report['entidade']}.system_entity IS NULL)";
+
+            /**
+             * Se não for um administrador e
+             * tem um sistema vinculado
+             */
+            if(!empty($_SESSION["userlogin"]["system_id"])) {
+                $mySystem = Metadados::getInfo($_SESSION["userlogin"]['setor']);
+
+                //permite registros que estão vinculados ao meu sistema
+                $queryLogic .= " OR ({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$mySystem['system']}')";
+
+                //permite registros que estão abaixo do meu sistema
+                $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
+                if(!empty($listaEntitySystemBelow)) {
+                    foreach ($listaEntitySystemBelow as $systemBelow)
+                        $queryLogic .= " OR {$this->report['entidade']}.system_entity = '" . $systemBelow . "'";
+                }
+            }
+
+            $queryLogic .= ")";
+        }
 
         $query = "SELECT " . $querySelect . " " . $queryDeclarationString . " " . ($queryLogic !== "WHERE" ? $queryLogic . " " : "") . $queryGroup . " " . $queryOrder . " LIMIT " . $this->limit . " OFFSET " . $this->offset;
 
@@ -186,6 +212,37 @@ class ExeReadEntity
 
                 $this->result[] = $register;
             }
+        }
+    }
+
+    /**
+     * Obtém lista de entidades que estão em um sistema inferior ao do usuário
+     * @param string $mySystem
+     * @param string $entitySystem
+     * @param array $lista
+     * @return array
+     */
+    private function _getEntitySystemBelow(string $mySystem, string $entitySystem, array $lista) {
+        if($mySystem === $entitySystem) {
+            /**
+             * Meu usuário esta no mesmo nível de sistema que a entidade em questão
+             */
+            return $lista;
+
+        } else {
+            /**
+             * Verifica se a entidade possui um sistema pai
+             */
+            $infoparent = Metadados::getInfo($entitySystem);
+            if(!empty($infoparent['system'])) {
+                /**
+                 * Entidade possui um sistema pai, verifica se é o mesmo que o meu
+                 */
+                $lista[] = $entitySystem;
+                return $this->_getEntitySystemBelow($mySystem, $infoparent['system'], $lista);
+            }
+
+            return [];
         }
     }
 
