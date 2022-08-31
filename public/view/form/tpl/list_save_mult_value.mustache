@@ -1,0 +1,35 @@
+<div class="col extend_register" rel="{{id}}" style="height:46px;overflow: hidden">
+    <div class="col">
+        <div class="rest no-select padding-medium edit-folder" style="cursor: move" data-id="{{columnName}}-{{id}}">
+            <div class="col right" style="width: {{^columnStatus.have}}46{{/columnStatus.have}}{{#columnStatus.have}}135{{/columnStatus.have}}px">
+                <button onclick="removeListSaveItem('{{columnName}}', '{{id}}')" rel="{{id}}"
+                        class="right btn-small radius opacity hover-opacity-off btn-del-extend-register transition-slow mode-background-colorLine mode-text-colorText color-hover-text-red"
+                        data-column="{{columnName}}" data-id="{{id}}"
+                        style="overflow: hidden;margin-left: 5px; width: 38px">
+                    <i class="material-icons left font-large">delete</i>
+                </button>
+                {{#columnStatus.have}}
+                    <label class="right" style="height: 35px;">
+                        <div class="switch switch-squad" style="margin:-8px 3px 0 0">
+                            <input type="checkbox" class="switch-status-extend switchCheck"
+                                   data-status="{{columnStatus.value}}"
+                                   data-column="{{columnName}}"
+                                   data-entity="{{entity}}"
+                                   data-id="{{id}}"
+                                   rel="{{formIdentificador}}"
+                                   {{#columnStatus.value}}checked='checked'{{/columnStatus.value}}
+                            />
+                            <div class="slider"></div>
+                        </div>
+                    </label>
+                {{/columnStatus.have}}
+            </div>
+            <a href="form/{{columnRelation}}/{{id}}" class="right btn-small pointer radius mode-background-colorLine mode-text-colorText hover-opacity-off btn-del-extend-register transition-slow"
+                    style="overflow: hidden;margin-left: 5px; width: 38px;">
+                <i class="material-icons left font-large" >edit</i>
+            </a>
+            <div class="left font-medium padding-4 extend_register_title"
+                 rel="{{id}}" style="cursor: default">{{{columnTituloExtend}}}</div>
+        </div>
+    </div>
+</div>

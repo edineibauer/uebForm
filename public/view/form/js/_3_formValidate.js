@@ -13,8 +13,8 @@ function validateDicionario(entity, dicionario, form, action) {
             if (meta.column === "system_id" && USER.setor !== "admin")
                 continue;
 
-            if(meta.format === "password" && !isNumberPositive(form.id) && typeof dicionario.usuarios_id === "object")
-                meta.default = false;
+            if(meta.format === "password")
+                meta.default = (action === "create" ? false : "");
 
             let data = form.data;
             if (data !== null) {

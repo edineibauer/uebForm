@@ -1,0 +1,113 @@
+<div class='col margin-bottom padding-tiny relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative {{form.class}}"
+         style="{{#form.style}}{{form.style}}{{/form.style}}">
+        <label for="{{column}}" class="col align-left font-small formLabel no-select"
+               data-column="{{column}}">
+            <div class="left d-inline">{{nome}}</div>
+            {{#required}}<sup class="color-text-red left d-inline" style="margin-top: 5px"><b>*</b></sup>{{/required}}
+            {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
+        </label>
+
+        {{#autocompletenovo}}
+            <div style="margin-right: 0" class="btn btnListAction right mode-background-colorLine mode-text-colorText hover-shadow pointer margin-left margin-bottom{{#disabled}} disabled{{/disabled}}"
+                 rel="{{id}}"
+                {{#disabled}} disabled='disabled' title='atualizações não disponíveis'{{/disabled}}
+                {{^disabled}}onclick="addRegisterAssociation('{{relation}}', '{{column}}')"{{/disabled}}>
+                {{^value}}
+                    <i class="material-icons list-btn-icon left transition-easy font-large padding-tiny" rel="{{column}}">add</i>
+                    <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
+                        adicionar
+                    </div>
+                {{/value}}
+                {{#value}}
+                    <i class="material-icons list-btn-icon font-large left transition-easy font-large padding-tiny"
+                       rel="{{column}}">edit</i>
+                    <div class="left s-hide relative font-medium" style="padding:1px 0 0 5px">
+                        editar
+                    </div>
+                {{/value}}
+            </div>
+        {{/autocompletenovo}}
+
+        <div class='right pointer hide list-remove-btn color-text-gray-dark color-hover-text-red' style='padding: 7px 10px' onclick="deleteRegisterAssociation('{{column}}', this)"><i class='material-icons'>delete</i></div>
+        <div class="rest relative list-input" rel="{{column}}">
+            <input type="text" placeholder="pesquisar..." autocomplete="off"
+                   class="list{{#disabled}} disabled{{/disabled}}"
+                   data-column="{{column}}"
+                   data-entity="{{relation}}"
+                   id="{{column}}"
+                   data-value="{{value}}"
+                   rel="{{formIdentificador}}"
+                {{#required}} required="required" {{/required}}
+                {{#disabled}}disabled="disabled"{{/disabled}}
+                {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
+                {{{form.atributos}}}
+            />
+            <span class="input-bar"></span>
+
+            <div class="col list-results" style="margin-top:-20px" id="list-result-{{column}}"></div>
+        </div>
+        <div class="col info-container" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+            <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
+            <input type="hidden" class="formCrudInput" data-column="{{column}}"/>
+        </div>
+    </div>
+</div>
+
+<script>
+    (async function () {
+        inputListMultSize();
+        var timeWrite = 0;
+
+        /**
+         * Atribui função ao click duplo nesta input
+         */
+        $(".form-crud").off("focus", ".list").on("focus", ".list", function () {
+            searchList($(this));
+
+        }).off("keyup", ".list").on("keyup", ".list", function (e) {
+            let $search = $(this).siblings(".list-results");
+            if(e.which === 40) {
+                if(!$search.find("li.active").length) {
+                    $search.find("li:first-of-type").addClass("active");
+                } else if($search.find("li.active").next().length) {
+                    $search.find("li.active").removeClass("active").next().addClass("active");
+                }
+
+            } else if(e.which === 38) {
+                if(!$search.find("li.active").length) {
+                    $search.find("li:last-of-type").addClass("active");
+                } else if($search.find("li.active").prev().length) {
+                    $search.find("li.active").removeClass("active").prev().addClass("active");
+                }
+
+            } else if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 39, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1) {
+                let $this = $(this);
+                clearTimeout(timeWrite);
+                timeWrite = setTimeout(function () {
+                    searchList($this);
+                }, 300);
+            }
+
+        });
+    }());
+</script>
+
+<style>
+    .btnListAction {
+        padding: 8px 6px !important;
+        border-radius: 50px;
+        width: 40px;
+        border: solid 1px #dddddd;
+        box-shadow: none;
+        margin-right: 0;
+    }
+
+    @media (min-width: 700px) {
+        .btnListAction {
+            border-radius: 4px;
+            padding: 8px 16px !important;
+            width: auto;
+        }
+    }
+</style>

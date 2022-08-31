@@ -515,14 +515,15 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                             let n = JSON.parse(localStorage.getItem("navigation_" + this.target));
                             if(localStorage.getItem("navigation_" + this.target) && n.length > 1) {
                                 let routeBefore = n[n.length-2];
+
                                 if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation)) {
                                     if(dicionarios[routeBefore.param.form.entity][routeBefore.param.form.columnRelation].group === "many") {
                                         if(isEmpty(n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation]))
                                             n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = [];
 
-                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation].push(parseInt(dbCreate.data.id));
+                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation].push(parseInt(dbCreate.data));
                                     } else if(isEmpty(routeBefore.param.form.data[routeBefore.param.form.columnRelation])) {
-                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data.id);
+                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data);
                                     }
                                     n[n.length - 2].param.form.modified = true;
 
@@ -638,6 +639,8 @@ async function getInputsTemplates(form, col) {
 
             if (metaInput.format === "password") {
                 if(isNumberPositive(form.id)) {
+                    metaInput.default = "";
+                    metaInput.nome = "Nova senha";
                     if (metaInput.value.length === 32)
                         metaInput.value = "";
                 } else {
@@ -692,6 +695,9 @@ async function getInputsTemplates(form, col) {
                  */
                 let jsContent = (!isEmpty(metaInput.lib) && !isEmpty(metaInput.js) ? "<script src='" + HOME + VENDOR + metaInput.lib + "/public/assets/" + metaInput.js + ".js'></script>" : "");
                 let cssContent = (!isEmpty(metaInput.lib) && !isEmpty(metaInput.css) ? "<link rel='stylesheet' href='" + HOME + VENDOR + metaInput.lib + "/public/assets/" + metaInput.css + ".css'>" : "");
+
+                if((metaInput.form.input === "list_mult" || metaInput.form.input === "list") && !metaInput.autocompleteexists)
+                    metaInput.form.input = "list_save" + (metaInput.form.input === "list_mult" ? "_mult" : "");
 
                 inputs.splice(position, 0, Mustache.render(templates[metaInput.form.input], metaInput, {file_source: templates[file_source]}) + jsContent + cssContent);
             }

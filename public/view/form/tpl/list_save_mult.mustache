@@ -1,0 +1,72 @@
+<div style="border: solid 1px" class='col mode-background-colorLine mode-border-colorBackground radius margin-bottom relative {{#form.cols}}s{{form.cols}} {{/form.cols}}{{#form.colm}}m{{form.colm}} {{/form.colm}}{{#form.coll}}l{{form.coll}} {{/form.coll}}'>
+    <div class="col parent-input parent-relation relative {{form.class}}"
+         {{#form.style}}style="{{form.style}}"{{/form.style}}>
+
+        <h3 style="color: var(--colorText);padding: 20px 15px 5px 12px" class="left h3Label font-large font-bold">
+            <div class="left d-inline">{{nome}}</div>
+            {{#required}}<sup class="color-text-red left d-inline" style="margin-top: 5px"><b>*</b></sup>{{/required}}
+            {{#haveAjuda}}<sup class="left"><i class="material-icons left ajuda d-inline" title="{{ajuda}}">help</i></sup>{{/haveAjuda}}
+        </h3>
+        <div class="btn right mode-background-colorLine mode-text-colorText radius padding-medium hover-shadow mode-border-colorLine pointer margin-bottom{{#disabled}} disabled{{/disabled}}"
+            {{#disabled}} disabled='disabled' title="Atualizações não permitidas"{{/disabled}}
+            {{^disabled}} onclick="addRegisterAssociation('{{relation}}', '{{column}}')"{{/disabled}}
+             data-column="{{column}}" style="border: solid 1px;box-shadow: none;margin-top: 12px;">
+            <i class="material-icons left font-xlarge">add</i>
+            <div class="left formCrudInput relative font-medium" data-column="{{column}}" id="{{column}}" style="padding:1px 0 0 5px">
+                adicionar
+            </div>
+        </div>
+        <div class="left padding-24 info-container font-small" rel="{{column}}">
+            <span class="rest input-message color-text-red padding-right" rel="{{column}}"></span>
+        </div>
+
+        <div class="extend_list_register no-select col transition-slow{{#disabled}} disabled{{/disabled}}" data-id="{{formIdentificador}}-{{column}}" data-column="{{column}}" rel="{{formIdentificador}}" style="overflow: hidden"></div>
+    </div>
+</div>
+<div class="col info-container padding-tiny padding-4 margin-bottom" style="margin-top: -19px;font-size: 12px;" rel="{{column}}">
+    <span class="right align-right color-text-gray"  rel="{{column}}">
+        {{#isNumeric}}
+            {{#valueLenght}}
+                {{^size}}>= {{valueLenght}}{{/size}}
+                {{#size}}{{valueLenght}} ~{{size}}{{/size}}
+            {{/valueLenght}}
+            {{^valueLenght}}
+                {{#size}}<={{size}}{{/size}}
+            {{/valueLenght}}
+        {{/isNumeric}}
+        {{^isNumeric}}{{#size}}<span class="input-info">{{valueLenght}}</span>/{{size}}{{/size}}{{/isNumeric}}
+    </span>
+</div>
+
+<script>
+    async function removeListSaveItem(column, id) {
+        if (confirm("Remover item?")) {
+
+            await db.exeDelete('{{relation}}', id);
+
+            removeItemArray(form.data[column], parseInt(id));
+            form.setColumnValue(column, form.data[column]);
+
+            let $reg = form.$element.find(".extend_register[rel='" + id + "']");
+            let $regList = $reg.closest(".extend_list_register");
+            $regList.css("height", $regList.css("height")).css("height", (parseInt($regList.css("height")) - parseInt($reg.css("height"))) + "px");
+            $reg.css("height", $reg.css("height")).css("height", 0).removeClass("padding-small");
+
+            await sleep(300);
+            $reg.remove()
+        }
+    }
+    $(async function() {
+        let tpl = await getTemplates();
+        {{#value}}
+            db.exeRead("{{relation}}", {{.}}).then(async result => {
+                result = result[0];
+                result.columnStatus = {column: '', have: !1, value: !1}
+                result.columnRelation = "{{relation}}";
+                result.columnName = "{{column}}";
+                result.columnTituloExtend = await getRelevantTitle("{{relation}}", result);
+                $(".extend_list_register[data-id='{{formIdentificador}}-{{column}}']").append(Mustache.render(tpl.list_save_mult_value, result));
+            });
+        {{/value}}
+    });
+</script>
