@@ -175,6 +175,9 @@ class ExeReadEntity
                 //permite registros que estão vinculados ao meu sistema
                 $queryLogic .= " OR ({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$mySystem['system']}')";
 
+                if($this->report['entidade'] === $mySystem['system'])
+                    $queryLogic .= " OR ({$this->report['entidade']}.id = {$_SESSION["userlogin"]["system_id"]})";
+
                 //permite registros que estão abaixo do meu sistema
                 $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
                 if(!empty($listaEntitySystemBelow)) {
