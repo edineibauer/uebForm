@@ -214,6 +214,10 @@ input[type='date'], input[type='time'] {
     border-color: #999;
 }
 
+.switch input:checked + .slider:after, .theme-hover:hover {
+    background-color: var(--colorText)!important;
+}
+
 @media (min-width: 700px) {
     .list_mult_context .btnListMult {
         border-radius: 4px;
