@@ -266,8 +266,7 @@ async function searchList($input) {
             ativoSearch = false;
         });
 
-        let relevants = await dbLocal.exeRead("__relevant", 1);
-        let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
+        let infoEntity = (JSON.parse(sessionStorage.__info))[entity];
         let dataRead = await db.exeRead(entity, search, 10);
 
         if(ativoSearch) {
@@ -1044,7 +1043,7 @@ async function searchListMult($input) {
         ativoSearch = false;
     });
 
-    let infoEntity = (await dbLocal.exeRead("__info", 1))[entity];
+    let infoEntity = (JSON.parse(sessionStorage.__info))[entity];
     let r = await db.exeRead(entity, search, 15);
 
     if(ativoSearch) {
