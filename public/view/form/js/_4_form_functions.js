@@ -381,18 +381,18 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         setRelationColumn: function(column) {
             if(typeof column === "string") {
                 this.columnRelation = column;
-                let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
+                let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
                 nav[nav.length - 1].param.form.columnRelation = column;
-                localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+                sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
             }
         },
         setColumnValue: async function(column, value) {
             this.data[column] = await _getDefaultValue(dicionarios[this.entity][column], value);
             form.modified = true;
 
-            let nav = JSON.parse(localStorage.getItem("navigation_" + this.target));
+            let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
             nav[nav.length - 1].param.form.data[column] = this.data[column];
-            localStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+            sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
         },
         setData: async function (dados) {
             if (isEmpty(dicionarios[this.entity])) {
@@ -512,8 +512,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                             /**
                              * Verifica se é um formulário de autocomplete para preencher no formulário anterior
                              * */
-                            let n = JSON.parse(localStorage.getItem("navigation_" + this.target));
-                            if(localStorage.getItem("navigation_" + this.target) && n.length > 1) {
+                            let n = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
+                            if(sessionStorage.getItem("navigation_" + this.target) && n.length > 1) {
                                 let routeBefore = n[n.length-2];
 
                                 if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation)) {
@@ -527,14 +527,14 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                                     }
                                     n[n.length - 2].param.form.modified = true;
 
-                                    localStorage.setItem("navigation_" + target, JSON.stringify(n));
+                                    sessionStorage.setItem("navigation_" + target, JSON.stringify(n));
                                 }
                             }
 
                             /**
                              * Se tiver navegação para trás, volta, senão, mantém o formulário aberto para edição
                              */
-                            if(!localStorage.getItem("navigation_" + target) || n.length < 2) {
+                            if(!sessionStorage.getItem("navigation_" + target) || n.length < 2) {
                                 await form.show(dbCreate.data);
                             } else {
                                 goBackMaestruNavigation(this.target, "back");
@@ -565,13 +565,13 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
     await formCrud.show((isNumberPositive(id) || typeof id === "object" ? id : null), fields);
 
-    let navigation = JSON.parse(localStorage.getItem( "navigation_" + formCrud.target));
+    let navigation = JSON.parse(sessionStorage.getItem( "navigation_" + formCrud.target));
     if (navigation) {
         if (!isEmpty(formCrud.funcao) && typeof formCrud.funcao === "function")
             formCrud.funcaoString = formCrud.funcao.toString();
 
         navigation[navigation.length - 1].param.form = formCrud;
-        localStorage.setItem( "navigation_" + formCrud.target, JSON.stringify(navigation))
+        sessionStorage.setItem( "navigation_" + formCrud.target, JSON.stringify(navigation))
     }
 
     return formCrud;
@@ -926,12 +926,12 @@ function editFormRelation(entity, column) {
         data: (!isEmpty(form.data[column]) ? form.data[column] : null),
         functionCallBack: ((data) => {
             data.id = Math.floor((Math.random() * 1000)) + "" + Date.now();
-            let nav = JSON.parse(localStorage.getItem("navigation_" + form.target));
+            let nav = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
             let formBefore = nav[nav.length -2].param.form;
             formBefore.data[formBefore.columnRelation] = data;
             formBefore.columnRelation = null;
             formBefore.modified = true;
-            localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+            sessionStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
             goBackMaestruNavigation(form.target);
         })
     });
@@ -961,7 +961,7 @@ function editFormRelationMult(entity, column, id) {
         pageTransition("form/" + entity, form.target, {
             data: f,
             functionCallBack: ((data) => {
-                let nav = JSON.parse(localStorage.getItem("navigation_" + form.target));
+                let nav = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
                 let navTarget = nav[nav.length -2];
 
                 if(isEmpty(navTarget.param.form.data[navTarget.param.form.columnRelation]) || navTarget.param.form.data[navTarget.param.form.columnRelation].constructor !== Array)
@@ -985,7 +985,7 @@ function editFormRelationMult(entity, column, id) {
 
                 navTarget.param.form.modified = true;
 
-                localStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+                sessionStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
                 goBackMaestruNavigation(form.target);
             })
         });
