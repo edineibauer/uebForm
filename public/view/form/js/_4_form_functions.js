@@ -582,6 +582,7 @@ async function getInputsTemplates(form, col) {
     let promessas = [];
     let position = 0;
     let dic = orderBy(dicionarios[form.entity], "indice").reverse();
+    let info = JSON.parse(sessionStorage.__info)[form.entity];
 
     for (let meta of dic) {
 
@@ -599,10 +600,13 @@ async function getInputsTemplates(form, col) {
          * ou caso seja um usuário system parent
          */
         if (meta.column === "system_id") {
+            if(isEmpty(info.system))
+                continue;
+
             if(USER.setor !== "admin")
                 continue;
-            else
-                meta.nome = "Atribuir ao " + meta.nome;
+
+            meta.nome = "Atribuir ao " + meta.nome;
         }
 
         if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password"))
