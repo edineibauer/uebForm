@@ -78,7 +78,7 @@ class ExeReadEntity
         $info = Metadados::getInfo($this->report['entidade']);
         $dicionario = Metadados::getDicionario($this->report['entidade']);
         $querySelect = "";
-        $queryDeclarationString = "FROM " . PRE . $this->report['entidade'] . " as " . $this->report['entidade'];
+        $queryDeclarationString = "FROM " .  $this->report['entidade'] . " as " . $this->report['entidade'];
 
         /**
          * Select the own entity fields
@@ -113,16 +113,16 @@ class ExeReadEntity
                     if ($regra['tipo'] === 'select') {
                         $queryLogic .= $query;
                     } elseif ($regra['tipo'] === "inner_join") {
-                        $queryLogic .= " " . strtoupper($grupo['filtros'][0]['logica']) . " {$this->report['entidade']}.{$regra['tipoColumn']} IN ( SELECT {$this->report['entidade']}.{$regra['tipoColumn']} FROM " . PRE . $this->report['entidade'] . " as {$this->report['entidade']} WHERE{$query})";
+                        $queryLogic .= " " . strtoupper($grupo['filtros'][0]['logica']) . " {$this->report['entidade']}.{$regra['tipoColumn']} IN ( SELECT {$this->report['entidade']}.{$regra['tipoColumn']} FROM " .  $this->report['entidade'] . " as {$this->report['entidade']} WHERE{$query})";
                     } elseif ($regra['tipo'] === "outer_join") {
-                        $queryLogic .= " " . strtoupper($grupo['filtros'][0]['logica']) . " {$this->report['entidade']}.{$regra['tipoColumn']} NOT IN ( SELECT {$this->report['entidade']}.{$regra['tipoColumn']} FROM " . PRE . $this->report['entidade'] . " as {$this->report['entidade']} WHERE{$query})";
+                        $queryLogic .= " " . strtoupper($grupo['filtros'][0]['logica']) . " {$this->report['entidade']}.{$regra['tipoColumn']} NOT IN ( SELECT {$this->report['entidade']}.{$regra['tipoColumn']} FROM " .  $this->report['entidade'] . " as {$this->report['entidade']} WHERE{$query})";
                     }
                 }
             }
         }
 
         foreach ($this->queryDeclaration as $entity => $logic)
-            $queryDeclarationString .= " {$logic['tipo']} " . PRE . $entity . " as {$entity}" . (!empty($logic['on']) ? " ON " . $logic['on'] : "");
+            $queryDeclarationString .= " {$logic['tipo']} " .  $entity . " as {$entity}" . (!empty($logic['on']) ? " ON " . $logic['on'] : "");
 
         $queryOrder = "ORDER BY " . (!in_array($this->report['ordem'], ["total", "contagem"]) ? $this->report['entidade'] . "." : "") . (!empty($this->report['ordem']) ? $this->report['ordem'] : "id") . ($this->report['decrescente'] === null || $this->report['decrescente'] ? " DESC" : " ASC");
 

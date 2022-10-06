@@ -206,7 +206,7 @@ class Form
     private function checkIfTableExist()
     {
         $sql = new SqlCommand();
-        $sql->exeCommand("SHOW TABLES LIKE '" . PRE . $this->entity . "'");
+        $sql->exeCommand("SHOW TABLES LIKE '" .  $this->entity . "'");
         if (!$sql->getResult())
             new \EntityForm\EntityCreateEntityDatabase($this->entity, []);
     }
@@ -446,7 +446,7 @@ class Form
             }
             $read = new Read();
             $tpl = new Template(DOMINIO);
-            $read->exeRead(PRE . $meta->getRelation(), $filter);
+            $read->exeRead($meta->getRelation(), $filter);
             if($read->getResult()) {
                 if(empty($meta->getForm()['template']))
                     $dd = new Dicionario($meta->getRelation());

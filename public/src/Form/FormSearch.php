@@ -51,12 +51,12 @@ class FormSearch
         $where = "";
         foreach (['identifier', 'title', 'link', 'email', 'tel', 'cpf', 'cnpj', 'cep'] as $item) {
             if (!empty($d->getInfo()[$item]) && !empty($c = $d->search($d->getInfo()[$item]))) {
-                $where .= (!empty($where) ? " OR " : "") . PRE . $this->entity . ".{$c->getColumn()} LIKE '%{$this->search}%'";
+                $where .= (!empty($where) ? " OR " : "") .  $this->entity . ".{$c->getColumn()} LIKE '%{$this->search}%'";
                 $fieldShow[] = [$c->getColumn(), $c->getNome()];
             }
         }
 
-        $comando = "SELECT " . PRE . $this->entity . ".* FROM " . PRE . $this->entity . (!empty($data['join']) ? " {$data['join']}" : "") . " WHERE " . (!empty($where) ? "({$where})" : "") . (!empty($data['where']) ? " AND {$data['where']}" : "") . " ORDER BY " . PRE . $this->entity . ".{$column} LIMIT 7";
+        $comando = "SELECT " .  $this->entity . ".* FROM " .  $this->entity . (!empty($data['join']) ? " {$data['join']}" : "") . " WHERE " . (!empty($where) ? "({$where})" : "") . (!empty($data['where']) ? " AND {$data['where']}" : "") . " ORDER BY " .  $this->entity . ".{$column} LIMIT 7";
 
         $sql = new SqlCommand();
         $sql->exeCommand($comando);
@@ -76,10 +76,10 @@ class FormSearch
 
     private function filterSelecao(): array
     {
-        $rel = PRE . $this->parent . "_" . $this->entity . "_" . explode("__", $this->column)[0];
+        $rel = $this->parent . "_" . $this->entity . "_" . explode("__", $this->column)[0];
 
         return [
-            "join" => "INNER JOIN " . $rel . " ON " . $rel . "." . $this->entity . "_id = " . PRE . $this->entity . ".id",
+            "join" => "INNER JOIN " . $rel . " ON " . $rel . "." . $this->entity . "_id = " .  $this->entity . ".id",
             "where" => $rel . "." . $this->parent . "_id = {$this->selecao}"
         ];
     }
@@ -111,7 +111,7 @@ class FormSearch
                         $filter = $this->filterFieldMult($filter, $relationColumnDic['relation'], $relationDicionario, $relationColumnDic, $dados);
 
                     } else {
-                        $filter["where"] = $this->filterField(PRE . $this->entity, $filter['where'], $dados);
+                        $filter["where"] = $this->filterField($this->entity, $filter['where'], $dados);
                     }
                 }
             }
@@ -130,8 +130,8 @@ class FormSearch
      */
     private function filterFieldList(array $filter, string $relEntity, array $relDicionario, array $relColumnDic, array $dados)
     {
-        $filter['join'] = "INNER JOIN " . PRE . $relEntity . " ON " . PRE . $this->entity . "." . $relColumnDic['column'] . " = " . PRE . $relEntity . ".id";
-        $filter['where'] = $this->filterField(PRE . $relEntity, $filter['where'], $dados);
+        $filter['join'] = "INNER JOIN " .  $relEntity . " ON " .  $this->entity . "." . $relColumnDic['column'] . " = " .  $relEntity . ".id";
+        $filter['where'] = $this->filterField($relEntity, $filter['where'], $dados);
 
         return $filter;
     }
@@ -146,9 +146,9 @@ class FormSearch
      */
     private function filterFieldMult(array $filter, string $relEntity, array $relDicionario, array $relColumnDic, array $dados)
     {
-        $entity1 = PRE . $this->entity;
+        $entity1 =  $this->entity;
         $entityRelational = $entity1 . "_" . $relEntity . "_" . $relColumnDic['column'];
-        $entity2 = PRE . $relEntity;
+        $entity2 =  $relEntity;
 
         $filter['join'] .= " INNER JOIN " . $entityRelational . " ON {$entity1}.id = {$entityRelational}.{$this->entity}_id";
         $filter['join'] .= " INNER JOIN " . $entity2 . " ON {$entity2}.id = {$entityRelational}.{$relEntity}_id";
