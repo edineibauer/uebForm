@@ -160,30 +160,24 @@ class ExeReadEntity
          * restringe leitura a somente dados do system_id de acesso
          * Aplica regra recursiva sobre sistema pai
          */
-        if ($_SESSION["userlogin"]["setor"] !== "admin" && !empty($info['system'])) {
+        if ($_SESSION["userlogin"]["setor"] !== "admin" && !empty($info['system']) && !empty($_SESSION["userlogin"]["system_id"])) {
 
             // permite registros que não tem vinculos com nenhum sistema (criados pelo admin)
             $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "(({$this->report['entidade']}.system_id IS NULL AND {$this->report['entidade']}.system_entity IS NULL)";
 
-            /**
-             * Se não for um administrador e
-             * tem um sistema vinculado
-             */
-            if(!empty($_SESSION["userlogin"]["system_id"])) {
-                $mySystem = Metadados::getInfo($_SESSION["userlogin"]['setor']);
+            $mySystem = Metadados::getInfo($_SESSION["userlogin"]['setor']);
 
-                //permite registros que estão vinculados ao meu sistema
-                $queryLogic .= " OR ({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$mySystem['system']}')";
+            //permite registros que estão vinculados ao meu sistema
+            $queryLogic .= " OR ({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$mySystem['system']}')";
 
-                if($this->report['entidade'] === $mySystem['system'])
-                    $queryLogic .= " OR ({$this->report['entidade']}.id = {$_SESSION["userlogin"]["system_id"]})";
+            if($this->report['entidade'] === $mySystem['system'])
+                $queryLogic .= " OR ({$this->report['entidade']}.id = {$_SESSION["userlogin"]["system_id"]})";
 
-                //permite registros que estão abaixo do meu sistema
-                $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
-                if(!empty($listaEntitySystemBelow)) {
-                    foreach ($listaEntitySystemBelow as $systemBelow)
-                        $queryLogic .= " OR {$this->report['entidade']}.system_entity = '" . $systemBelow . "'";
-                }
+            //permite registros que estão abaixo do meu sistema
+            $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
+            if(!empty($listaEntitySystemBelow)) {
+                foreach ($listaEntitySystemBelow as $systemBelow)
+                    $queryLogic .= " OR {$this->report['entidade']}.system_entity = '" . $systemBelow . "'";
             }
 
             $queryLogic .= ")";
