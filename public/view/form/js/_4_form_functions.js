@@ -243,10 +243,9 @@ function applyRules(entity, rule, column) {
 function createSource(mock, $input, tipo, prepend) {
     if (!isEmpty(mock)) {
         let tpl = (tipo === 1 ? 'file_list_source' : 'file_source');
-        return getTemplates().then(templates => {
-            if (typeof prepend !== "undefined")
-                $input.siblings(".file_gallery").prepend(Mustache.render(templates[tpl], mock)); else $input.siblings(".file_gallery").append(Mustache.render(templates[tpl], mock))
-        })
+        let templates = getTemplates();
+        if (typeof prepend !== "undefined")
+            $input.siblings(".file_gallery").prepend(Mustache.render(templates[tpl], mock)); else $input.siblings(".file_gallery").append(Mustache.render(templates[tpl], mock))
     }
 }
 
@@ -257,7 +256,7 @@ async function searchList($input) {
     let search = $input.val();
     if ($input.is(":focus")) {
         let entity = $input.data("entity");
-        let templates = await getTemplates();
+        let templates = getTemplates();
         $search.html(Mustache.render(templates.list_result_skeleton));
 
         $input.off("blur").on("blur", function () {
@@ -449,9 +448,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             let action = isNumberPositive(this.id) ? "update" : "create";
             return permissionToAction(this.entity, action).then(have => {
                 if (have) {
-                    return getTemplates().then(templates => {
-                        return Mustache.render(templates.formCrud, this)
-                    })
+                    return Mustache.render(getTemplates().formCrud, this)
                 } else {
                     return "<h2 class='form-control col align-center padding-32 color-text-gray-dark'>Sem Permissão para " + (action === "update" ? "Atualizar" : "Adicionar") + "</h2>"
                 }
@@ -577,7 +574,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 }
 
 async function getInputsTemplates(form, col) {
-    let templates = await getTemplates();
+    let templates = getTemplates();
     let inputs = [];
     let promessas = [];
     let position = 0;
@@ -1038,7 +1035,7 @@ async function searchListMult($input) {
     if (typeof form.data[column] === null || isEmpty(form.data[column]))
         form.setColumnValue(column, []);
 
-    let templates = await getTemplates();
+    let templates = getTemplates();
     $search.html(Mustache.render(templates.list_result_skeleton));
 
     $input.off("blur").on("blur", function () {

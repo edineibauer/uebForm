@@ -57,7 +57,7 @@
         }
     }
     $(async function() {
-        let tpl = await getTemplates();
+        let tpl = getTemplates();
         {{#value}}
             db.exeRead("{{relation}}", {{.}}).then(async result => {
                 result = result[0];
