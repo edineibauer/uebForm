@@ -533,7 +533,13 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                             if(!sessionStorage.getItem("navigation_" + target) || n.length < 2) {
                                 await form.show(dbCreate.data);
                             } else {
-                                goBackMaestruNavigation(this.target, "back");
+                                let n = JSON.parse(sessionStorage.getItem("navigation_" + target));
+                                n.pop();
+                                if(/^table\//.test(n.pop().route)) {
+                                    goBackMaestruNavigation(this.target, "back");
+                                } else {
+                                    await form.show(dbCreate.data);
+                                }
                             }
                         }
 
