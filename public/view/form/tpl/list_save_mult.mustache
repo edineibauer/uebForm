@@ -60,12 +60,14 @@
         let tpl = getTemplates();
         {{#value}}
             db.exeRead("{{relation}}", {{.}}).then(async result => {
-                result = result[0];
-                result.columnStatus = {column: '', have: !1, value: !1}
-                result.columnRelation = "{{relation}}";
-                result.columnName = "{{column}}";
-                result.columnTituloExtend = await getRelevantTitle("{{relation}}", result);
-                $(".extend_list_register[data-id='{{formIdentificador}}-{{column}}']").append(Mustache.render(tpl.list_save_mult_value, result));
+                if(typeof result[0] === "object" && result.length === 1) {
+                    result = result[0];
+                    result.columnStatus = {column: '', have: !1, value: !1}
+                    result.columnRelation = "{{relation}}";
+                    result.columnName = "{{column}}";
+                    result.columnTituloExtend = await getRelevantTitle("{{relation}}", result);
+                    $(".extend_list_register[data-id='{{formIdentificador}}-{{column}}']").append(Mustache.render(tpl.list_save_mult_value, result));
+                }
             });
         {{/value}}
     });

@@ -93,18 +93,20 @@
         let rel = await dbLocal.exeRead("__relevant", 1);
         {{#value}}
             db.exeRead("{{relation}}", {{.}}).then(result => {
-                let findTitle = !1;
-                for (let i in rel) {
-                    for (let col in dicionarios.{{relation}}) {
-                        if (dicionarios.{{relation}}[col].format === rel[i]) {
-                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
-                            inputListMultSize();
-                            findTitle = !0;
-                            break;
+                if(typeof result[0] === "object" && result.length === 1) {
+                    let findTitle = !1;
+                    for (let i in rel) {
+                        for (let col in dicionarios.{{relation}}) {
+                            if (dicionarios.{{relation}}[col].format === rel[i]) {
+                                $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
+                                inputListMultSize();
+                                findTitle = !0;
+                                break;
+                            }
                         }
+                        if (findTitle)
+                            break;
                     }
-                    if (findTitle)
-                        break;
                 }
             });
         {{/value}}
