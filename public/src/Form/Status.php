@@ -19,11 +19,12 @@ class Status
         Helper::createFolderIfNoExist(PATH_HOME . "_cdn/formSaveStatus");
 
         $userlogin = "";
-        if (isset($_SESSION) && !empty($_SESSION["userlogin"]["id"])) {
-            $userlogin = $_SESSION["userlogin"]["id"];
-        } elseif($user > 0) {
+        if($user > 0) {
             $userlogin = $user;
+        } elseif (isset($_SESSION) && !empty($_SESSION["userlogin"]["id"])) {
+            $userlogin = $_SESSION["userlogin"]["id"];
         }
+
         if (!empty($userlogin)) {
             Helper::createFolderIfNoExist(PATH_HOME . "_cdn/formSaveStatus/" . $userlogin);
             Config::createFile(PATH_HOME . "_cdn/formSaveStatus/" . $userlogin . "/" . $entity . ".txt", $mensagem);
