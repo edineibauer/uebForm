@@ -15,12 +15,12 @@
                     readonly
                     id="{{column}}"
                     rel="{{formIdentificador}}"
+                    value="{{value}}"
                     {{#disabled}}disabled="disabled"{{/disabled}}
                     {{#allow.regexp}}pattern="{{allow.regexp}}"{{/allow.regexp}}
                 {{#minimo}} minlength="{{minimo}}" min="{{minimo}}" {{/minimo}}
                 {{#size}} maxlength="{{size}}" max="{{size}}" {{/size}}
                 {{#disabled}} disabled='disabled' {{/disabled}}
-                {{#value}}value="{{value}}"{{/value}}
                 {{#required}} required="required" {{/required}}
                 {{{form.atributos}}}
             />

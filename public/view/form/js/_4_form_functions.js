@@ -614,7 +614,7 @@ async function getInputsTemplates(form, col) {
          */
         if ((isEmpty(form.fields) && isEmpty(col)) || (!isEmpty(form.fields) && form.fields.indexOf(meta.column) > -1) || (!isEmpty(col) && col === meta.column)) {
             let metaInput = Object.assign({}, meta);
-            metaInput.value = form.data[meta.column] || "";
+            metaInput.value = form.data[meta.column] || (form.data[meta.column] === 0 ? 0 : "");
             metaInput.isNumeric = ["float", "decimal", "smallint", "int", "tinyint"].indexOf(metaInput.type) > -1;
             metaInput.valueLenght = (metaInput.isNumeric && isNumber(metaInput.minimo) ? metaInput.minimo : metaInput.value.length);
             metaInput.isFull = metaInput.valueLenght === metaInput.size;
