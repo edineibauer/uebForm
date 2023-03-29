@@ -354,7 +354,7 @@ class Form
                 $data = [];
                 $i = 0;
                 foreach (json_decode($v, true) as $item) {
-                    $read->exeRead($meta->getRelation(), "WHERE id = :id", "id={$item}");
+                    $read->exeRead($meta->getRelation(), "WHERE id = :id", ["id" => $item]);
                     if ($read->getResult()){
                         $i ++;
                         $data[$i] = ["id" => $read->getResult()[0]['id'], "valores" => []];
@@ -371,7 +371,7 @@ class Form
                 $data = [];
                 $read = new Read();
                 foreach (json_decode($v, true) as $item) {
-                    $read->exeRead($meta->getRelation(), "WHERE id = :id", "id={$item}");
+                    $read->exeRead($meta->getRelation(), "WHERE id = :id", ["id" => $item]);
                     if ($read->getResult())
                         $data[] = $read->getResult()[0]['id'];
                 }
@@ -432,7 +432,8 @@ class Form
     private function checkCheckBoxData(Meta $meta, Dicionario $d)
     {
         if ($meta->getFormat() === "checkbox_mult" || $meta->getFormat() === "checkbox_rel") {
-            $filter = "WHERE id > 0";
+            $filter = "WHERE id > :idfss";
+            $filterPlace = ["idfss" => 0];
             if(!empty($meta->getFilter())) {
                 foreach ($meta->getFilter() as $item) {
                     $item = explode(',', $item);
@@ -441,12 +442,13 @@ class Form
                         $item[2] = $_SESSION[str_replace(["'", '"'], '', explode(']', $ss[1])[0])][str_replace(["'", '"'], '', explode(']', $ss[2])[0])];
 
                     }
-                    $filter .= " && {$item[0]} {$item[1]} {$item[2]}";
+                    $filter .= " && {$item[0]} {$item[1]} :{$item[0]}";
+                    $filterPlace[$item[0]] = $item[2];
                 }
             }
             $read = new Read();
             $tpl = new Template(DOMINIO);
-            $read->exeRead($meta->getRelation(), $filter);
+            $read->exeRead($meta->getRelation(), $filter, $filterPlace);
             if($read->getResult()) {
                 if(empty($meta->getForm()['template']))
                     $dd = new Dicionario($meta->getRelation());
