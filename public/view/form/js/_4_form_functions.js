@@ -32,6 +32,9 @@ function clearMarginFormInput() {
 $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInput", async function (e) {
     let $input = $(this);
     if ($input.attr("rel") !== "undefined" && typeof form === "object" && form.identificador === $input.attr("rel")) {
+
+        form.loading = true;
+
         let column = $input.data("column");
         let format = $input.data("format");
         let value = null;
@@ -131,11 +134,10 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
             $input.siblings(".info-container").find(".input-info").html(size)
         }
 
-        if (!form.loading)
-            form.modified = true;
-
-        form.setColumnValue(column, value);
+        await form.setColumnValue(column, value);
         checkRules(form.entity, column, value);
+
+        form.loading = false;
     }
 
 }).off("click", ".remove-file-gallery").on("click", ".remove-file-gallery", function () {
@@ -437,14 +439,16 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
             $this.inputs = await getInputsTemplates($this);
             if (this.$element !== "") {
+                this.loading = true;
+
                 this.$element.find(".maestru-form-control").remove();
                 this.$element.prepend(await $this.getShow());
                 loadMask(this);
-                this.loading = !1;
+
+                this.loading = false;
             }
         },
         getShow: function () {
-            this.loading = !0
             let action = isNumberPositive(this.id) ? "update" : "create";
             return permissionToAction(this.entity, action).then(have => {
                 if (have) {
@@ -457,6 +461,9 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         save: async function (showMessages, destroy) {
             showMessages = typeof showMessages === "undefined" || ["false", "0", 0, false].indexOf(showMessages) === -1;
             let form = this;
+
+            while(form.loading)
+                await sleep(100);
 
             if (form.saving)
                 return Promise.all([]);
@@ -902,7 +909,7 @@ async function setInputFormatListValue(form, entity, column, id, $input) {
     $input.siblings(".list-remove-btn").removeClass("hide");
 
     if (isNaN(form.id) || dicionario[column].update)
-        form.modified = !0;
+        form.modified = true;
 }
 
 function deleteRegisterAssociation(col, el) {
