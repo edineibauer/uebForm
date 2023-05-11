@@ -81,8 +81,6 @@
                 }, 300);
             }
 
-        }).off("click", ".badgeListMultOption").on("click", ".badgeListMultOption", function () {
-            removeBadge($(this).data("id"), $(this).attr("rel"));
         }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
             addRegisterAssociation($(this).data("entity"), $(this).data("column"));
         });
