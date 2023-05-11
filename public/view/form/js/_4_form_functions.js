@@ -33,8 +33,6 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
     let $input = $(this);
     if ($input.attr("rel") !== "undefined" && typeof form === "object" && form.identificador === $input.attr("rel")) {
 
-        form.loading = true;
-
         let column = $input.data("column");
         let format = $input.data("format");
         let value = null;
@@ -43,6 +41,8 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
 
         if(format === 'list_mult')
             return;
+
+        form.loading = true;
 
         if (['checkbox', 'radio'].indexOf(format) > -1)
             $(".error-support[rel='" + column + "']").remove();
@@ -142,13 +142,16 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
 
 }).off("click", ".remove-file-gallery").on("click", ".remove-file-gallery", function () {
     if (confirm("Remover arquivo?"))
-        removeFileForm($(this))
+        removeFileForm($(this));
+
 }).off("click", ".btn-form-list").on("click", ".btn-form-list", function () {
     form.save(0).then(() => {
         animateBack(".maestru-form-control").grid(form.entity)
-    })
+    });
+
 }).off("click", ".btn-form-save").on("click", ".btn-form-save", function () {
-    form.save()
+    form.save();
+
 }).off("click", ".switch-status-extend").on("click", ".switch-status-extend", function () {
     let column = $(this).data("column");
     let id = $(this).data("id");
