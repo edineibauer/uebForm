@@ -782,8 +782,14 @@ function loadMask(form) {
         $v.each(function (i, e) {
             let v = $(e).val();
             checkRules(v)
-            if(v !== '' && /\./.test(v))
-                $(e).val(parseFloat(v).toFixed(2));
+            if(v !== '') {
+                if(/,/.test(v))
+                    v = parseFloat(v.replace(",", ".")).toFixed(2);
+                else
+                    v = parseFloat(v).toFixed(2);
+
+                $(e).val(v);
+            }
         });
 
         $v.mask('##0,00%', {reverse: !0});
