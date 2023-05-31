@@ -613,7 +613,19 @@ async function getInputsTemplates(form, col) {
             if(USER.setor !== "admin")
                 continue;
 
-            meta.nome = "Atribuir ao " + meta.nome;
+            /**
+             * Verifica se é um formulário de autocomplete para preencher no formulário anterior
+             * */
+            let n = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
+            if(sessionStorage.getItem("navigation_" + form.target) && n.length > 1) {
+                let routeBefore = n[n.length-2];
+
+                if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation))
+                    continue;
+            }
+
+            if(!meta.nome.startsWith("Atribuir ao "))
+                meta.nome = "Atribuir ao " + meta.nome;
         }
 
         if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password"))
