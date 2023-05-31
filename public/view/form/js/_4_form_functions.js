@@ -590,6 +590,7 @@ async function getInputsTemplates(form, col) {
     let position = 0;
     let dic = orderBy(dicionarios[form.entity], "indice").reverse();
     let info = JSON.parse(sessionStorage.__info)[form.entity];
+    let haveFilesIcons = false;
 
     for (let meta of dic) {
 
@@ -704,7 +705,13 @@ async function getInputsTemplates(form, col) {
                 if((metaInput.form.input === "list_mult" || metaInput.form.input === "list") && !metaInput.autocompleteexists)
                     metaInput.form.input = "list_save" + (metaInput.form.input === "list_mult" ? "_mult" : "");
 
-                inputs.splice(position, 0, Mustache.render(templates[metaInput.form.input], metaInput, {file_source: templates[file_source]}) + jsContent + cssContent);
+                let extraContent = "";
+                if(!haveFilesIcons && ["source", "source_list"].indexOf(metaInput.format) > -1) {
+                    haveFilesIcons = true;
+                    extraContent = templates.fileIconTypes;
+                }
+
+                inputs.splice(position, 0,  extraContent + Mustache.render(templates[metaInput.form.input], metaInput, {file_source: templates[file_source]}) + jsContent + cssContent);
             }
 
             position++

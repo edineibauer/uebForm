@@ -1,1 +1,79 @@
-<div id="form-maestru"></div>
+<div id="form-maestru">
+    <div class='maestru-form-control col padding-24 s-padding-0 font-large'>
+        <div class="col card radius border s-border-0 s-radius-0 p-0 overflow-hidden">
+            <div class="col loadindTableSpace no-select p-0">
+                <div class="col form-header">
+                    <a href="#back" class="left mode-background-colorLine mode-text-colorText btn-floating">
+                        <i class="material-icons left">keyboard_arrow_left</i>
+                    </a>
+                    <h4 class="left mode-text-colorText" style="padding: 5px 0 0 7px;">
+                    <span class='pointer'>
+                        Carregando...
+                    </span>
+                    </h4>
+
+                    <div class="right parent-save-form-mini">
+                        <button class="right mode-background-colorLine mode-text-colorText hover-shadow btn radius">
+                            <i class="material-icons left">save</i>
+                            <div class="left padding-left-8">salvar</div>
+                        </button>
+                    </div>
+                    <div class="saveStatusCallBack topSave"></div>
+                </div>
+            </div>
+            <div class="col padding-4 no-select"></div>
+
+            <div class="col relative form-crud p-0">
+                <div class="panel padding-top s-padding-small mb-0">
+                    <div class="col margin-bottom padding-tiny relative s12">
+                        <div class="col parent-input relative font-bold font-xlarge">
+                            <label class="col">
+                                <span class="col align-left formLabel no-select">
+                                    <div class="left d-inline">Carregando...</div>
+                                </span>
+                                <input type="text" data-format="title" class="formCrudInput skeleton"
+                                       autocomplete="off" readonly="readonly" disabled="disabled" maxlength="127" max="127">
+                                <span class="input-bar"></span>
+
+                                <div class="col info-container" style="margin-top: -19px;font-size: 12px;">
+                                <span class="right align-right color-text-gray">
+                                    <span class="input-info">0</span>/...
+                                </span>
+                                    <span class="rest input-message color-text-red padding-right"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col margin-bottom padding-tiny relative s12">
+                        <div class="col parent-input relative">
+                            <label class="col">
+                                <span class="col align-left formLabel no-select">
+                                    <div class="left d-inline">Carregando...</div>
+                                </span>
+                                <input type="text" class="formCrudInput skeleton"
+                                       autocomplete="off" readonly="readonly" disabled="disabled" maxlength="127" max="127">
+                                <span class="input-bar"></span>
+                                <div class="col info-container" style="margin-top: -19px;font-size: 12px;">
+                                <span class="right align-right color-text-gray">
+                                    <span class="input-info">0</span>/...
+                                </span>
+                                    <span class="rest input-message color-text-red padding-right"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel no-select padding-bottom parent-save-form">
+                    <div class="col padding-tiny">
+                        <button class="btn radius mode-background-colorBackground m-0 mode-text-colorText hover-shadow opacity hover-opacity-off"
+                                onclick="saveForm('{{identificador}}')">
+                            {{{options.buttonText}}}
+                        </button>
+                        <div class="saveStatusCallBack"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
