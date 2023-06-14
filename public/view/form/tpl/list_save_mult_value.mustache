@@ -24,10 +24,10 @@
                     </label>
                 {{/columnStatus.have}}
             </div>
-            <a href="form/{{columnRelation}}/{{id}}" class="right btn-small pointer radius mode-background-colorLine mode-text-colorText hover-opacity-off btn-del-extend-register transition-slow"
+            <div onclick="editFormMultRelation('{{columnRelation}}', {{id}}, '{{columnName}}')" class="right btn-small pointer radius mode-background-colorLine mode-text-colorText hover-opacity-off btn-del-extend-register transition-slow"
                     style="overflow: hidden;margin-left: 5px; width: 38px;">
                 <i class="material-icons left font-large" >edit</i>
-            </a>
+            </div>
             <div class="left font-medium padding-4 extend_register_title"
                  rel="{{id}}" style="cursor: default">{{{columnTituloExtend}}}</div>
         </div>

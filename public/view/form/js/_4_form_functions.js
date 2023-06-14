@@ -955,6 +955,11 @@ async function addRegisterAssociation(entity, column) {
     pageTransition("form/" + entity + (!isEmpty(form.data[column]) && isNumberPositive(form.data[column]) ? "/" + form.data[column] : ""), form.target);
 }
 
+function editFormMultRelation(entity, id, column) {
+    form.setRelationColumn(column);
+    pageTransition("form/" + entity + "/" + id, form.target);
+}
+
 /**
  * Single form relation
  * */
