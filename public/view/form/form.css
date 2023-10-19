@@ -233,39 +233,6 @@ input[type='date'], input[type='time'] {
     border-left-color: var(--colorPrimary) !important;
 }
 
-/* LOADING LINE STYLE */
-@keyframes loading {
-    0% {
-        left: 0;
-        width: 0;
-        background: var(--colorPrimary);
-    }
-    20% {
-        width: 120px
-    }
-    100% {
-        left: 100%;
-        width: 0;
-        background: var(--colorPrimary)
-    }
-}
-
-@-webkit-keyframes loading {
-    0% {
-        left: 0;
-        width: 0;
-        background: var(--colorPrimary);
-    }
-    20% {
-        width: 120px
-    }
-    100% {
-        left: 100%;
-        width: 0;
-        background: var(--colorPrimary)
-    }
-}
-
 @media (min-width: 700px) {
     .list_mult_context .btnListMult {
         border-radius: 4px;
