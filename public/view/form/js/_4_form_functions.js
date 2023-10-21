@@ -1133,17 +1133,6 @@ async function searchListMult($input) {
     }
 }
 
-function inputListMultSize() {
-    $(".listMult").each(function (i, e) {
-        let wb = $(e).siblings(".badgeListMult").width();
-        let pr = $(e).siblings(".badgeListMult").parent().width();
-        if(wb + 151 > pr)
-            $(e).css("width", "100%");
-        else
-            $(e).css("width", "calc(100% - " + wb + "px)");
-    });
-}
-
 function addListMultBadge(id, title, $input) {
     let column = $input.attr("id");
 
@@ -1175,9 +1164,100 @@ function removeBadge(id, column) {
     }
 }
 
+async function removeListSaveItem(column, id) {
+    if (confirm("Remover item?")) {
+
+        await db.exeDelete('{{relation}}', id);
+
+        removeItemArray(form.data[column], parseInt(id));
+        form.setColumnValue(column, form.data[column]);
+
+        let $reg = form.$element.find(".extend_register[rel='" + id + "']");
+        let $regList = $reg.closest(".extend_list_register");
+        $regList.css("height", $regList.css("height")).css("height", (parseInt($regList.css("height")) - parseInt($reg.css("height"))) + "px");
+        $reg.css("height", $reg.css("height")).css("height", 0).removeClass("padding-small");
+
+        await sleep(300);
+        $reg.remove()
+    }
+}
+
 $(function () {
     $(document).off("mouseup").on("mouseup", async function (e) {
         await sleep(5);
         $(".ajudatext").remove();
+    });
+
+    let timeWrite = 0;
+
+    /**
+     * Atribui função ao click duplo nesta input
+     */
+    $(".form-crud").off("focus", ".list").on("focus", ".list", function () {
+        searchList($(this));
+
+    }).off("keyup", ".list").on("keyup", ".list", function (e) {
+        let $search = $(this).siblings(".list-results");
+        if(e.which === 40) {
+            if(!$search.find("li.active").length) {
+                $search.find("li:first-of-type").addClass("active");
+            } else if($search.find("li.active").next().length) {
+                $search.find("li.active").removeClass("active").next().addClass("active");
+            }
+
+        } else if(e.which === 38) {
+            if(!$search.find("li.active").length) {
+                $search.find("li:last-of-type").addClass("active");
+            } else if($search.find("li.active").prev().length) {
+                $search.find("li.active").removeClass("active").prev().addClass("active");
+            }
+
+        } else if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 39, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1) {
+            let $this = $(this);
+            clearTimeout(timeWrite);
+            timeWrite = setTimeout(function () {
+                searchList($this);
+            }, 300);
+        }
+    });
+
+    $(".listMult").each(function (i, e) {
+        let wb = $(e).siblings(".badgeListMult").width();
+        let pr = $(e).siblings(".badgeListMult").parent().width();
+        if(wb + 151 > pr)
+            $(e).css("width", "100%");
+        else
+            $(e).css("width", "calc(100% - " + wb + "px)");
+    });
+
+    $(".list_mult_context").off("focus", ".listMult").on("focus", ".listMult", function () {
+        searchListMult($(this));
+
+    }).off("keyup", ".listMult").on("keyup", ".listMult", function (e) {
+        let $search = $(this).siblings(".list-results");
+        if(e.which === 40) {
+            if(!$search.find("li.active").length) {
+                $search.find("li:first-of-type").addClass("active");
+            } else if($search.find("li.active").next().length) {
+                $search.find("li.active").removeClass("active").next().addClass("active");
+            }
+
+        } else if(e.which === 38) {
+            if(!$search.find("li.active").length) {
+                $search.find("li:last-of-type").addClass("active");
+            } else if($search.find("li.active").prev().length) {
+                $search.find("li.active").removeClass("active").prev().addClass("active");
+            }
+
+        } else if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 39, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1) {
+            let $this = $(this);
+            clearTimeout(timeWrite);
+            timeWrite = setTimeout(function () {
+                searchListMult($this);
+            }, 300);
+        }
+
+    }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
+        addRegisterAssociation($(this).data("entity"), $(this).data("column"));
     });
 })

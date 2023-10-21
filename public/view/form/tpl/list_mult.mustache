@@ -47,64 +47,28 @@
 </div>
 
 <script>
-    inputListMultSize();
-    let timeWrite = 0;
-
-    /**
-     * Atribui função ao click duplo nesta input
-     */
-    $(".list_mult_context").off("focus", ".listMult").on("focus", ".listMult", function () {
-        searchListMult($(this));
-
-    }).off("keyup", ".listMult").on("keyup", ".listMult", function (e) {
-        let $search = $(this).siblings(".list-results");
-        if(e.which === 40) {
-            if(!$search.find("li.active").length) {
-                $search.find("li:first-of-type").addClass("active");
-            } else if($search.find("li.active").next().length) {
-                $search.find("li.active").removeClass("active").next().addClass("active");
-            }
-
-        } else if(e.which === 38) {
-            if(!$search.find("li.active").length) {
-                $search.find("li:last-of-type").addClass("active");
-            } else if($search.find("li.active").prev().length) {
-                $search.find("li.active").removeClass("active").prev().addClass("active");
-            }
-
-        } else if ([13, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 39, 45, 46, 91, 92, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145].indexOf(e.which) === -1) {
-            let $this = $(this);
-            clearTimeout(timeWrite);
-            timeWrite = setTimeout(function () {
-                searchListMult($this);
-            }, 300);
-        }
-
-    }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
-        addRegisterAssociation($(this).data("entity"), $(this).data("column"));
-    });
-
     /**
      * Carregamento dos dados já salvos
      */
-    let rel = await dbLocal.exeRead("__relevant", 1);
-    {{#value}}
-        db.exeRead("{{relation}}", {{.}}).then(result => {
-            if(typeof result[0] === "object" && result.length === 1) {
-                let findTitle = !1;
-                for (let i in rel) {
-                    for (let col in dicionarios.{{relation}}) {
-                        if (dicionarios.{{relation}}[col].format === rel[i]) {
-                            $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
-                            inputListMultSize();
-                            findTitle = !0;
-                            break;
+    $(async function() {
+        let rel = await dbLocal.exeRead("__relevant", 1);
+        {{#value}}
+            db.exeRead("{{relation}}", {{.}}).then(result => {
+                if (typeof result[0] === "object" && result.length === 1) {
+                    let findTitle = !1;
+                    for (let i in rel) {
+                        for (let col in dicionarios.{{relation}}) {
+                            if (dicionarios.{{relation}}[col].format === rel[i]) {
+                                $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onload=\"inputListMultSize()\" onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
+                                findTitle = !0;
+                                break;
+                            }
                         }
+                        if (findTitle)
+                            break;
                     }
-                    if (findTitle)
-                        break;
                 }
-            }
-        });
-    {{/value}}
+            });
+        {{/value}}
+    });
 </script>

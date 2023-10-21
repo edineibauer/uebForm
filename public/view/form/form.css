@@ -233,6 +233,23 @@ input[type='date'], input[type='time'] {
     border-left-color: var(--colorPrimary) !important;
 }
 
+.btnListAction {
+    padding: 8px 6px !important;
+    border-radius: 50px;
+    width: 40px;
+    border: solid 1px #dddddd;
+    box-shadow: none;
+    margin-right: 0;
+}
+
+@media (min-width: 700px) {
+    .btnListAction {
+        border-radius: 4px;
+        padding: 8px 16px !important;
+        width: auto;
+    }
+}
+
 @media (min-width: 700px) {
     .list_mult_context .btnListMult {
         border-radius: 4px;

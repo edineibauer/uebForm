@@ -39,23 +39,9 @@
 </div>
 
 <script>
-    async function removeListSaveItem(column, id) {
-        if (confirm("Remover item?")) {
-
-            await db.exeDelete('{{relation}}', id);
-
-            removeItemArray(form.data[column], parseInt(id));
-            form.setColumnValue(column, form.data[column]);
-
-            let $reg = form.$element.find(".extend_register[rel='" + id + "']");
-            let $regList = $reg.closest(".extend_list_register");
-            $regList.css("height", $regList.css("height")).css("height", (parseInt($regList.css("height")) - parseInt($reg.css("height"))) + "px");
-            $reg.css("height", $reg.css("height")).css("height", 0).removeClass("padding-small");
-
-            await sleep(300);
-            $reg.remove()
-        }
-    }
+    /**
+     * Carregamento dos dados já salvos
+     */
     $(async function() {
         let tpl = getTemplates();
         {{#value}}
