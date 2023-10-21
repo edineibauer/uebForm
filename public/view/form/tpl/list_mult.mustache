@@ -59,7 +59,15 @@
                     for (let i in rel) {
                         for (let col in dicionarios.{{relation}}) {
                             if (dicionarios.{{relation}}[col].format === rel[i]) {
-                                $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onload=\"inputListMultSize()\" onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
+                                $("#{{column}}").siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge({{.}}, '{{column}}');\" rel='{{column}}' data-id='{{.}}'>" + result[0][col] + "<i class='material-icons close'>close</i></div>");
+                                $(".listMult").each(function (i, e) {
+                                    let wb = $(e).siblings(".badgeListMult").width();
+                                    let pr = $(e).siblings(".badgeListMult").parent().width();
+                                    if(wb + 151 > pr)
+                                        $(e).css("width", "100%");
+                                    else
+                                        $(e).css("width", "calc(100% - " + wb + "px)");
+                                });
                                 findTitle = !0;
                                 break;
                             }
