@@ -1193,7 +1193,7 @@ $(function () {
     /**
      * Atribui função ao click duplo nesta input
      */
-    $(".form-crud").off("focus", ".list").on("focus", ".list", function () {
+    $("#form-maestru").off("focus", ".list").on("focus", ".list", function () {
         searchList($(this));
 
     }).off("keyup", ".list").on("keyup", ".list", function (e) {
@@ -1219,18 +1219,8 @@ $(function () {
                 searchList($this);
             }, 300);
         }
-    });
 
-    $(".listMult").each(function (i, e) {
-        let wb = $(e).siblings(".badgeListMult").width();
-        let pr = $(e).siblings(".badgeListMult").parent().width();
-        if(wb + 151 > pr)
-            $(e).css("width", "100%");
-        else
-            $(e).css("width", "calc(100% - " + wb + "px)");
-    });
-
-    $(".list_mult_context").off("focus", ".listMult").on("focus", ".listMult", function () {
+    }).off("focus", ".listMult").on("focus", ".listMult", function () {
         searchListMult($(this));
 
     }).off("keyup", ".listMult").on("keyup", ".listMult", function (e) {
@@ -1259,5 +1249,14 @@ $(function () {
 
     }).off("click", ".btnListAction").on("click", ".btnListAction", function () {
         addRegisterAssociation($(this).data("entity"), $(this).data("column"));
+    });
+
+    $(".listMult").each(function (i, e) {
+        let wb = $(e).siblings(".badgeListMult").width();
+        let pr = $(e).siblings(".badgeListMult").parent().width();
+        if(wb + 151 > pr)
+            $(e).css("width", "100%");
+        else
+            $(e).css("width", "calc(100% - " + wb + "px)");
     });
 })
