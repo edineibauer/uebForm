@@ -92,7 +92,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                     /**
                      * Create loading file
                      */
-                    createSource({
+                    await createSource({
                         name: idMockLoading,
                         nome: '',
                         sizeName: '',
@@ -105,7 +105,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                     /**
                      * Upload the file
                      */
-                    await AJAX.uploadFile(file).then(mock => {
+                    await AJAX.uploadFile(file).then(async (mock) => {
 
                         /**
                          * Set the file on form
@@ -116,7 +116,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                          * Remove loading and create DOM file
                          */
                         $input.siblings(".file_gallery").find("#mock-" + idMockLoading).remove();
-                        createSource(mock, $input, 1);
+                        await createSource(mock, $input, 1);
                     });
                 }
             }
@@ -245,12 +245,16 @@ function applyRules(entity, rule, column) {
         $input.val(rule.default)
 }
 
-function createSource(mock, $input, tipo, prepend) {
+async function createSource(mock, $input, tipo, prepend) {
     if (!isEmpty(mock)) {
         let tpl = (tipo === 1 ? 'file_list_source' : 'file_source');
         let templates = getTemplates();
-        if (typeof prepend !== "undefined")
-            $input.siblings(".file_gallery").prepend(Mustache.render(templates[tpl], mock)); else $input.siblings(".file_gallery").append(Mustache.render(templates[tpl], mock))
+        let $gal = $input.siblings(".file_gallery");
+        if (typeof prepend !== "undefined") {
+            await $gal.prepend(Mustache.render(templates[tpl], mock));
+        } else {
+            await $gal.append(Mustache.render(templates[tpl], mock))
+        }
     }
 }
 
@@ -445,7 +449,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                 this.loading = true;
 
                 this.$element.find(".maestru-form-control").remove();
-                this.$element.prepend(await $this.getShow());
+                await this.$element.prepend(await $this.getShow());
                 loadMask(this);
 
                 this.loading = false;
@@ -1109,21 +1113,21 @@ async function searchListMult($input) {
         if (!isEmpty(results)) {
             $search.html(Mustache.render(templates.list_result, {data: results}))
                 .off("mousedown", ".list-option")
-                .on("mousedown", ".list-option", function () {
+                .on("mousedown", ".list-option", async function () {
 
                     /**
                      * Adiciona ação ao clicar em uma opção
                      */
-                    addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
+                    await addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
                 });
         } else {
             $search.html('<ul class="col s12 card list-result-itens border radius opacity" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
         }
 
-        $input.off("keydown").on("keydown", function (e) {
+        $input.off("keydown").on("keydown", async function (e) {
             if (e.which === 13 && !isEmpty(results)) {
                 let option = $search.find(".list-option.active").length ? $search.find(".list-option.active") : $search.find(".list-option").first();
-                addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
+                await addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
                 $input.val("").blur();
                 $search.html("");
             }
@@ -1133,7 +1137,7 @@ async function searchListMult($input) {
     }
 }
 
-function addListMultBadge(id, title, $input) {
+async function addListMultBadge(id, title, $input) {
     let column = $input.attr("id");
 
     /**
@@ -1151,7 +1155,7 @@ function addListMultBadge(id, title, $input) {
     /**
      * Adiciona o badge na input
      */
-    $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '" + column + "')\" rel='" + column + "' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
+    await $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '" + column + "')\" rel='" + column + "' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
     inputListMultSize();
 }
 
