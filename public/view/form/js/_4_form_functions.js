@@ -92,7 +92,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                     /**
                      * Create loading file
                      */
-                    await createSource({
+                    createSource({
                         name: idMockLoading,
                         nome: '',
                         sizeName: '',
@@ -105,7 +105,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                     /**
                      * Upload the file
                      */
-                    await AJAX.uploadFile(file).then(async (mock) => {
+                    await AJAX.uploadFile(file).then((mock) => {
 
                         /**
                          * Set the file on form
@@ -116,7 +116,7 @@ $("#app").off("keyup change", ".formCrudInput").on("keyup change", ".formCrudInp
                          * Remove loading and create DOM file
                          */
                         $input.siblings(".file_gallery").find("#mock-" + idMockLoading).remove();
-                        await createSource(mock, $input, 1);
+                        createSource(mock, $input, 1);
                     });
                 }
             }
@@ -245,15 +245,15 @@ function applyRules(entity, rule, column) {
         $input.val(rule.default)
 }
 
-async function createSource(mock, $input, tipo, prepend) {
+function createSource(mock, $input, tipo, prepend) {
     if (!isEmpty(mock)) {
         let tpl = (tipo === 1 ? 'file_list_source' : 'file_source');
         let templates = getTemplates();
         let $gal = $input.siblings(".file_gallery");
         if (typeof prepend !== "undefined") {
-            await $gal.prepend(Mustache.render(templates[tpl], mock));
+            $gal.prepend(Mustache.render(templates[tpl], mock));
         } else {
-            await $gal.append(Mustache.render(templates[tpl], mock))
+            $gal.append(Mustache.render(templates[tpl], mock))
         }
     }
 }
@@ -449,7 +449,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                 this.loading = true;
 
                 this.$element.find(".maestru-form-control").remove();
-                await this.$element.prepend(await $this.getShow());
+                this.$element.prepend(await $this.getShow());
                 loadMask(this);
 
                 this.loading = false;
@@ -1118,7 +1118,7 @@ async function searchListMult($input) {
                     /**
                      * Adiciona ação ao clicar em uma opção
                      */
-                    await addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
+                    addListMultBadge($(this).attr("rel"), $(this).find("span").text().trim(), $input);
                 });
         } else {
             $search.html('<ul class="col s12 card list-result-itens border radius opacity" style="padding: 3px 10px!important;">Nenhum resultado</ul>')
@@ -1127,7 +1127,7 @@ async function searchListMult($input) {
         $input.off("keydown").on("keydown", async function (e) {
             if (e.which === 13 && !isEmpty(results)) {
                 let option = $search.find(".list-option.active").length ? $search.find(".list-option.active") : $search.find(".list-option").first();
-                await addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
+                addListMultBadge(option.attr("rel"), option.find("span").text().trim(), $input);
                 $input.val("").blur();
                 $search.html("");
             }
@@ -1137,7 +1137,18 @@ async function searchListMult($input) {
     }
 }
 
-async function addListMultBadge(id, title, $input) {
+function inputListMultSize() {
+    $(".listMult").each(function (i, e) {
+        let wb = $(e).siblings(".badgeListMult").width();
+        let pr = $(e).siblings(".badgeListMult").parent().width();
+        if(wb + 151 > pr)
+            $(e).css("width", "100%");
+        else
+            $(e).css("width", "calc(100% - " + wb + "px)");
+    });
+}
+
+function addListMultBadge(id, title, $input) {
     let column = $input.attr("id");
 
     /**
@@ -1155,7 +1166,7 @@ async function addListMultBadge(id, title, $input) {
     /**
      * Adiciona o badge na input
      */
-    await $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '" + column + "')\" rel='" + column + "' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
+    $input.siblings(".badgeListMult").append("<div class='badge badgeListMultOption' onclick=\"removeBadge(" + id + ", '" + column + "')\" rel='" + column + "' data-id='" + id + "'>" + title + "<i class='material-icons close'>close</i></div>");
     inputListMultSize();
 }
 
@@ -1255,12 +1266,5 @@ $(function () {
         addRegisterAssociation($(this).data("entity"), $(this).data("column"));
     });
 
-    $(".listMult").each(function (i, e) {
-        let wb = $(e).siblings(".badgeListMult").width();
-        let pr = $(e).siblings(".badgeListMult").parent().width();
-        if(wb + 151 > pr)
-            $(e).css("width", "100%");
-        else
-            $(e).css("width", "calc(100% - " + wb + "px)");
-    });
+    inputListMultSize();
 })
