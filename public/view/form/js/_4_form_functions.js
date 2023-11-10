@@ -390,7 +390,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                 this.columnRelation = column;
                 let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
                 nav[nav.length - 1].param.form.columnRelation = column;
-                sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+
+                salvaNavegacaoHistorico("navigation_" + this.target, nav);
             }
         },
         setColumnValue: async function(column, value) {
@@ -399,7 +400,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
             let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
             nav[nav.length - 1].param.form.data[column] = this.data[column];
-            sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
+            salvaNavegacaoHistorico("navigation_" + this.target, nav);
         },
         setData: async function (dados) {
             if (isEmpty(dicionarios[this.entity])) {
@@ -536,8 +537,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                                         n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data);
                                     }
                                     n[n.length - 2].param.form.modified = true;
-
-                                    sessionStorage.setItem("navigation_" + target, JSON.stringify(n));
+                                    salvaNavegacaoHistorico("navigation_" + target, n);
                                 }
                             }
 
@@ -588,7 +588,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             fields: formCrud.fields,
             funcaoString: (!isEmpty(formCrud.funcao) && typeof formCrud.funcao === "function" ? formCrud.funcao.toString() : null)
         };
-        sessionStorage.setItem( "navigation_" + formCrud.target, JSON.stringify(navigation))
+        salvaNavegacaoHistorico("navigation_" + formCrud.target, navigation);
     }
 
     return formCrud;
@@ -985,7 +985,7 @@ function editFormRelation(entity, column) {
             formBefore.data[formBefore.columnRelation] = data;
             formBefore.columnRelation = null;
             formBefore.modified = true;
-            sessionStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+            salvaNavegacaoHistorico("navigation_" + form.target, nav);
             goBackMaestruNavigation(form.target);
         })
     });
@@ -1039,7 +1039,7 @@ function editFormRelationMult(entity, column, id) {
 
                 navTarget.param.form.modified = true;
 
-                sessionStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
+                salvaNavegacaoHistorico("navigation_" + form.target, nav);
                 goBackMaestruNavigation(form.target);
             })
         });
