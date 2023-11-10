@@ -389,7 +389,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             if(typeof column === "string") {
                 this.columnRelation = column;
                 let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
-                nav[nav.length - 1].form.columnRelation = column;
+                nav[nav.length - 1].param.form.columnRelation = column;
                 sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
             }
         },
@@ -398,7 +398,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             form.modified = true;
 
             let nav = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
-            nav[nav.length - 1].form.data[column] = this.data[column];
+            nav[nav.length - 1].param.form.data[column] = this.data[column];
             sessionStorage.setItem("navigation_" + this.target, JSON.stringify(nav));
         },
         setData: async function (dados) {
@@ -528,14 +528,14 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
 
                                 if(!isEmpty(routeBefore.form) && !isEmpty(routeBefore.form.columnRelation)) {
                                     if(dicionarios[routeBefore.form.entity][routeBefore.form.columnRelation].group === "many") {
-                                        if(isEmpty(n[n.length - 2].form.data[routeBefore.form.columnRelation]))
-                                            n[n.length - 2].form.data[routeBefore.form.columnRelation] = [];
+                                        if(isEmpty(n[n.length - 2].param.form.data[routeBefore.form.columnRelation]))
+                                            n[n.length - 2].param.form.data[routeBefore.form.columnRelation] = [];
 
-                                        n[n.length - 2].form.data[routeBefore.form.columnRelation].push(parseInt(dbCreate.data));
+                                        n[n.length - 2].param.form.data[routeBefore.form.columnRelation].push(parseInt(dbCreate.data));
                                     } else if(isEmpty(routeBefore.form.data[routeBefore.form.columnRelation])) {
-                                        n[n.length - 2].form.data[routeBefore.form.columnRelation] = parseInt(dbCreate.data);
+                                        n[n.length - 2].param.form.data[routeBefore.form.columnRelation] = parseInt(dbCreate.data);
                                     }
-                                    n[n.length - 2].form.modified = true;
+                                    n[n.length - 2].param.form.modified = true;
 
                                     sessionStorage.setItem("navigation_" + target, JSON.stringify(n));
                                 }
@@ -580,7 +580,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         if (!isEmpty(formCrud.funcao) && typeof formCrud.funcao === "function")
             formCrud.funcaoString = formCrud.funcao.toString();
 
-        navigation[navigation.length - 1].form = {
+        navigation[navigation.length - 1].param.form = {
             entity: formCrud.entity,
             columnRelation: formCrud.columnRelation,
             modified: formCrud.modified,
