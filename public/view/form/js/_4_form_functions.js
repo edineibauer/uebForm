@@ -526,14 +526,14 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                             if(sessionStorage.getItem("navigation_" + this.target) && n.length > 1) {
                                 let routeBefore = n[n.length-2];
 
-                                if(!isEmpty(routeBefore.form) && !isEmpty(routeBefore.form.columnRelation)) {
-                                    if(dicionarios[routeBefore.form.entity][routeBefore.form.columnRelation].group === "many") {
-                                        if(isEmpty(n[n.length - 2].param.form.data[routeBefore.form.columnRelation]))
-                                            n[n.length - 2].param.form.data[routeBefore.form.columnRelation] = [];
+                                if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation)) {
+                                    if(dicionarios[routeBefore.param.form.entity][routeBefore.param.form.columnRelation].group === "many") {
+                                        if(isEmpty(n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation]))
+                                            n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = [];
 
-                                        n[n.length - 2].param.form.data[routeBefore.form.columnRelation].push(parseInt(dbCreate.data));
-                                    } else if(isEmpty(routeBefore.form.data[routeBefore.form.columnRelation])) {
-                                        n[n.length - 2].param.form.data[routeBefore.form.columnRelation] = parseInt(dbCreate.data);
+                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation].push(parseInt(dbCreate.data));
+                                    } else if(isEmpty(routeBefore.param.form.data[routeBefore.param.form.columnRelation])) {
+                                        n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data);
                                     }
                                     n[n.length - 2].param.form.modified = true;
 
@@ -632,7 +632,7 @@ async function getInputsTemplates(form, col) {
             if(sessionStorage.getItem("navigation_" + form.target) && n.length > 1) {
                 let routeBefore = n[n.length-2];
 
-                if(!isEmpty(routeBefore.form) && !isEmpty(routeBefore.form.columnRelation))
+                if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation))
                     continue;
             }
 
@@ -981,7 +981,7 @@ function editFormRelation(entity, column) {
         functionCallBack: ((data) => {
             data.id = Math.floor((Math.random() * 1000)) + "" + Date.now();
             let nav = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
-            let formBefore = nav[nav.length -2].form;
+            let formBefore = nav[nav.length -2].param.form;
             formBefore.data[formBefore.columnRelation] = data;
             formBefore.columnRelation = null;
             formBefore.modified = true;
@@ -1018,26 +1018,26 @@ function editFormRelationMult(entity, column, id) {
                 let nav = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
                 let navTarget = nav[nav.length -2];
 
-                if(isEmpty(navTarget.form.data[navTarget.form.columnRelation]) || navTarget.form.data[navTarget.form.columnRelation].constructor !== Array)
-                    navTarget.form.data[navTarget.form.columnRelation] = [];
+                if(isEmpty(navTarget.param.form.data[navTarget.param.form.columnRelation]) || navTarget.param.form.data[navTarget.param.form.columnRelation].constructor !== Array)
+                    navTarget.param.form.data[navTarget.param.form.columnRelation] = [];
 
                 if(isNumberPositive(data.id)) {
-                    let elementPos = navTarget.form.data[navTarget.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id);
+                    let elementPos = navTarget.param.form.data[navTarget.param.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id);
                     if(elementPos === -1)
-                        elementPos = navTarget.form.data[navTarget.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id.toString());
+                        elementPos = navTarget.param.form.data[navTarget.param.form.columnRelation].map((x) => {return x.id; }).indexOf(data.id.toString());
 
                     if(elementPos > -1) {
-                        navTarget.form.data[navTarget.form.columnRelation][elementPos] = data;
+                        navTarget.param.form.data[navTarget.param.form.columnRelation][elementPos] = data;
                     } else {
                         data.id = Math.floor((Math.random() * 1000)) + "" + Date.now();
-                        navTarget.form.data[navTarget.form.columnRelation].push(data);
+                        navTarget.param.form.data[navTarget.param.form.columnRelation].push(data);
                     }
                 } else {
                     data.id = parseInt(Math.floor((Math.random() * 1000)) + "" + Date.now());
-                    navTarget.form.data[navTarget.form.columnRelation].push(data);
+                    navTarget.param.form.data[navTarget.param.form.columnRelation].push(data);
                 }
 
-                navTarget.form.modified = true;
+                navTarget.param.form.modified = true;
 
                 sessionStorage.setItem("navigation_" + form.target, JSON.stringify(nav));
                 goBackMaestruNavigation(form.target);
