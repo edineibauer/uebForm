@@ -951,10 +951,10 @@ async function setInputFormatListValue(form, entity, column, id, $input) {
         form.modified = true;
 }
 
-function deleteRegisterAssociation(col, el) {
+function deleteRegisterAssociation(col) {
     form.setColumnValue(col, null);
     getInputsTemplates(form, col).then(inputTemplate => {
-        $(el).addClass("hide").closest(".parent-input").parent().replaceWith(inputTemplate[0]);
+        $(".list-remove-btn[rel='" + col + "']").addClass("hide").closest(".parent-input").parent().replaceWith(inputTemplate[0]);
     })
 }
 

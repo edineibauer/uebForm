@@ -29,7 +29,7 @@
             </div>
         {{/autocompletenovo}}
 
-        <div class='right pointer hide list-remove-btn color-text-gray-dark color-hover-text-red' style='padding: 7px 10px' onclick="deleteRegisterAssociation('{{column}}', this)"><i class='material-icons'>delete</i></div>
+        <div class='right pointer hide list-remove-btn color-text-gray-dark color-hover-text-red' rel='{{column}}' style='padding: 7px 10px' onclick="deleteRegisterAssociation('{{column}}')"><i class='material-icons'>delete</i></div>
         <div class="rest relative list-input" rel="{{column}}">
             <input type="text" placeholder="pesquisar..." autocomplete="off"
                    class="list{{#disabled}} disabled{{/disabled}}"
