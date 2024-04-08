@@ -509,7 +509,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                         /**
                          * Show errors on form
                          */
-                        if (!dbCreate.response) {
+                        if (!dbCreate.response || dbCreate.response !== 1) {
                             form.error = dbCreate.data[form.entity];
                             privateFormSetError(form, form.error, showMessages, destroy);
 
