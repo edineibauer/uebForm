@@ -607,7 +607,8 @@ async function getInputsTemplates(form, col) {
     let promessas = [];
     let position = 0;
     let dic = orderBy(dicionarios[form.entity], "indice").reverse();
-    let info = JSON.parse(sessionStorage.__info)[form.entity];
+    let infoData = JSON.parse(sessionStorage.__info);
+    let info = infoData[form.entity];
     let haveFilesIcons = false;
 
     for (let meta of dic) {
@@ -626,20 +627,16 @@ async function getInputsTemplates(form, col) {
          * ou caso seja um usuário system parent
          */
         if (meta.column === "system_id") {
-            if(isEmpty(info.system))
-                continue;
-
-            if(USER.setor !== "admin")
+            if(isEmpty(info.system) || (USER.setor !== "admin" && (info.system !== USER.setor && infoData[info.system].system !== infoData[USER.setor].system)))
                 continue;
 
             /**
-             * Verifica se é um formulário de autocomplete para preencher no formulário anterior
-             * */
-            let n = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
-            if(sessionStorage.getItem("navigation_" + form.target) && n.length > 1) {
-                let routeBefore = n[n.length-2];
+             * Formulário veio de outro formulário e consegue autopreencher o system_id, então não mostra o campo
+             */
+            if(isEmpty(form.data.id) && isEmpty(form.data.system_id) && sessionStorage.getItem("navigation_" + form.target)) {
+                let n = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
 
-                if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation))
+                if(typeof n[n.length -2] !== "undefined" && typeof n[n.length -2].param.form !== "undefined" && !isEmpty(n[n.length -2].param.form.columnRelation) && !isEmpty(info.system) && info.system === n[n.length -2].param.form.entity)
                     continue;
             }
 
