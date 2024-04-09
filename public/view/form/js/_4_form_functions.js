@@ -542,14 +542,30 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                                 let routeBefore = n[n.length-2];
 
                                 if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation)) {
+                                    let valueFinalToSave = null;
                                     if(dicionarios[routeBefore.param.form.entity][routeBefore.param.form.columnRelation].group === "many") {
                                         if(isEmpty(n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation]))
                                             n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = [];
 
                                         n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation].push(parseInt(dbCreate.data));
+                                        valueFinalToSave = JSON.stringify(n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation].map(n => n.toString()));
                                     } else if(isEmpty(routeBefore.param.form.data[routeBefore.param.form.columnRelation])) {
                                         n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation] = parseInt(dbCreate.data);
+                                        valueFinalToSave = n[n.length - 2].param.form.data[routeBefore.param.form.columnRelation];
                                     }
+
+                                    /**
+                                     * Se o formulário anterior já existe no banco, atualiza o valor do campo para garantir
+                                     */
+                                    if(isNumberPositive(n[n.length - 2].param.form.data.id)) {
+                                        await AJAX.post('saveAutocompleteAssociation', {
+                                            entity: n[n.length - 2].param.form.entity,
+                                            id: n[n.length - 2].param.form.data.id,
+                                            column: routeBefore.param.form.columnRelation,
+                                            value: valueFinalToSave
+                                        });
+                                    }
+
                                     n[n.length - 2].param.form.modified = true;
                                     salvaNavegacaoHistorico("navigation_" + target, n);
                                 }
@@ -566,6 +582,40 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                         }
 
                     } else {
+
+                        /**
+                         * Verifica se é um formulário para preencher no formulário anterior
+                         * */
+                        let n = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
+                        if(sessionStorage.getItem("navigation_" + this.target) && n.length > 1) {
+                            let routeBefore = n[n.length-2];
+
+                            /**
+                             * Se o formulário anterior já existe no banco, atualiza o valor do campo para garantir
+                             */
+                            if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation) && isNumberPositive(n[n.length - 2].param.form.data.id)) {
+
+                                let dataF = {};
+
+                                for(let col of JSON.parse(sessionStorage.__info)[form.entity].columns_readable) {
+                                    if(typeof form.data[col] !== "undefined" && col !== "id" && col !== "system_id" && col !== "system_entity")
+                                        dataF[col] = form.data[col];
+                                }
+
+                                dataF.columnTituloExtend = await getRelevantTitle(form.entity, dataF);
+                                dataF.columnName = routeBefore.param.form.columnRelation;
+                                dataF.columnRelation = form.entity;
+                                dataF.columnStatus = {column: '', have: !1, value: !1}
+
+                                await AJAX.post('saveAutocompleteAssociation', {
+                                    entity: n[n.length - 2].param.form.entity,
+                                    id: n[n.length - 2].param.form.data.id,
+                                    column: routeBefore.param.form.columnRelation,
+                                    value: JSON.stringify(dataF)
+                                });
+                            }
+                        }
+
                         form.funcao(form.data);
                     }
 
