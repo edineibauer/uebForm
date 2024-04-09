@@ -411,6 +411,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             let $this = this;
             $this.id = "";
             $this.data = {};
+            let info = JSON.parse(sessionStorage.__info)[this.entity];
 
             if (typeof dados === "undefined" || isEmpty(dados)) {
                 $this.data = await _getDefaultValues($this.entity);
@@ -627,16 +628,16 @@ async function getInputsTemplates(form, col) {
          * ou caso seja um usuário system parent
          */
         if (meta.column === "system_id") {
-            if(isEmpty(info.system) || (USER.setor !== "admin" && (info.system !== USER.setor && infoData[info.system].system !== infoData[USER.setor].system)))
+            if(isEmpty(info.system) || info.system === USER.setor || (USER.setor !== "admin" && infoData[info.system].system !== infoData[USER.setor].system))
                 continue;
 
             /**
              * Formulário veio de outro formulário e consegue autopreencher o system_id, então não mostra o campo
              */
-            if(isEmpty(form.data.id) && isEmpty(form.data.system_id) && sessionStorage.getItem("navigation_" + form.target)) {
+            if(!isEmpty(form.data.system_id) && sessionStorage.getItem("navigation_" + form.target)) {
                 let n = JSON.parse(sessionStorage.getItem("navigation_" + form.target));
 
-                if(typeof n[n.length -2] !== "undefined" && typeof n[n.length -2].param.form !== "undefined" && !isEmpty(n[n.length -2].param.form.columnRelation) && !isEmpty(info.system) && info.system === n[n.length -2].param.form.entity)
+                if(typeof n[n.length -2] !== "undefined" && typeof n[n.length -2].param.form !== "undefined" && !isEmpty(n[n.length -2].param.form.columnRelation))
                     continue;
             }
 
