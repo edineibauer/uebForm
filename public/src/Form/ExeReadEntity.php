@@ -3,6 +3,7 @@
 namespace Form;
 
 use Config\Config;
+use Conn\Read;
 use Conn\SqlCommand;
 use Entity\Meta;
 use Entity\Metadados;
@@ -176,8 +177,20 @@ class ExeReadEntity
             //permite registros que estão abaixo do meu sistema
             $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
             if(!empty($listaEntitySystemBelow)) {
-                foreach ($listaEntitySystemBelow as $systemBelow)
-                    $queryLogic .= " OR {$this->report['entidade']}.system_entity = '" . $systemBelow . "'";
+                foreach ($listaEntitySystemBelow as $systemBelow) {
+
+                    //busca todos os registros do sistema abaixo ao qual pertencem a essa entidade
+                    $listEntityBellow = [];
+                    $read = new Read();
+                    $read->setSelect("id");
+                    $read->exeRead($systemBelow, "WHERE system_id = :ss", ["ss" => $_SESSION["userlogin"]["system_id"]]);
+                    if($read->getResult()) {
+                        foreach ($read->getResult() as $item)
+                            $listEntityBellow[] = $item['id'];
+
+                        $queryLogic .= " OR ({$this->report['entidade']}.system_entity = '" . $systemBelow . "' AND {$this->report['entidade']}.system_id IN(" . implode(",", $listEntityBellow) . "))";
+                    }
+                }
             }
 
             $queryLogic .= ")";

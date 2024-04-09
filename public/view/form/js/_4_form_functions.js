@@ -423,6 +423,13 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                 }
             }
 
+            if(isEmpty($this.data.id) && isEmpty($this.data.system_id) && sessionStorage.getItem("navigation_" + $this.target)) {
+                let n = JSON.parse(sessionStorage.getItem("navigation_" + $this.target));
+
+                if(typeof n[n.length -2] !== "undefined" && typeof n[n.length -2].param.form !== "undefined" && !isEmpty(n[n.length -2].param.form.columnRelation) && !isEmpty(info.system) && info.system === n[n.length -2].param.form.entity)
+                    $this.data.system_id = n[n.length -2].param.form.data.id;
+            }
+
             $this.dataOld = Object.assign({}, $this.data);
         },
         setId: async function (id) {
@@ -524,7 +531,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                              * Verifica se é um formulário de autocomplete para preencher no formulário anterior
                              * */
                             let n = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
-                            if(sessionStorage.getItem("navigation_" + this.target) && n.length > 1) {
+                            if(isEmpty(this.data.id) && sessionStorage.getItem("navigation_" + this.target) && n.length > 1) {
                                 let routeBefore = n[n.length-2];
 
                                 if(!isEmpty(routeBefore.param.form) && !isEmpty(routeBefore.param.form.columnRelation)) {
