@@ -263,6 +263,8 @@ async function searchList($input) {
     let column = $input.data("column");
     let $search = $input.siblings("#list-result-" + column);
     let search = $input.val();
+    search = (!isEmpty(search) ? {"*": "%" + search + "%"} : {});
+
     if ($input.is(":focus")) {
         let entity = $input.data("entity");
         let templates = getTemplates();
@@ -275,6 +277,10 @@ async function searchList($input) {
         });
 
         let infoEntity = (JSON.parse(sessionStorage.__info))[entity];
+        let colStatus = (!isEmpty(infoEntity.status) ? Object.values(dicionarios[entity]).find(e => e.id == infoEntity.status)?.column : "");
+        if(!isEmpty(colStatus))
+            search[colStatus] = 1;
+
         let dataRead = await db.exeRead(entity, search, 10);
 
         if(ativoSearch) {
