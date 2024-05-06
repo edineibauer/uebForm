@@ -605,13 +605,19 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                                 dataF.columnTituloExtend = await getRelevantTitle(form.entity, dataF);
                                 dataF.columnName = routeBefore.param.form.columnRelation;
                                 dataF.columnRelation = form.entity;
-                                dataF.columnStatus = {column: '', have: !1, value: !1}
+                                dataF.columnStatus = {column: '', have: !1, value: !1};
+
+                                let dataAtual = dataF;
+                                if(dicionarios[routeBefore.param.form.entity][routeBefore.param.form.columnRelation].group === "many") {
+                                    dataAtual = routeBefore.param.form.data[routeBefore.param.form.columnRelation] || [];
+                                    dataAtual.push(dataF);
+                                }
 
                                 await AJAX.post('saveAutocompleteAssociation', {
                                     entity: n[n.length - 2].param.form.entity,
                                     id: n[n.length - 2].param.form.data.id,
                                     column: routeBefore.param.form.columnRelation,
-                                    value: JSON.stringify(dataF)
+                                    value: JSON.stringify(dataAtual)
                                 });
                             }
                         }
