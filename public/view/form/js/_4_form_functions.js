@@ -602,6 +602,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                                         dataF[col] = form.data[col];
                                 }
 
+                                dataF.id = Math.random().toString().slice(2, 18);
+                                dataF.system_id = "";
                                 dataF.columnTituloExtend = await getRelevantTitle(form.entity, dataF);
                                 dataF.columnName = routeBefore.param.form.columnRelation;
                                 dataF.columnRelation = form.entity;
