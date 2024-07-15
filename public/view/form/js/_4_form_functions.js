@@ -961,13 +961,26 @@ function loadMask(form) {
 
 function loadFolderDrag() {
     $(".extend_list_register").sortable({
-        revert: !1, stop: function () {
+        revert: !1,
+        stop: function () {
             let $div = $(this).closest(".extend_list_register");
             let column = $div.data("column");
             let order = [];
-            $div.children(".extend_register").each(function () {
-                order.push(parseInt($(this).attr('rel')));
-            });
+            if($(this).hasClass("list_mult_register")) {
+                $div.children(".extend_register").each(function () {
+                    order.push(parseInt($(this).attr('rel')));
+                });
+            } else {
+                $div.children(".extend_register").each(function () {
+                    let id = parseInt($(this).attr('rel'));
+                    for (let i in form.data[column]) {
+                        if (typeof form.data[column][i] === "object" && parseInt(form.data[column][i].id) === id) {
+                            order.push(form.data[column][i]);
+                            break
+                        }
+                    }
+                });
+            }
             form.setColumnValue(column, order);
         }
     })
