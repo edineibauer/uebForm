@@ -50,6 +50,11 @@
         let formId = "{{formIdentificador}}";
         let listFinal = [];
         if(!isEmpty(multList) && typeof multList === "object" && typeof multList[0] === 'number') {
+
+            $(".extend_list_register[data-id='" + formId + "-" + columnList + "']").append(
+                    '<div class="col extend_register extend_register_load" rel="{{column}}" style="height:46px;overflow: hidden"><div class="col padding-medium"><div class="left font-medium padding-4 extend_register_title" style="cursor: default">carregando...</div></div></div>'
+            );
+
             let promises = multList.map(async (id, id_indice) => {
                 if (typeof id === "number") {
                     let result = await db.exeRead(entityList, id);
@@ -66,6 +71,9 @@
 
             // Aguarde todas as promessas serem concluídas
             await Promise.all(promises);
+
+            $(".extend_register_load[rel='{{column}}']").remove();
+
             if(!isEmpty(listFinal)) {
                 listFinal.sort((a, b) => a.index - b.index);
                 for (let rr of listFinal)
