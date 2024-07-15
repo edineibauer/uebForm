@@ -966,13 +966,7 @@ function loadFolderDrag() {
             let column = $div.data("column");
             let order = [];
             $div.children(".extend_register").each(function () {
-                let id = parseInt($(this).attr('rel'));
-                for (let i in form.data[column]) {
-                    if (typeof form.data[column][i] === "object" && parseInt(form.data[column][i].id) === id) {
-                        order.push(form.data[column][i]);
-                        break
-                    }
-                }
+                order.push(parseInt($(this).attr('rel')));
             });
             form.setColumnValue(column, order);
         }
