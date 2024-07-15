@@ -40,21 +40,37 @@
 
 <script>
     /**
-     * Carregamento dos dados já salvos
+     * Carregamento dos dados já salvos 1 a 1 na ordem correta de forma sincrona
      */
     $(async function() {
         let tpl = getTemplates();
-        {{#value}}
-            db.exeRead("{{relation}}", {{.}}).then(async result => {
-                if(typeof result[0] === "object" && result.length === 1) {
-                    result = result[0];
-                    result.columnStatus = {column: '', have: !1, value: !1}
-                    result.columnRelation = "{{relation}}";
-                    result.columnName = "{{column}}";
-                    result.columnTituloExtend = await getRelevantTitle("{{relation}}", result);
-                    $(".extend_list_register[data-id='{{formIdentificador}}-{{column}}']").append(Mustache.render(tpl.list_save_mult_value, result));
+        let multList = [{{value}}];
+        let entityList = "{{relation}}";
+        let columnList = "{{column}}";
+        let formId = "{{formIdentificador}}";
+        let listFinal = [];
+        if(!isEmpty(multList) && typeof multList === "object" && typeof multList[0] === 'number') {
+            let promises = multList.map(async (id, id_indice) => {
+                if (typeof id === "number") {
+                    let result = await db.exeRead(entityList, id);
+                    if (typeof result[0] === "object" && result.length === 1) {
+                        result = result[0];
+                        result.columnStatus = { column: '', have: !1, value: !1 };
+                        result.columnRelation = entityList;
+                        result.columnName = columnList;
+                        result.columnTituloExtend = await getRelevantTitle(entityList, result);
+                        listFinal.push({ index: id_indice, data: result });
+                    }
                 }
             });
-        {{/value}}
+
+            // Aguarde todas as promessas serem concluídas
+            await Promise.all(promises);
+            if(!isEmpty(listFinal)) {
+                listFinal.sort((a, b) => a.index - b.index);
+                for (let rr of listFinal)
+                    $(".extend_list_register[data-id='" + formId + "-" + columnList + "']").append(Mustache.render(tpl.list_save_mult_value, rr.data));
+            }
+        }
     });
 </script>
