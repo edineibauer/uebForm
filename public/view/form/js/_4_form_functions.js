@@ -708,7 +708,7 @@ async function getInputsTemplates(form, col) {
                 meta.nome = "Atribuir ao " + meta.nome;
         }
 
-        if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password"))
+        if (meta.nome === "" || (isEditingMyPerfil && meta.format === "status") || (myPerfilIsSocial && meta.format === "password") || meta.column === "system_entity")
             continue;
 
         /**

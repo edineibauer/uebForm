@@ -7,7 +7,7 @@ function validateDicionario(entity, dicionario, form, action) {
         for(let i in dicionario) {
             let meta = dicionario[i];
 
-            if (meta.key === "identifier")
+            if (meta.key === "identifier" || meta.column === "system_entity")
                 continue;
 
             if (meta.column === "system_id" && USER.setor !== "admin")
