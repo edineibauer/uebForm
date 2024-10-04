@@ -159,34 +159,79 @@ class ExeReadEntity
          * restringe leitura a somente dados do system_id de acesso
          * Aplica regra recursiva sobre sistema pai
          */
-        if ($_SESSION["userlogin"]["setor"] !== "admin" && !empty($_SESSION["userlogin"]["system_id"])) {
+        if ($_SESSION["userlogin"]["setor"] !== "admin") {
 
-            $mySystem = Metadados::getInfo($_SESSION["userlogin"]['setor']);
+            /**
+             * Verifica se o usuário que esta a editar essa entidade pertence a um sistema ou se é anônimo a sistema
+             */
+            if(!empty($_SESSION["userlogin"]["system_id"])) {
 
-            // pega registros criado pelo meu sistema atual logado
-            $queryLogic .=  ($queryLogic !== "WHERE" ? " AND " : " ") . "(({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$mySystem['system']}')";
+                //USUÁRIO PERTENCE A UM SISTEMA
+                $mySystem = Metadados::getInfo($_SESSION["userlogin"]['setor']);
+                $usuarioSistema = $mySystem['system'];
 
-            if(!empty($info['system'])) {
-                //os registros estão vinculados a um sistema específico, hierarquia de gestão se aplica nesse caso
+                /**
+                 * Verifica se a entidade que estou editando pertence a um sistema ou se é de todos
+                 */
+                if (!empty($info['system'])) {
 
-                //permite registros que estão abaixo do meu sistema
-                $listaEntitySystemBelow = $this->_getEntitySystemBelow($mySystem['system'], $info['system'], []);
-                if(!empty($listaEntitySystemBelow)) {
-                    foreach ($listaEntitySystemBelow as $systemBelow) {
-                        $read = new Read();
-                        $read->exeRead($systemBelow, "WHERE system_id = :s", ["s" => $_SESSION["userlogin"]["system_id"]]);
-                        if($read->getResult()) {
-                            $listaSistemasFilhos = [];
-                            foreach ($read->getResult() as $itemm)
-                                $listaSistemasFilhos[] = $itemm['id'];
+                    //ENTIDADE PERTENCE A UM SISTEMA
 
-                            $queryLogic .= " OR ({$this->report['entidade']}.system_id IN(" . implode(',', $listaSistemasFilhos) . ") AND {$this->report['entidade']}.system_entity = '" . $systemBelow . "')";
+                    if($this->report['entidade'] === $usuarioSistema) {
+                        //permite pois a entidade é igual ao sistema ao qual estou logado
+                        $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.id = {$_SESSION["userlogin"]["system_id"]}";
+
+                    } elseif($info['system'] === $usuarioSistema) {
+                        //permite pois a entidade pertence ao mesmo sistema ao qual estou logado
+                        $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$usuarioSistema}'";
+
+                    } else {
+
+                        //permite registros que pertencem a sistemas abaixo do meu sistema logado
+                        $listaEntitySystemBelow = $this->_getEntitySystemBelow($usuarioSistema, $info['system'], []);
+                        if (!empty($listaEntitySystemBelow)) {
+                            $logicaFilhos = "(";
+                            foreach ($listaEntitySystemBelow as $systemBelow) {
+                                $read = new Read();
+                                $read->exeRead($systemBelow, "WHERE system_id = :s", ["s" => $_SESSION["userlogin"]["system_id"]]);
+                                if ($read->getResult()) {
+                                    $listaSistemasFilhos = [];
+                                    foreach ($read->getResult() as $itemm)
+                                        $listaSistemasFilhos[] = $itemm['id'];
+
+                                    $logicaFilhos .= (!empty($logicaFilhos) ? " OR " : "") . "({$this->report['entidade']}.system_id IN(" . implode(',', $listaSistemasFilhos) . ") AND {$this->report['entidade']}.system_entity = '" . $systemBelow . "')";
+                                }
+                            }
+                            $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . $logicaFilhos . ")";
                         }
                     }
+
+                } else {
+
+                    //ENTIDADE NÃO TEM SISTEMA, QUALQUER USUÁRIO PODE GERIR, MAS SOMENTES REGISTROS DO SISTEMA LOGADO
+
+                    $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$usuarioSistema}'";
+
+                }
+            } else {
+
+                //USUÁRIO É ANÔNIMO A SISTEMA
+
+                /**
+                 * Verifica se a entidade que estou editando pertence a um sistema ou se é de todos
+                 */
+                if (!empty($info['system'])) {
+
+                    //ENTIDADE PERTENCE A UM SISTEMA, LOGO ESTE USUÁRIO NÃO TEM ACESSO
+                    $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.id = 0";
+
+                } else {
+
+                    //ENTIDADE NÃO TEM SISTEMA, QUALQUER USUÁRIO PODE GERIR, MAS SOMENTES REGISTROS DO SISTEMA LOGADO
+                    $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.system_id = IS NULL AND {$this->report['entidade']}.system_entity = IS NULL";
+
                 }
             }
-
-            $queryLogic .= ")";
         }
 
         $orderIncludePrefix = (!in_array($this->report['ordem'], ["total", "contagem"]) ? $this->report['entidade'] . "." : "");
