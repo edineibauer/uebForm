@@ -199,7 +199,7 @@ class ExeReadEntity
                                     foreach ($read->getResult() as $itemm)
                                         $listaSistemasFilhos[] = $itemm['id'];
 
-                                    $logicaFilhos .= (!empty($logicaFilhos) ? " OR " : "") . "({$this->report['entidade']}.system_id IN(" . implode(',', $listaSistemasFilhos) . ") AND {$this->report['entidade']}.system_entity = '" . $systemBelow . "')";
+                                    $logicaFilhos .= ($logicaFilhos === "(" ? "" : " OR ") . "({$this->report['entidade']}.system_id IN(" . implode(',', $listaSistemasFilhos) . ") AND {$this->report['entidade']}.system_entity = '" . $systemBelow . "')";
                                 }
                             }
                             $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . $logicaFilhos . ")";
