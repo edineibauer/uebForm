@@ -470,15 +470,13 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                 this.loading = false;
             }
         },
-        getShow: function () {
+        getShow: async function () {
             let action = isNumberPositive(this.id) ? "update" : "create";
-            return permissionToAction(this.entity, action).then(have => {
-                if (have) {
-                    return Mustache.render(getTemplates().formCrud, this)
-                } else {
-                    return "<h2 class='form-control col align-center padding-32 color-text-gray-dark'>Sem Permissão para " + (action === "update" ? "Atualizar" : "Adicionar") + "</h2>"
-                }
-            })
+
+            if (USER.setor === "admin" || await AJAX.get("permissionTo/" + this.entity + "/" + action))
+                return Mustache.render(getTemplates().formCrud, this);
+
+            return "<h2 class='form-control col align-center padding-32 color-text-gray-dark'>Sem Permissão para " + (action === "update" ? "Atualizar" : "Adicionar") + "</h2>"
         },
         save: async function (showMessages, destroy) {
             showMessages = typeof showMessages === "undefined" || ["false", "0", 0, false].indexOf(showMessages) === -1;
@@ -850,6 +848,13 @@ function getExtraMeta(identificador, entity, meta) {
     return meta
 }
 
+function checkUserOptionsForm() {
+    $("." + USER.setor + "Show").removeClass("hide");
+    $("." + USER.setor + "Hide").addClass("hide");
+    $("." + USER.setor + "Allow").removeAttr("disabled");
+    $("." + USER.setor + "Disabled").attr("disabled", "disabled");
+}
+
 function loadMask(form) {
     let $form = form.$element;
     let SPMaskBehavior = function (val) {
@@ -945,7 +950,7 @@ function loadMask(form) {
         $ajuda.remove();
     });
 
-    checkUserOptions();
+    checkUserOptionsForm();
     clearMarginFormInput();
     loadFolderDrag();
     $form.find("input[type='text'].formCrudInput, input[type='tel'].formCrudInput, input[type='number'].formCrudInput").trigger("change");
