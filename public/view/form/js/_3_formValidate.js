@@ -1,43 +1,34 @@
-function validateDicionario(entity, dicionario, form, action) {
-    let promessas = [];
-    let entityData = (SERVICEWORKER ? db.exeRead(entity) : new Promise((s, f) => {s([])}));
-    return Promise.all([entityData]).then(entityData => {
-        entityData = entityData[0];
+async function validateDicionario(entity, dicionario, form, action) {
+    for(let i in dicionario) {
+        let meta = dicionario[i];
 
-        for(let i in dicionario) {
-            let meta = dicionario[i];
+        if (meta.key === "identifier" || meta.column === "system_entity")
+            continue;
 
-            if (meta.key === "identifier" || meta.column === "system_entity")
-                continue;
+        if (meta.column === "system_id" && USER.setor !== "admin")
+            continue;
 
-            if (meta.column === "system_id" && USER.setor !== "admin")
-                continue;
+        if(meta.format === "password")
+            meta.default = (action === "create" ? false : "");
 
-            if(meta.format === "password")
-                meta.default = (action === "create" ? false : "");
+        let data = form.data;
+        if (data !== null) {
+            let dataOld = form.dataOld;
+            let error = form.error;
+            let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+            if (!isEmpty(value))
+                validateMetaEspecialFields(meta, value, error)
 
-            let data = form.data;
-            if (data !== null) {
-                let dataOld = form.dataOld;
-                let error = form.error;
-                let value = typeof data !== "undefined" && typeof data[meta.column] !== "undefined" ? data[meta.column] : "";
+            if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
+                validateMetaUpdate(meta, data, dataOld, action);
+                validateMetaNull(meta, value, error);
                 if (!isEmpty(value)) {
-                    promessas.push(validateMetaUnique(meta, value, form.id, entityData, error));
-                    validateMetaEspecialFields(meta, value, error)
-                }
-                if (!validateRules(entity, meta, value, error, data, dataOld, action)) {
-                    validateMetaUpdate(meta, data, dataOld, action);
-                    validateMetaNull(meta, value, error);
-                    if (!isEmpty(value)) {
-                        validateMetaSize(meta, value, error);
-                        validateMetaRegExp(meta, value, error)
-                    }
+                    validateMetaSize(meta, value, error);
+                    validateMetaRegExp(meta, value, error)
                 }
             }
         }
-
-        return Promise.all(promessas)
-    })
+    }
 }
 
 function validateRules(entity, meta, value, error, data, dataOld, action) {
@@ -130,37 +121,6 @@ function validateMetaSize(meta, value, error) {
             error[meta.column] = "Mínimo de " + meta.minimo + " arquivos."
         }
     }
-}
-
-function validateMetaUnique(meta, value, id, entityData, error) {
-	return new Promise(function (s, f) {
-        if (meta.unique) {
-            if(SERVICEWORKER) {
-                if (isEmpty(id)) {
-                    if (entityData.some(el => el[meta.column] === value))
-                        error[meta.column] = "Valor já existe! Informe outro.";
-                } else if (isNumberPositive(id)) {
-                    if (entityData.some(el => el['id'] != id && el[meta.column] === value))
-                        error[meta.column] = "Valor já existe! Informe outro.";
-                }
-            }
-
-            if(navigator.onLine && (!SERVICEWORKER || entityData.length > LIMITOFFLINE - 10) && (typeof error[meta.column] === "undefined" || isEmpty(error[meta.column]))) {
-                AJAX.post('load/unique', {column: meta.column, id: id, valor: value, entity: form.entity}).then(data => {
-                    if(data)
-                        error[meta.column] = "Valor já existe! Informe outro.";
-
-                    s(1);
-                }).catch(() => {
-                    f(1);
-                })
-            } else {
-                s(1);
-            }
-        } else {
-            s(1);
-        }
-    });
 }
 
 function validateMetaRegExp(meta, value, error) {
