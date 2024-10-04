@@ -73,16 +73,9 @@ function validateRules(entity, meta, value, error, data, dataOld, action) {
 function validateForm() {
     let action = isNumberPositive(form.id) ? 'update' : 'create';
     clearFormError(form);
-    return havePermission(form.entity, form.data, action).then(permission => {
-        if (permission) {
-            return validateDicionario(form.entity, dicionarios[form.entity], form, action).then(() => {
-                return formNotHaveError(form.error)
-            })
-        } else {
-            form.error = {"id" : "Sem permissão para " + (isNumberPositive(form.id) ? "atualizar" : "criar")};
-        }
-        return !1
-    })
+    return validateDicionario(form.entity, dicionarios[form.entity], form, action).then(() => {
+        return formNotHaveError(form.error)
+    });
 }
 
 function formNotHaveError(errors) {
