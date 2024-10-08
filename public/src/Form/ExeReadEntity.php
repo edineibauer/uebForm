@@ -209,8 +209,7 @@ class ExeReadEntity
                 } else {
 
                     //ENTIDADE NÃO TEM SISTEMA, QUALQUER USUÁRIO PODE GERIR, MAS SOMENTES REGISTROS DO SISTEMA LOGADO
-
-                    $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "{$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$usuarioSistema}'";
+                    $queryLogic .= ($queryLogic !== "WHERE" ? " AND " : " ") . "(({$this->report['entidade']}.system_id = {$_SESSION["userlogin"]["system_id"]} AND {$this->report['entidade']}.system_entity = '{$usuarioSistema}') OR (system_id IS NULL AND system_entity IS NULL))";
 
                 }
             } else {
