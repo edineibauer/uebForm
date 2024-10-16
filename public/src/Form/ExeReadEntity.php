@@ -159,7 +159,7 @@ class ExeReadEntity
          * restringe leitura a somente dados do system_id de acesso
          * Aplica regra recursiva sobre sistema pai
          */
-        if ($_SESSION["userlogin"]["setor"] !== "admin") {
+        if ($_SESSION["userlogin"]["setor"] !== "admin" && !$permission[$this->report['entidade']]["menu"]) {
 
             /**
              * Verifica se o usuário que esta a editar essa entidade pertence a um sistema ou se é anônimo a sistema
