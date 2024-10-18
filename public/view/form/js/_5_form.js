@@ -1,3 +1,21 @@
+function sanitizeCSS(css) {
+    // Remover tags <script>, <iframe>, ou quaisquer tags HTML indesejadas
+    css = css.replace(/<\/?[^>]+(>|$)/g, ""); // Remove qualquer tag HTML
+
+    // Verificar por tentativas de injeção de JavaScript
+    const invalidPatterns = [
+        /javascript:/gi, // Remover "javascript:" em qualquer lugar
+        /expression\(/gi, // Remover expressões CSS que executam código
+        /url\(["']?javascript:/gi // Remover URLs baseadas em "javascript:"
+    ];
+
+    invalidPatterns.forEach(pattern => {
+        css = css.replace(pattern, "");
+    });
+
+    return css;
+}
+
 $(async function () {
 
     let $target = $("#form-maestru");
@@ -8,6 +26,9 @@ $(async function () {
      * */
     while($target.parent().attr("id") === undefined)
         await sleep(50);
+
+    if(app.param.css)
+        $target.closest(".core-class-container").prepend("<style>" + sanitizeCSS(app.param.css) + "</style>");
 
     if(!isEmpty(app.param.form)) {
         $target.form(app.param.form.entity, app.param.form.data, app.param.form.fields, !isEmpty(app.param.form.funcaoString) ? eval(app.param.form.funcaoString) : null, app.param.form.modified);
