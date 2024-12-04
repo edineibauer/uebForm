@@ -44,14 +44,20 @@ $(async function () {
         }
 
         let fields = [];
+        let hideHeader = false
         if (!isEmpty(app.param.fields) && app.param.fields.constructor === Array) {
             fields = app.param.fields;
         } else if (!isEmpty(app.param.url[2])) {
             app.param.url.shift();
             app.param.url.shift();
             fields = app.param.url;
+
+            if (fields.includes('form-no-header')) {
+                fields = fields.filter(field => field !== 'form-no-header');
+                hideHeader = true;
+            }
         }
 
-        $target.form(entity, id, fields, app.param.functionCallBack || null);
+        $target.form(entity, id, fields, (app.param.functionCallBack || null), false, hideHeader);
     }
 })

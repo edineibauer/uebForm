@@ -11,9 +11,9 @@ $(function ($) {
      * @param pendenteSave (bool) (se informado e for true, o formulário fica como alterado pendente de salvar)
      * @returns {*}
      */
-    $.fn.form = async function (entity, id, fields, callback, pendenteSave) {
+    $.fn.form = async function (entity, id, fields, callback, pendenteSave, hideHeader) {
         if (typeof entity === "string")
-            form = await formCrud($(this).attr("id"), entity, id, fields, callback, pendenteSave);
+            form = await formCrud($(this).attr("id"), entity, id, fields, callback, pendenteSave, hideHeader);
 
         return this
     }
@@ -356,7 +356,7 @@ function privateFormSetError(form, error, showMessages, destroy) {
     }
 }
 
-async function formCrud(target, entity, id, fields, functionCallBack, pendenteSave) {
+async function formCrud(target, entity, id, fields, functionCallBack, pendenteSave, hideHeader) {
     let $target = $("#" + target);
     if (!$target.length)
         return {};
@@ -375,7 +375,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         funcao: "",
         store: true,
         columnRelation: null,
-        header: true,
+        bodyCard: true,
+        header: (typeof hideHeader === "undefined" || hideHeader === false),
         modified: (typeof pendenteSave !== "undefined" && pendenteSave),
         saving: false,
         loading: true,
