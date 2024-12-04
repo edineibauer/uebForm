@@ -9,11 +9,13 @@ $(function ($) {
      * @param fields (array de strings) (se informado, limita o formulário aos campos informados)
      * @param callback (function) (se informado, os dados salvos serão passados para esta função em vez de salvar no banco)
      * @param pendenteSave (bool) (se informado e for true, o formulário fica como alterado pendente de salvar)
+     * @param hideHeader (bool) (caso seja true, esconde o cabeçalho do formulário)
+     * @param hideBodyCard (bool) (caso seja true, não mostra o formulário em um card (body))
      * @returns {*}
      */
-    $.fn.form = async function (entity, id, fields, callback, pendenteSave, hideHeader) {
+    $.fn.form = async function (entity, id, fields, callback, pendenteSave, hideHeader, hideBodyCard) {
         if (typeof entity === "string")
-            form = await formCrud($(this).attr("id"), entity, id, fields, callback, pendenteSave, hideHeader);
+            form = await formCrud($(this).attr("id"), entity, id, fields, callback, pendenteSave, hideHeader, hideBodyCard);
 
         return this
     }
@@ -356,7 +358,7 @@ function privateFormSetError(form, error, showMessages, destroy) {
     }
 }
 
-async function formCrud(target, entity, id, fields, functionCallBack, pendenteSave, hideHeader) {
+async function formCrud(target, entity, id, fields, functionCallBack, pendenteSave, hideHeader, hideBodyCard) {
     let $target = $("#" + target);
     if (!$target.length)
         return {};
@@ -375,7 +377,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
         funcao: "",
         store: true,
         columnRelation: null,
-        bodyCard: true,
+        bodyCard: (typeof hideBodyCard === "undefined" || hideBodyCard === false),
         header: (typeof hideHeader === "undefined" || hideHeader === false),
         modified: (typeof pendenteSave !== "undefined" && pendenteSave),
         saving: false,

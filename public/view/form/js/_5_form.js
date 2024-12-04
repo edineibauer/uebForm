@@ -31,7 +31,7 @@ $(async function () {
         $target.closest(".core-class-container").prepend("<style>" + sanitizeCSS(app.param.css) + "</style>");
 
     if(!isEmpty(app.param.form)) {
-        $target.form(app.param.form.entity, app.param.form.data, app.param.form.fields, !isEmpty(app.param.form.funcaoString) ? eval(app.param.form.funcaoString) : null, app.param.form.modified);
+        $target.form(app.param.form.entity, app.param.form.data, app.param.form.fields, (!isEmpty(app.param.form.funcaoString) ? eval(app.param.form.funcaoString) : null), app.param.form.modified, app.param.form.header, app.param.form.bodyCard);
     } else {
 
         let entity = app.param.entity || app.param.url[0];
@@ -45,6 +45,7 @@ $(async function () {
 
         let fields = [];
         let hideHeader = false
+        let hideCard = false
         if (!isEmpty(app.param.fields) && app.param.fields.constructor === Array) {
             fields = app.param.fields;
         } else if (!isEmpty(app.param.url[2])) {
@@ -56,8 +57,13 @@ $(async function () {
                 fields = fields.filter(field => field !== 'form-no-header');
                 hideHeader = true;
             }
+
+            if (fields.includes('form-no-card')) {
+                fields = fields.filter(field => field !== 'form-no-card');
+                hideCard = true;
+            }
         }
 
-        $target.form(entity, id, fields, (app.param.functionCallBack || null), false, hideHeader);
+        $target.form(entity, id, fields, (app.param.functionCallBack || null), false, hideHeader, hideCard);
     }
 })
