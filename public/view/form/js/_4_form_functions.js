@@ -658,6 +658,8 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             modified: formCrud.modified,
             data: formCrud.data,
             fields: formCrud.fields,
+            header: formCrud.header,
+            bodyCard: formCrud.bodyCard,
             funcaoString: (!isEmpty(formCrud.funcao) && typeof formCrud.funcao === "function" ? formCrud.funcao.toString() : null)
         };
         salvaNavegacaoHistorico("navigation_" + formCrud.target, navigation);
