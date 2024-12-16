@@ -585,6 +585,21 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                     } else {
 
                         /**
+                         * Faz request ao servidor perguntando sobre o andamento do status de react do formulário
+                         * */
+                        let checkStatus = setInterval(async function () {
+                            $(".saveStatusCallBack").text(await AJAX.get("formSaveStatus/" + form.entity));
+                        }, 1000);
+
+                        /**
+                         * Salva o formulário
+                         * */
+                        form.data = await AJAX.post("getDataReacted", {entity: form.entity, dados: form.data});
+
+                        //desliga o status do save no servidor
+                        clearInterval(checkStatus);
+
+                        /**
                          * Verifica se é um formulário para preencher no formulário anterior
                          * */
                         let n = JSON.parse(sessionStorage.getItem("navigation_" + this.target));
