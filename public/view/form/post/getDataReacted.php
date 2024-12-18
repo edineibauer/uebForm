@@ -16,6 +16,6 @@ if(is_string($table) && is_array($data['data'])) {
 
     if (!empty($react["error"]))
         $data['error'] = $react["error"];
-    else
+    elseif(!empty($react["data"]))
         $data['data'] = $react["data"];
 }
