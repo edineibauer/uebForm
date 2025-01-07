@@ -1,7 +1,7 @@
 <div id="form-maestru">
     <div class='maestru-form-control col padding-24 s-padding-0 font-large'>
-        <div class="col card radius border s-border-0 s-radius-0 p-0 overflow-hidden">
-            <div class="col loadindTableSpace no-select p-0">
+        <div class="col card radius border s-border-0 s-radius-0 p-0 overflow-hidden bodyCardPre">
+            <div class="col loadindTableSpace no-select headerFormPre p-0">
                 <div class="col form-header">
                     <a href="#back" class="left mode-background-colorLine mode-text-colorText btn-floating">
                         <i class="material-icons left">keyboard_arrow_left</i>
@@ -44,36 +44,42 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col margin-bottom padding-tiny relative s12">
-                        <div class="col parent-input relative">
-                            <label class="col">
-                                <span class="col align-left formLabel no-select">
-                                    <div class="left d-inline">Carregando...</div>
-                                </span>
-                                <input type="text" class="formCrudInput skeleton"
-                                       autocomplete="off" readonly="readonly" disabled="disabled" maxlength="127" max="127">
-                                <span class="input-bar"></span>
-                                <div class="col info-container" style="margin-top: -19px;font-size: 12px;">
-                                <span class="right align-right color-text-gray">
-                                    <span class="input-info">0</span>/...
-                                </span>
-                                    <span class="rest input-message color-text-red padding-right"></span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="panel no-select padding-bottom parent-save-form">
                     <div class="col padding-tiny">
-                        <button class="btn radius mode-background-colorBackground m-0 mode-text-colorText hover-shadow opacity hover-opacity-off"
-                                onclick="saveForm('{{identificador}}')">
-                            {{{options.buttonText}}}
-                        </button>
+                        <button class="btn radius mode-background-colorBackground m-0 mode-text-colorText hover-shadow opacity hover-opacity-off">Carregando...</button>
                         <div class="saveStatusCallBack"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+
+        if(typeof hideHeader === "undefined") {
+            var hideHeader = false
+            var hideCard = false
+        } else {
+            hideCard = false;
+            hideHeader = false;
+        }
+
+        if(!isEmpty(app.param.form)) {
+            hideHeader = !app.param.form.header;
+            hideCard = !app.param.form.bodyCard;
+        } else if (!isEmpty(app.param.fields) && app.param.fields.constructor === Array) {
+            hideHeader = app.param.fields.indexOf('form-no-header') > -1;
+            hideCard = app.param.fields.indexOf('form-no-card') > -1;
+        } else if (!isEmpty(app.param.url[2])) {
+            hideHeader = app.param.url.includes('form-no-header');
+            hideCard = app.param.url.includes('form-no-card');
+        }
+
+        if(hideHeader)
+            $(".headerFormPre").remove();
+
+        if(hideCard)
+            $(".bodyCardPre").removeClass("card radius border s-border-0 s-radius-0 p-0 overflow-hidden");
+    </script>
 </div>

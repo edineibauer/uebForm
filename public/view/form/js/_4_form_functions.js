@@ -466,8 +466,7 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
             if (this.$element !== "") {
                 this.loading = true;
 
-                this.$element.find(".maestru-form-control").remove();
-                this.$element.prepend(await $this.getShow());
+                this.$element.html(await $this.getShow());
                 loadMask(this);
 
                 this.loading = false;
