@@ -572,13 +572,15 @@ async function formCrud(target, entity, id, fields, functionCallBack, pendenteSa
                             }
 
                             /**
-                             * Se tiver navegação para trás, volta, senão, mantém o formulário aberto para edição
+                             * Se tiver navegação para trás e form uma tabela, então volta para a tabela, senão, mantém o formulário aberto para edição
                              */
-                            if(!sessionStorage.getItem("navigation_" + target) || n.length < 2) {
-                                await form.show(dbCreate.data);
-                            } else {
-                                goBackMaestruNavigation(this.target, "back");
+                            if(sessionStorage.getItem("navigation_" + target) && n.length > 2) {
+                                let n = JSON.parse(sessionStorage.getItem("navigation_" + target));
+                                if(n[n.length -2].route.startsWith("table/"))
+                                    return goBackMaestruNavigation(this.target, "back");
                             }
+
+                            return await form.show(dbCreate.data);
                         }
 
                     } else {
