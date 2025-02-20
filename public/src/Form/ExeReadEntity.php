@@ -93,7 +93,7 @@ class ExeReadEntity
 
         if(!empty($this->report['search'])) {
             foreach ($dicionario as $meta) {
-                if(!in_array($meta['key'], ["information", "identifier"]))
+                if(!in_array($meta['key'], ["information", "identifier", "status", "source", "color", "date"]) && !in_array($meta['format'], ['radio', 'list_mult', 'list']))
                     $queryLogic .= ($queryLogic === "WHERE" ? " (" : " || ") . "{$this->report['entidade']}.{$meta['column']} LIKE '%{$this->report['search']}%'";
             }
             $queryLogic .= ")";
